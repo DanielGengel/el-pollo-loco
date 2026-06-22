@@ -14,11 +14,19 @@ export class World {
     new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 0)];
     canvas;
     ctx;
+    keyboard;
 
-    constructor(canvas) {
+    constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
+        this.keyboard = keyboard;
+        
         this.draw();
+        this.setWorld();
+    }
+
+    setWorld() {
+        this.character.world = this; // to make the World accessible to the character
     }
 
     draw() {
