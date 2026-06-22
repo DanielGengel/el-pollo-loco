@@ -8,19 +8,42 @@ export class World {
     character = new Character();
     enemies = [new Chicken(), new Chicken(), new Chicken()];
     clouds = [new Cloud()];
-    backgroundObjects = [new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 0),
-    new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 0),
-    new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 0),
-    new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 0)];
+    backgroundObjects = [
+        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], -719),
+        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], -719),
+        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], -719),
+        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], -719),
+
+        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 0),
+        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 0),
+        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 0),
+        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 0),
+
+        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719),
+        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], 719),
+        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719),
+        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719),
+
+        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719*2),
+        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 719*2),
+        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 719*2),
+        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 719*2),
+
+        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719*3),
+        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], 719*3),
+        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719*3),
+        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719*3)
+    ];
     canvas;
     ctx;
     keyboard;
+    cameraX = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
-        
+
         this.draw();
         this.setWorld();
     }
@@ -32,12 +55,13 @@ export class World {
     draw() {
         // clear content from canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
+        this.ctx.translate(this.cameraX, 0);
         this.addObjectsToMap(this.backgroundObjects);
         this.addToMap(this.character);
         this.addObjectsToMap(this.enemies);
         this.addObjectsToMap(this.clouds);
-        
+
+        this.ctx.translate(-this.cameraX, 0);
 
         self = this;
         // In requestAnimationFrame "this" is unknown, therfore self = this
@@ -53,6 +77,19 @@ export class World {
     }
 
     addToMap(mo) {
+        if (mo.otherDirection) {
+            // If left-key is pressed, mirror image of character
+            this.ctx.save(); // save ctx to only mirror image of character
+            this.ctx.translate(mo.width, 0);
+            this.ctx.scale(-1, 1);
+            mo.x = mo.x * -1;
+        }
+
         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+        if (mo.otherDirection) {
+            // If left-key is pressed, mirror only image of character, restore rest
+            mo.x = mo.x * -1;
+            this.ctx.restore();
+        }
     }
 }

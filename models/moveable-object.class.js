@@ -7,6 +7,7 @@ export class MoveableObject {
     img;
     imageCache = {};
     currentImage = 0;
+    otherDirection = false; // mirroring character image when walking left
 
     loadImage(path) {
         this.img = new Image();
