@@ -6,9 +6,21 @@ export class Character extends MoveableObject {
     height = 300;
     y = 135;
     
+
     constructor() {
-        // super().loadImage('../assets/img/2_character_pepe/1_idle/idle/I-1.png');
-        super().loadImage(ImageHelper.PEPE.idle[0]);
+        super();
+        this.loadImage(ImageHelper.PEPE.idle[0]);
+        this.loadImages(ImageHelper.PEPE.idle);
+        this.animate();
+    }
+
+    animate() {
+        setInterval(() => {
+            let index = this.currentImage % ImageHelper.PEPE.idle.length;
+            let path = ImageHelper.PEPE.idle[index]
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }, 200);
     }
 
     jump() {}
