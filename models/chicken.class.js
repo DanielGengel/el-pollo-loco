@@ -11,6 +11,14 @@ export class Chicken extends MoveableObject {
 
         // Chicken start position = 200px (position from character + random number)
         this.x = 200 + Math.random() * 500;
-        }
+        this.animate();
+    }
+
+    animate() {
+        setInterval(() => {
+            this.x -= 0.15;
+        }, 1000 / 60);
+
+    }
 
 }

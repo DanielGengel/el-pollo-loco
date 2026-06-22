@@ -9,5 +9,13 @@ export class Cloud extends MoveableObject {
     constructor() {
         super().loadImage(ImageHelper.BACKGROUND.clouds[0]);
         this.x = -100 + Math.random() * 500;
+        this.animate();
+    }
+
+    animate() {
+        setInterval(() => {
+            this.x -= 0.15;
+        }, 1000 / 60);
+
     }
 }
