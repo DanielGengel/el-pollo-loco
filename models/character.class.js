@@ -36,16 +36,18 @@ export class Character extends MoveableObject {
         setInterval(() => {
             if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 // Walk 'movement' animation
-                let index = this.currentImage % ImageHelper.PEPE.walk.length;
-                let path = ImageHelper.PEPE.walk[index];
-                this.img = this.imageCache[path];
-                this.currentImage++;
+                this.playAnimation(ImageHelper.PEPE.walk);
+                // let index = this.currentImage % ImageHelper.PEPE.walk.length;
+                // let path = ImageHelper.PEPE.walk[index];
+                // this.img = this.imageCache[path];
+                // this.currentImage++;
             } else {
                 // Idle animation
-                let index = this.currentImage % ImageHelper.PEPE.idle.length;
-                let path = ImageHelper.PEPE.idle[index];
-                this.img = this.imageCache[path];
-                this.currentImage++;
+                this.playAnimation(ImageHelper.PEPE.idle);
+                // let index = this.currentImage % ImageHelper.PEPE.idle.length;
+                // let path = ImageHelper.PEPE.idle[index];
+                // this.img = this.imageCache[path];
+                // this.currentImage++;
             }
         }, 100);
     }

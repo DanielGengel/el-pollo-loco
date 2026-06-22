@@ -1,5 +1,5 @@
 
-import { Character } from "../models/character.class.js";
+import { Character } from "./character.class.js";
 import { level1 } from "../levels/level1.js";
 
 export class World {

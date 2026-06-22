@@ -1,30 +1,27 @@
 import { MoveableObject } from "./moveable-object.class.js";
 import { ImageHelper } from "../js/imgHelper.js";
 
-export class Chicken extends MoveableObject {
-    width = 80;
-    height = 100;
-    y = 330;
+export class Endboss extends MoveableObject {
+    height = 500;
+    width = 300;
+    y = -40;
 
     constructor() {
         super();
-        this.loadImage(ImageHelper.CHICKEN.chicken_normal[0]);
-        this.loadImages(ImageHelper.CHICKEN.chicken_normal);
+        this.loadImage(ImageHelper.CHICKEN_BOSS.alert[0]);
+        this.loadImages(ImageHelper.CHICKEN_BOSS.alert);
+        this.x = 2500;
 
-        // Chicken start position = 200px (position from character + random number)
-        this.x = 200 + Math.random() * 500;
-        this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }
-    
+
     animate() {
         setInterval(() => {
-            this.playAnimation(ImageHelper.CHICKEN.chicken_normal);
+            this.playAnimation(ImageHelper.CHICKEN_BOSS.alert);
             // let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
             // let path = ImageHelper.CHICKEN.chicken_normal[index];
             // this.img = this.imageCache[path];
             // this.currentImage++;
         }, 200);
-        this.moveLeft();
     }
 }
