@@ -1,39 +1,10 @@
-import { ImageHelper } from "../js/imgHelper.js";
-import { BackgroundObject } from "./background.class.js";
-import { Cloud } from "./clouds.class.js";
+
 import { Character } from "../models/character.class.js";
-import { Chicken } from "../models/chicken.class.js";
+import { level1 } from "../levels/level1.js";
 
 export class World {
     character = new Character();
-    enemies = [new Chicken(), new Chicken(), new Chicken()];
-    clouds = [new Cloud()];
-    backgroundObjects = [
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], -719),
-
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 0),
-
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719),
-
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719*2),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 719*2),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 719*2),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 719*2),
-
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719*3),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], 719*3),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719*3),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719*3)
-    ];
+level = level1;
     canvas;
     ctx;
     keyboard;
@@ -56,10 +27,10 @@ export class World {
         // clear content from canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.cameraX, 0);
-        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.level.backgroundObjects);
         this.addToMap(this.character);
-        this.addObjectsToMap(this.enemies);
-        this.addObjectsToMap(this.clouds);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.cameraX, 0);
 

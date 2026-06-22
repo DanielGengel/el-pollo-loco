@@ -20,16 +20,16 @@ export class Character extends MoveableObject {
     animate() {
         setInterval(() => {
             // Walking animation
-            if (this.world.keyboard.RIGHT) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
                 this.x += this.speed;
                 this.otherDirection = false;
             }
 
-            if (this.world.keyboard.LEFT) {
+            if (this.world.keyboard.LEFT && this.x > 0) {
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
-            this.world.cameraX = -this.x;
+            this.world.cameraX = -this.x + 100;
 
         }, 1000 / 60);
 
