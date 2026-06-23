@@ -1,3 +1,5 @@
+import { IntervalHub } from "../helper/intervallHub.js";
+
 export class MoveableObject {
     x = 120;
     y = 280;
@@ -35,8 +37,29 @@ export class MoveableObject {
     }
 
     moveLeft() {
-        setInterval(() => {
-            this.x -= this.speed;
-        }, 1000 / 60);
+        IntervalHub.startInterval(() => this.x -= this.speed, 1000/ 60);
     }
 }
+
+
+// playAnimation(images, timer) {
+//         IntervalHub.startInterval(() => this.addImages(images), timer);
+//     }
+
+//     addImages = (images) => {
+//         let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1
+//         let path = images[i];
+//         this.img = this.imageCache[path];
+//         this.currentImage++;
+//     };
+
+//     moveRight() {
+//         console.log("moving right");
+//     }
+
+//     moveLeft() {
+//         IntervalHub.startInterval(() => this.x -= this.speed, 1000/ 60);
+//         // setInterval(() => {
+//         //     this.x -= this.speed;
+//         // }, 1000 / 60);
+//     }

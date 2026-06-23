@@ -1,5 +1,6 @@
 import { MoveableObject } from "./moveable-object.class.js";
-import { ImageHelper } from "../js/imgHelper.js";
+import { ImageHelper } from "../helper/imgHelper.class.js";
+import { IntervalHub } from "../helper/intervallHub.js";
 
 export class Endboss extends MoveableObject {
     height = 500;
@@ -16,7 +17,7 @@ export class Endboss extends MoveableObject {
     }
 
     animate() {
-        setInterval(() => {
+        IntervalHub.startInterval(() => {
             this.playAnimation(ImageHelper.CHICKEN_BOSS.alert);
             // let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
             // let path = ImageHelper.CHICKEN.chicken_normal[index];

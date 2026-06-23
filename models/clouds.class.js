@@ -1,5 +1,5 @@
 import { MoveableObject } from "./moveable-object.class.js";
-import { ImageHelper } from "../js/imgHelper.js";
+import { ImageHelper } from "../helper/imgHelper.class.js";
 
 export class Cloud extends MoveableObject {
     y = 20;
@@ -8,8 +8,11 @@ export class Cloud extends MoveableObject {
     
 
     constructor() {
-        super().loadImage(ImageHelper.BACKGROUND.clouds[0]);
-        this.x = -100 + Math.random() * 500;
+        super();
+        this.loadImage(ImageHelper.BACKGROUND.clouds[0]);
+        this.loadImages(ImageHelper.BACKGROUND.clouds);
+        this.x = -100 + Math.random() * 1000;
+        this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }
 
