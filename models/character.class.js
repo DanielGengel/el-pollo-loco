@@ -6,7 +6,7 @@ import { IntervalHub } from "../helper/intervallHub.js";
 export class Character extends MoveableObject {
     width = 130;
     height = 300;
-    y = 135;
+    y = 0;
     speed = 10;
     world; // this variable to access the variables in world.class.js
 
@@ -15,11 +15,13 @@ export class Character extends MoveableObject {
         this.loadImage(ImageHelper.PEPE.idle[0]);
         this.loadImages(ImageHelper.PEPE.idle);
         this.loadImages(ImageHelper.PEPE.walk);
-        // this.animate();
+        this.loadImages(ImageHelper.PEPE.jump);
+        this.applayGravity();
+        this.animate();
     }
 
     // animate() {
-        
+
     //     setInterval(() => {
     //         // Walking animation
     //         if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
@@ -39,7 +41,7 @@ export class Character extends MoveableObject {
     //     // setInterval(() => {
     //         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
     //             console.log("charcter make steps...");
-                
+
     //             // Walk 'movement' animation
     //             // this.playAnimation(ImageHelper.PEPE.walk, 200);
     //             let index = this.currentImage % ImageHelper.PEPE.walk.length;
@@ -60,7 +62,6 @@ export class Character extends MoveableObject {
     animate() {
         // Move character (60 FPS)
         IntervalHub.startInterval(() => {
-
             if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
                 this.x += this.speed;
                 this.otherDirection = false;
@@ -70,18 +71,27 @@ export class Character extends MoveableObject {
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
+
+            if (this.world.keyboard.UP && !this.isAboveGround()) {
+                this.speedY = 30;
+            }
+
             this.world.cameraX = -this.x + 100;
         }, 1000 / 60);
 
-
-        // Animate character (alle 200 ms)
+        // Animate character (every 200 ms)
         IntervalHub.startInterval(() => {
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            if (this.isAboveGround()) {
+                // console.log("is above ground");
+                this.addImages(ImageHelper.PEPE.jump);
+            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                // console.log("walking");
                 this.addImages(ImageHelper.PEPE.walk);
             } else {
+                // console.log("is idle");
                 this.addImages(ImageHelper.PEPE.idle);
             }
-        }, 200);
+        }, 150);
     }
 
     addImages = (images) => {
@@ -90,7 +100,6 @@ export class Character extends MoveableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
     };
-
 
     jump() {}
 }

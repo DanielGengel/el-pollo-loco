@@ -10,6 +10,8 @@ export class MoveableObject {
     imageCache = {};
     currentImage = 0;
     otherDirection = false; // mirroring character image when walking left
+    speedY = 0; // fall speed of character
+    acceleration = 3;
 
     loadImage(path) {
         this.img = new Image();
@@ -25,22 +27,33 @@ export class MoveableObject {
     }
 
     playAnimation(images) {
-        let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1 
+        let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
     }
-
 
     moveRight() {
         console.log("moving right");
     }
 
     moveLeft() {
-        IntervalHub.startInterval(() => this.x -= this.speed, 1000/ 60);
+        IntervalHub.startInterval(() => (this.x -= this.speed), 1000 / 60);
+    }
+
+    applayGravity() {
+        IntervalHub.startInterval(() => {
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }
+        }, 1000 / 25);
+    }
+
+    isAboveGround() {
+        return this.y < 130;
     }
 }
-
 
 // playAnimation(images, timer) {
 //         IntervalHub.startInterval(() => this.addImages(images), timer);

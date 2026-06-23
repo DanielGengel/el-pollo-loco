@@ -21,7 +21,7 @@ level = level1;
 
     setWorld() {
         this.character.world = this; // to make the World accessible to the character
-        this.character.animate();
+        // this.character.animate();
     }
 
     draw() {
