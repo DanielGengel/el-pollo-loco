@@ -6,6 +6,7 @@ export class Chicken extends MoveableObject {
     width = 80;
     height = 100;
     y = 330;
+    showFrame = true; // show frame around chicken
 
     constructor() {
         super();
@@ -28,7 +29,9 @@ export class Chicken extends MoveableObject {
         //     // this.img = this.imageCache[path];
         //     // this.currentImage++;
         }, 200);
-        this.moveLeft();
+
+        IntervalHub.startInterval(() => this.moveLeft(), 1000 / 60);
+        
     }
 
     // startCounter = () => {

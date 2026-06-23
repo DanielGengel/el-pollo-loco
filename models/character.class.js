@@ -6,9 +6,10 @@ import { IntervalHub } from "../helper/intervallHub.js";
 export class Character extends MoveableObject {
     width = 130;
     height = 300;
-    y = 0;
+    y = 130;
     speed = 10;
     world; // this variable to access the variables in world.class.js
+    showFrame = true; // show frame around character
 
     constructor() {
         super();
@@ -63,17 +64,17 @@ export class Character extends MoveableObject {
         // Move character (60 FPS)
         IntervalHub.startInterval(() => {
             if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-                this.x += this.speed;
-                this.otherDirection = false;
+                this.otherDirection = false; // Don't mirror character image
+                this.moveRight();
             }
 
             if (this.world.keyboard.LEFT && this.x > 0) {
-                this.x -= this.speed;
-                this.otherDirection = true;
+                this.otherDirection = true; // Mirror character image
+                this.moveLeft();
             }
 
-            if (this.world.keyboard.UP && !this.isAboveGround()) {
-                this.speedY = 30;
+            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+                this.jump();
             }
 
             this.world.cameraX = -this.x + 100;
@@ -100,6 +101,4 @@ export class Character extends MoveableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
     };
-
-    jump() {}
 }

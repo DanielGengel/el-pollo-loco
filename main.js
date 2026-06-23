@@ -17,8 +17,8 @@ function init() {
 
     // character.src = '../assets/img/2_character_pepe/1_idle/idle/I-1.png';
 
-    console.log("Character is ", world.character);
-       console.log("enemies are ", world.enemies);
+    // console.log("Character is ", world.character);
+    //    console.log("enemies are ", world.enemies);
 
     //     ctx.drawImage(character, 20, 20, 50, 150)
 }

@@ -1,10 +1,11 @@
-
 import { Character } from "./character.class.js";
 import { level1 } from "../levels/level1.js";
+import { MoveableObject } from "./moveable-object.class.js";
+import { IntervalHub } from "../helper/intervallHub.js";
 
 export class World {
     character = new Character();
-level = level1;
+    level = level1;
     canvas;
     ctx;
     keyboard;
@@ -17,6 +18,21 @@ level = level1;
 
         this.draw();
         this.setWorld();
+        this.checkCollision();
+        this.character.getRealFrame();
+        
+    }
+
+    checkCollision() {
+        // console.log("checkCollision()");
+        IntervalHub.startInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                // console.log("checkCollision forEach((enemy)");
+                if (this.character.isColliding(enemy)) {
+                    console.log("Collision", enemy);
+                }
+            });
+        }, 200);
     }
 
     setWorld() {
@@ -50,18 +66,27 @@ level = level1;
 
     addToMap(mo) {
         if (mo.otherDirection) {
-            // If left-key is pressed, mirror image of character
-            this.ctx.save(); // save ctx to only mirror image of character
-            this.ctx.translate(mo.width, 0);
-            this.ctx.scale(-1, 1);
-            mo.x = mo.x * -1;
+            this.flipImage(mo);
         }
+        mo.draw(this.ctx);
+        mo.drawFrame(this.ctx);
 
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
         if (mo.otherDirection) {
-            // If left-key is pressed, mirror only image of character, restore rest
-            mo.x = mo.x * -1;
-            this.ctx.restore();
+            this.flipImageBack(mo);
         }
+    }
+
+    flipImage(mo) {
+        // If left-key is pressed, mirror image of character
+        this.ctx.save(); // save ctx to only mirror image of character
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+
+    flipImageBack(mo) {
+        // If left-key is pressed, mirror only image of character, restore rest
+        mo.x = mo.x * -1;
+        this.ctx.restore();
     }
 }

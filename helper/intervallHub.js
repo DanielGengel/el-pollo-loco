@@ -7,8 +7,8 @@ export class IntervalHub {
     static startInterval(func, timer) {
         const newInterval = setInterval(func, timer);
         IntervalHub.allIntervals.push(newInterval);
-        console.log("<<<<< startInterval >>>>>");
-        console.log("func ==> ", func);
+        // console.log("<<<<< startInterval >>>>>");
+        // console.log("func ==> ", func);
         
     }
 

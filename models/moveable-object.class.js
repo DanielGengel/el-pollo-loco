@@ -12,6 +12,19 @@ export class MoveableObject {
     otherDirection = false; // mirroring character image when walking left
     speedY = 0; // fall speed of character
     acceleration = 3;
+    showFrame = false; // hide frame around character and chicken
+
+    // New coordinates for real frame
+    rX;
+    rY;
+    rW;
+    rH;
+    offset = {
+        top: 100,
+        right: 10,
+        bottom: 10,
+        left: 15,
+    };
 
     loadImage(path) {
         this.img = new Image();
@@ -34,11 +47,15 @@ export class MoveableObject {
     }
 
     moveRight() {
-        console.log("moving right");
+        this.x += this.speed;
     }
 
     moveLeft() {
-        IntervalHub.startInterval(() => (this.x -= this.speed), 1000 / 60);
+        this.x -= this.speed;
+    }
+
+    jump() {
+        this.speedY = 30;
     }
 
     applayGravity() {
@@ -52,6 +69,58 @@ export class MoveableObject {
 
     isAboveGround() {
         return this.y < 130;
+    }
+
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    drawFrame(ctx) {
+        if (this.showFrame) {
+            ctx.beginPath();
+            ctx.lineWidth = "2";
+            ctx.strokeStyle = "blue";
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.lineWidth = "2";
+            ctx.strokeStyle = "red";
+            ctx.rect(this.rX, this.rY, this.rW, this.rH);
+            ctx.stroke();
+        }
+    }
+
+    getRealFrame() {
+        // console.log("getRealFrame");
+
+        this.rX = this.x + this.offset.left;
+        this.rY = this.y + this.offset.top;
+        this.rW = this.width - this.offset.left - this.offset.right;
+        this.rH = this.height - this.offset.top - this.offset.bottom;
+        // console.log("this.x ", this.x);
+        // console.log("this.y ", this.y);
+        // console.log("this.width ", this.width);
+        // console.log("this.height ", this.height);
+        // console.log("this.rX ", this.rX);
+        // console.log("this.rY ", this.rY);
+        // console.log("this.rW ", this.rW);
+        // console.log("this.rH ", this.rH);
+    }
+
+    isColliding(mO) {
+        this.getRealFrame();
+        return (
+            // this.rX + this.rW > mO.rX &&
+            // this.rY + this.rH > mO.rY &&
+            // this.rX < mO.rX + mO.rW &&
+            // this.rY < mO.rY + mO.rH
+
+            this.x + this.width > mO.x &&
+            this.y + this.height > mO.y &&
+            this.x < mO.x + mO.width &&
+            this.y < mO.y + mO.height
+        );
     }
 }
 
