@@ -29,6 +29,7 @@ window.addEventListener("keydown", (event) => {
     if (event.code === "ArrowUp") Keyboard.UP = true;
     if (event.code === "ArrowDown") Keyboard.DOWN = true;
     if (event.code === "Space") Keyboard.SPACE = true;
+    if (event.code === "KeyD") Keyboard.D = true;
 });
 
 window.addEventListener("keyup", (event) => {
@@ -37,4 +38,5 @@ window.addEventListener("keyup", (event) => {
     if (event.code === "ArrowUp") Keyboard.UP = false;
     if (event.code === "ArrowDown") Keyboard.DOWN = false;
     if (event.code === "Space") Keyboard.SPACE = false;
+    if (event.code === "KeyD") Keyboard.D = false;
 });

@@ -1,20 +1,20 @@
 import { IntervalHub } from "../helper/intervallHub.js";
 import { DrawableObject } from "./drawableObject.class.js";
+// import { ThrowableObject } from "./throwableObject.class.js";
 
 export class MoveableObject extends DrawableObject {
-    
     otherDirection = false; // mirroring character image when walking left
     speedY = 0; // fall speed of character
     acceleration = 3;
     showFrame = false; // if true => drawCollsionFrame around character and chicken
     energy = 100;
     lastHit = 0;
+    bottleAboveGround = false;
 
     // New coordinates for real frame
     collisionBox = { x: 0, y: 0, width: 0, height: 0 };
     offset = { top: 120, right: 35, bottom: 15, left: 20 };
 
-    
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1
         let path = images[i];
@@ -43,13 +43,14 @@ export class MoveableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
+    // bottle should fall through ground, character until dead should not 
     isAboveGround() {
-        return this.y < 130;
+        if (this.bottleAboveGround) {
+            return true;
+        } else {
+            return this.y < 130;
+        }
     }
-
-    
-
-    
 
     getRealFrame() {
         // this.collisionBox.x = this.x + this.offset.left;
@@ -110,7 +111,7 @@ export class MoveableObject extends DrawableObject {
 
     isHurt() {
         let timePassed = new Date().getTime() - this.lastHit; // Time diff. in ms
-        return (timePassed < 1000); // 1000 milli seconds
+        return timePassed < 1000; // 1000 milli seconds
     }
 
     isDead() {
