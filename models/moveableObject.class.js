@@ -1,14 +1,8 @@
 import { IntervalHub } from "../helper/intervallHub.js";
+import { DrawableObject } from "./drawableObject.class.js";
 
-export class MoveableObject {
-    x = 120;
-    y = 280;
-    width = 100;
-    height = 150;
-    speed = 0.15;
-    img;
-    imageCache = {};
-    currentImage = 0;
+export class MoveableObject extends DrawableObject {
+    
     otherDirection = false; // mirroring character image when walking left
     speedY = 0; // fall speed of character
     acceleration = 3;
@@ -20,19 +14,7 @@ export class MoveableObject {
     collisionBox = { x: 0, y: 0, width: 0, height: 0 };
     offset = { top: 120, right: 35, bottom: 15, left: 20 };
 
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
-
-    loadImages(imageArray) {
-        imageArray.forEach((path) => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = img;
-        });
-    }
-
+    
     playAnimation(images) {
         let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1
         let path = images[i];
@@ -65,27 +47,9 @@ export class MoveableObject {
         return this.y < 130;
     }
 
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
+    
 
-    drawCollsionFrame(ctx) {
-        if (this.showFrame) {
-            // Picture frame
-            ctx.beginPath();
-            ctx.lineWidth = "2";
-            ctx.strokeStyle = "blue";
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-
-            // Corrected picture frame (real frame)
-            ctx.beginPath();
-            ctx.lineWidth = "2";
-            ctx.strokeStyle = "red";
-            ctx.rect(this.collisionBox.x, this.collisionBox.y, this.collisionBox.width, this.collisionBox.height);
-            ctx.stroke();
-        }
-    }
+    
 
     getRealFrame() {
         // this.collisionBox.x = this.x + this.offset.left;
