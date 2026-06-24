@@ -5,9 +5,11 @@ import { IntervalHub } from "../helper/intervallHub.js";
 import { StatusBar } from "./statusBar.class.js";
 import { ThrowableObject } from "./throwableObject.class.js";
 import { CollectibleObjects } from "./collectibleObjects.class.js";
+import { Chicken } from "./chicken.class.js";
 
 export class World {
     character = new Character();
+    chicken = new Chicken();
     level = level1;
     canvas;
     ctx;
@@ -30,16 +32,23 @@ export class World {
     run() {
         // console.log("checkCollision()");
         IntervalHub.startInterval(() => {
-            this.checkCollision();
-            this.checkCollisionWithBottle();
+            this.checkCollisionWithEnemy();
+            this.checkCollisionWithCollectibles();
             this.checkObjectThrown();
         }, 100);
     }
 
-    checkCollision() {
+    checkCollisionWithEnemy() {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
-            if (this.character.isColliding(enemy)) {
+            if (this.character.isColliding(enemy) && this.character.isAboveGround()) {
+
+                this.chicken.energy = 0;
+                console.log("CHICKEN DEAD ", this.chicken.isDead());
+              
+                
+            } else if
+             (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
             }
@@ -70,10 +79,10 @@ export class World {
 //         });
 // }
 
-checkCollisionWithBottle() {
+checkCollisionWithCollectibles() {
     this.level.collectibleObjects.forEach((object) => {
         if (this.character.isColliding(object)) {
-            console.log("remove bottle", object);
+            console.log("remove object", object);
             this.removeObjectFromMap(
                 this.level.collectibleObjects,
                 object
@@ -112,10 +121,10 @@ removeObjectFromMap(array, objectToRemove) {
         this.ctx.translate(this.cameraX, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
 
-        this.ctx.translate(-this.cameraX, 0);
+       //this.ctx.translate(-this.cameraX, 0);
         // Space for fixed objects moving with camera
-        this.addToMap(this.statusBar);
-        this.ctx.translate(this.cameraX, 0);
+        // this.addToMap(this.statusBar);
+        // this.ctx.translate(this.cameraX, 0);
 
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
@@ -124,12 +133,8 @@ removeObjectFromMap(array, objectToRemove) {
         this.addObjectsToMap(this.level.collectibleObjects);
 
         this.ctx.translate(-this.cameraX, 0);
-
-        // self = this;
-        // In requestAnimationFrame "this" is unknown, therfore self = this
-        // requestAnimationFrame(function () {
-        //     self.draw();
-        // });
+        // Space for fixed objects moving with camera
+        this.addToMap(this.statusBar);
 
         requestAnimationFrame(() => this.draw());
     }
