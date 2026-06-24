@@ -1,4 +1,4 @@
-import { MoveableObject } from "./moveable-object.class.js";
+import { MoveableObject } from "./moveableObject.class.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 

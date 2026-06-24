@@ -1,4 +1,4 @@
-import { MoveableObject } from "./moveable-object.class.js";
+import { MoveableObject } from "./moveableObject.class.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 // import { World } from "./world.class.js";
@@ -17,6 +17,8 @@ export class Character extends MoveableObject {
         this.loadImages(ImageHelper.PEPE.idle);
         this.loadImages(ImageHelper.PEPE.walk);
         this.loadImages(ImageHelper.PEPE.jump);
+        this.loadImages(ImageHelper.PEPE.hurt);
+        this.loadImages(ImageHelper.PEPE.dead);
         this.applayGravity();
         this.animate();
     }
@@ -82,7 +84,14 @@ export class Character extends MoveableObject {
 
         // Animate character (every 200 ms)
         IntervalHub.startInterval(() => {
-            if (this.isAboveGround()) {
+            
+            if (this.isDead()) {
+                // console.log("is above ground");
+                this.addImages(ImageHelper.PEPE.dead);
+            } else if (this.isHurt()) {
+                // console.log("is above ground");
+                this.addImages(ImageHelper.PEPE.hurt);
+            } else if (this.isAboveGround()) {
                 // console.log("is above ground");
                 this.addImages(ImageHelper.PEPE.jump);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {

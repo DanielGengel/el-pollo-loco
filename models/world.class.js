@@ -1,6 +1,6 @@
 import { Character } from "./character.class.js";
 import { level1 } from "../levels/level1.js";
-import { MoveableObject } from "./moveable-object.class.js";
+import { MoveableObject } from "./moveableObject.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 
 export class World {
@@ -18,9 +18,8 @@ export class World {
 
         this.draw();
         this.setWorld();
+        // this.character.getRealFrame();
         this.checkCollision();
-        this.character.getRealFrame();
-        
     }
 
     checkCollision() {
@@ -29,10 +28,10 @@ export class World {
             this.level.enemies.forEach((enemy) => {
                 // console.log("checkCollision forEach((enemy)");
                 if (this.character.isColliding(enemy)) {
-                    console.log("Collision", enemy);
+                    this.character.hit();
                 }
             });
-        }, 200);
+        }, 100);
     }
 
     setWorld() {
@@ -51,11 +50,13 @@ export class World {
 
         this.ctx.translate(-this.cameraX, 0);
 
-        self = this;
+        // self = this;
         // In requestAnimationFrame "this" is unknown, therfore self = this
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        // requestAnimationFrame(function () {
+        //     self.draw();
+        // });
+
+        requestAnimationFrame(() => this.draw());
     }
 
     addObjectsToMap(objects) {
@@ -69,10 +70,11 @@ export class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+        mo.drawCollsionFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);
+            mo.drawCollsionFrame(this.ctx);
         }
     }
 

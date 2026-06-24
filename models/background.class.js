@@ -1,4 +1,4 @@
-import { MoveableObject } from "./moveable-object.class.js";
+import { MoveableObject } from "./moveableObject.class.js";
 
 export class BackgroundObject extends MoveableObject {
     width = 720;
