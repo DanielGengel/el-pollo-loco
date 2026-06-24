@@ -7,7 +7,7 @@ export class Character extends MoveableObject {
     width = 130;
     height = 300;
     y = 130;
-    speed = 10;
+    speed = 1;
     world; // this variable to access the variables in world.class.js
     showFrame = true; // show frame around character
 

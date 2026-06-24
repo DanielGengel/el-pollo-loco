@@ -4,10 +4,14 @@ import { Cloud } from "../models/clouds.class.js";
 import { Chicken } from "../models/chicken.class.js";
 import { Level } from "../models/level.class.js";
 import { Endboss } from "../models/endboss.class.js";
+import { CollectibleObjects } from "../models/collectibleObjects.class.js";
 
 export const level1 = new Level(
     [new Chicken(), new Chicken(), new Chicken(), new Chicken(), new Endboss()],
     [new Cloud(), new Cloud()],
+    [new CollectibleObjects(), new CollectibleObjects(), new CollectibleObjects(), 
+        new CollectibleObjects(), new CollectibleObjects(), new CollectibleObjects(),
+        new CollectibleObjects(), new CollectibleObjects(), new CollectibleObjects()],
     [
         new BackgroundObject(ImageHelper.BACKGROUND.sky[0], -719),
         new BackgroundObject(ImageHelper.BACKGROUND.clouds[1], -719),

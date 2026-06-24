@@ -43,7 +43,7 @@ export class MoveableObject extends DrawableObject {
         }, 1000 / 25);
     }
 
-    // bottle should fall through ground, character until dead should not 
+    // bottle should fall through ground, character until dead should not
     isAboveGround() {
         if (this.bottleAboveGround) {
             return true;
@@ -76,6 +76,7 @@ export class MoveableObject extends DrawableObject {
 
     isColliding(mO) {
         this.getRealFrame();
+        mO.getRealFrame();
         // console.log("this.x =>", this.x);
         // console.log("this.y =>", this.y);
         // console.log("this.width =>", this.width);
@@ -86,10 +87,15 @@ export class MoveableObject extends DrawableObject {
         // console.log("this.collisionBox.height =>", this.collisionBox.height);
 
         return (
-            this.collisionBox.x + this.collisionBox.width > mO.x &&
-            this.collisionBox.y + this.collisionBox.height > mO.y &&
-            this.collisionBox.x < mO.x + mO.width &&
-            this.collisionBox.y < mO.y + mO.height
+            // this.collisionBox.x + this.collisionBox.width > mO.x &&
+            // this.collisionBox.y + this.collisionBox.height > mO.y &&
+            // this.collisionBox.x < mO.x + mO.width &&
+            // this.collisionBox.y < mO.y + mO.height
+
+            this.collisionBox.x + this.collisionBox.width > mO.collisionBox.x &&
+            this.collisionBox.y + this.collisionBox.height > mO.collisionBox.y &&
+            this.collisionBox.x < mO.collisionBox.x + mO.collisionBox.width &&
+            this.collisionBox.y < mO.collisionBox.y + mO.collisionBox.height
 
             // this.x + this.width > mO.x &&
             // this.y + this.height > mO.y &&

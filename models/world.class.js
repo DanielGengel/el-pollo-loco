@@ -4,6 +4,7 @@ import { MoveableObject } from "./moveableObject.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 import { StatusBar } from "./statusBar.class.js";
 import { ThrowableObject } from "./throwableObject.class.js";
+import { CollectibleObjects } from "./collectibleObjects.class.js";
 
 export class World {
     character = new Character();
@@ -29,12 +30,13 @@ export class World {
     run() {
         // console.log("checkCollision()");
         IntervalHub.startInterval(() => {
-            this.checkCollition();
+            this.checkCollision();
+            this.checkCollisionWithBottle();
             this.checkObjectThrown();
         }, 100);
     }
 
-    checkCollition() {
+    checkCollision() {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
             if (this.character.isColliding(enemy)) {
@@ -43,6 +45,52 @@ export class World {
             }
         });
     }
+
+// checkCollisionWithBottle() {
+//         this.level.collectibleObjects.forEach((object) => {
+//             // console.log("checkCollision forEach((enemy)");
+//             if (this.character.isColliding(object)) {
+
+//                 console.log("remove bottle ", object);
+                
+//                 // this.character.hit();
+//                 // this.statusBar.setPercentage(this.character.energy);
+//             }
+//         });
+//     }
+
+// checkCollisionWithBottle() {
+//     this.level.collectibleObjects =
+//         this.level.collectibleObjects.filter((object) => {
+//             if (this.character.isColliding(object)) {
+//                 console.log("remove bottle", object);
+//                 return false; // entfernen
+//             }
+//             return true; // behalten
+//         });
+// }
+
+checkCollisionWithBottle() {
+    this.level.collectibleObjects.forEach((object) => {
+        if (this.character.isColliding(object)) {
+            console.log("remove bottle", object);
+            this.removeObjectFromMap(
+                this.level.collectibleObjects,
+                object
+            );
+        }
+    });
+}
+
+removeObjectFromMap(array, objectToRemove) {
+    const index = array.indexOf(objectToRemove);
+
+    if (index > -1) {
+        array.splice(index, 1);
+    }
+}
+
+
 
     checkObjectThrown() {
         if (this.keyboard.D) {
@@ -73,6 +121,7 @@ export class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.throwableObject);
+        this.addObjectsToMap(this.level.collectibleObjects);
 
         this.ctx.translate(-this.cameraX, 0);
 

@@ -7,6 +7,7 @@ export class Chicken extends MoveableObject {
     height = 100;
     y = 330;
     showFrame = true; // show frame around chicken
+    offset = { top: 10, right: 10, bottom: 5, left: 10 };
 
     constructor() {
         super();
