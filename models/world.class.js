@@ -91,6 +91,8 @@ export class World {
     //         });
     // }
 
+
+    // Character can collect coins and bottles
     checkCollisionWithCollectibles() {
         this.level.collectibleObjects.forEach((object) => {
             if (this.character.isColliding(object)) {
@@ -121,11 +123,7 @@ export class World {
         if (this.keyboard.D) {
             console.log("key D");
 
-            let bottle = new ThrowableObject(
-                this.character.x + 100,
-                this.character.y + 100,
-                this.character.otherDirection,
-            );
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection,);
             this.throwableObject.push(bottle);
         }
     }
