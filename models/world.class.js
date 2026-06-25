@@ -132,6 +132,8 @@ export class World {
                 this.character.throwBottle();
                 // number of available bottles * 20 => status bar percentage
                 this.statusBarBottles.setPercentage(this.character.bottles * 20);
+                // Avoid character falling asleep while throwing bottles
+                this.character.lastAction = Date.now(); 
             }
         }
     }
