@@ -90,24 +90,24 @@ export class Character extends MoveableObject {
         IntervalHub.startInterval(() => {
             if (this.isDead()) {
                 // console.log("is above ground");
-                this.addImages(ImageHelper.PEPE.dead);
+                this.playAnimation(ImageHelper.PEPE.dead);
             } else if (this.isHurt()) {
                 // console.log("is above ground");
-                this.addImages(ImageHelper.PEPE.hurt);
+                this.playAnimation(ImageHelper.PEPE.hurt);
             } else if (this.isAboveGround()) {
                 // console.log("is above ground");
                 this.lastAction = Date.now(); 
-                this.addImages(ImageHelper.PEPE.jump);
+                this.playAnimation(ImageHelper.PEPE.jump);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 // console.log("walking");
                 this.lastAction = Date.now();
-                this.addImages(ImageHelper.PEPE.walk);
+                this.playAnimation(ImageHelper.PEPE.walk);
             } else {
                 const idleTime = this.timePassedSinceLastAction();
                 if (idleTime > 5000) {
-                    this.addImages(ImageHelper.PEPE.long_idle);
+                    this.playAnimation(ImageHelper.PEPE.long_idle);
                 } else {
-                    this.addImages(ImageHelper.PEPE.idle);
+                    this.playAnimation(ImageHelper.PEPE.idle);
                 }
             }
         }, 150);
@@ -117,12 +117,12 @@ export class Character extends MoveableObject {
         return Date.now() - this.lastAction;
     }
 
-    addImages = (images) => {
-        let index = this.currentImage % images.length;
-        let path = images[index];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-    };
+    // addImages = (images) => {
+    //     let index = this.currentImage % images.length;
+    //     let path = images[index];
+    //     this.img = this.imageCache[path];
+    //     this.currentImage++;
+    // };
 
     collectCoin() {
         this.coins++;

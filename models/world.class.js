@@ -51,8 +51,12 @@ export class World {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
             if (this.character.isColliding(enemy) && this.character.isAboveGround()) {
-                this.chicken.energy = 0;
-                console.log("CHICKEN DEAD ", this.chicken.isDead());
+                enemy.die();
+
+                setTimeout(() => {
+                    this.removeObjectFromMap(this.level.enemies, enemy);
+                }, 1000);
+                // console.log("CHICKEN DEAD ", this.chicken.isDead());
             } else if (this.character.isColliding(enemy)) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.energy);
