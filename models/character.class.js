@@ -10,6 +10,8 @@ export class Character extends MoveableObject {
     speed = 10;
     world; // this variable to access the variables in world.class.js
     showFrame = true; // show frame around character
+    coins = 0;
+    bottles = 0;
 
     constructor() {
         super();
@@ -84,7 +86,6 @@ export class Character extends MoveableObject {
 
         // Animate character (every 200 ms)
         IntervalHub.startInterval(() => {
-            
             if (this.isDead()) {
                 // console.log("is above ground");
                 this.addImages(ImageHelper.PEPE.dead);
@@ -110,4 +111,20 @@ export class Character extends MoveableObject {
         this.img = this.imageCache[path];
         this.currentImage++;
     };
+
+    collectCoin() {
+        this.coins++;
+
+        if (this.coins > 5) {
+            this.coins = 5;
+        }
+    }
+
+    collectBottle() {
+        this.bottles++;
+
+        if (this.bottles > 5) {
+            this.bottles = 5;
+        }
+    }
 }

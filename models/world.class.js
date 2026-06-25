@@ -6,6 +6,12 @@ import { StatusBar } from "./statusBar.class.js";
 import { ThrowableObject } from "./throwableObject.class.js";
 import { CollectibleObjects } from "./collectibleObjects.class.js";
 import { Chicken } from "./chicken.class.js";
+import { StatusBarHealth } from "./statusBarHealth.class.js";
+import { StatusBarCoins } from "./statusBarCoins.class.js";
+import { StatusBarBottles } from "./statusBarBottles.class.js";
+import { StatusBarEndboss } from "./statusBarEndboss.class.js";
+import { Coin } from "./coins.class.js";
+import { Bottle } from "./bottles.class.js";
 
 export class World {
     character = new Character();
@@ -15,7 +21,10 @@ export class World {
     ctx;
     keyboard;
     cameraX = 0;
-    statusBar = new StatusBar();
+    statusBarHealth = new StatusBarHealth();
+    statusBarCoins = new StatusBarCoins();
+    statusBarBottles = new StatusBarBottles();
+    statusBarEndboss = new StatusBarEndboss();
     throwableObject = [];
 
     constructor(canvas, keyboard) {
@@ -42,70 +51,74 @@ export class World {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
             if (this.character.isColliding(enemy) && this.character.isAboveGround()) {
-
                 this.chicken.energy = 0;
                 console.log("CHICKEN DEAD ", this.chicken.isDead());
-              
-                
-            } else if
-             (this.character.isColliding(enemy)) {
+            } else if (this.character.isColliding(enemy)) {
                 this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+                this.statusBarHealth.setPercentage(this.character.energy);
             }
         });
     }
 
-// checkCollisionWithBottle() {
-//         this.level.collectibleObjects.forEach((object) => {
-//             // console.log("checkCollision forEach((enemy)");
-//             if (this.character.isColliding(object)) {
+    // checkCollisionWithBottle() {
+    //         this.level.collectibleObjects.forEach((object) => {
+    //             // console.log("checkCollision forEach((enemy)");
+    //             if (this.character.isColliding(object)) {
 
-//                 console.log("remove bottle ", object);
-                
-//                 // this.character.hit();
-//                 // this.statusBar.setPercentage(this.character.energy);
-//             }
-//         });
-//     }
+    //                 console.log("remove bottle ", object);
 
-// checkCollisionWithBottle() {
-//     this.level.collectibleObjects =
-//         this.level.collectibleObjects.filter((object) => {
-//             if (this.character.isColliding(object)) {
-//                 console.log("remove bottle", object);
-//                 return false; // entfernen
-//             }
-//             return true; // behalten
-//         });
-// }
+    //                 // this.character.hit();
+    //                 // this.statusBar.setPercentage(this.character.energy);
+    //             }
+    //         });
+    //     }
 
-checkCollisionWithCollectibles() {
-    this.level.collectibleObjects.forEach((object) => {
-        if (this.character.isColliding(object)) {
-            console.log("remove object", object);
-            this.removeObjectFromMap(
-                this.level.collectibleObjects,
-                object
-            );
-        }
-    });
-}
+    // checkCollisionWithBottle() {
+    //     this.level.collectibleObjects =
+    //         this.level.collectibleObjects.filter((object) => {
+    //             if (this.character.isColliding(object)) {
+    //                 console.log("remove bottle", object);
+    //                 return false; // entfernen
+    //             }
+    //             return true; // behalten
+    //         });
+    // }
 
-removeObjectFromMap(array, objectToRemove) {
-    const index = array.indexOf(objectToRemove);
+    checkCollisionWithCollectibles() {
+        this.level.collectibleObjects.forEach((object) => {
+            if (this.character.isColliding(object)) {
+                if (object instanceof Coin) {
+                    this.character.collectCoin();
+                    this.statusBarCoins.setPercentage(this.character.coins * 20);
+                }
 
-    if (index > -1) {
-        array.splice(index, 1);
+                if (object instanceof Bottle) {
+                    this.character.collectBottle();
+                    this.statusBarBottles.setPercentage(this.character.bottles * 20);
+                }
+
+                this.removeObjectFromMap(this.level.collectibleObjects, object);
+            }
+        });
     }
-}
 
+    removeObjectFromMap(array, objectToRemove) {
+        const index = array.indexOf(objectToRemove);
 
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
 
     checkObjectThrown() {
         if (this.keyboard.D) {
             console.log("key D");
-            
-            let bottle =  new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
+
+            let bottle = new ThrowableObject(
+                this.character.x + 100,
+                this.character.y + 100,
+                this.character.otherDirection,
+            );
             this.throwableObject.push(bottle);
         }
     }
@@ -121,7 +134,7 @@ removeObjectFromMap(array, objectToRemove) {
         this.ctx.translate(this.cameraX, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
 
-       //this.ctx.translate(-this.cameraX, 0);
+        //this.ctx.translate(-this.cameraX, 0);
         // Space for fixed objects moving with camera
         // this.addToMap(this.statusBar);
         // this.ctx.translate(this.cameraX, 0);
@@ -134,7 +147,10 @@ removeObjectFromMap(array, objectToRemove) {
 
         this.ctx.translate(-this.cameraX, 0);
         // Space for fixed objects moving with camera
-        this.addToMap(this.statusBar);
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarEndboss);
 
         requestAnimationFrame(() => this.draw());
     }
