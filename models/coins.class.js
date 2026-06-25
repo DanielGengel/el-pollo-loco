@@ -10,10 +10,10 @@ export class Coin extends CollectibleObjects {
 
     // x = 200 + Math.random() * 2000;
     y = 20 + Math.random() * 100;
-    height = 120;
-    width = 130;
+    height = 150;
+    width = 150;
     showFrame = true; // show frame around chicken
-    offset = { top: 10, right: 20, bottom: 5, left: 20 }; // Offset values for real collision frame
+    offset = { top: 40, right: 40, bottom: 40, left: 40 }; // Offset values for real collision frame
 
     constructor() {
         super();

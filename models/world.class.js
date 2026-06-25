@@ -50,12 +50,15 @@ export class World {
     checkCollisionWithEnemy() {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
-            if (this.character.isColliding(enemy) && this.character.isAboveGround()) {
+            // Kill chicken only of this.character.speedY < -10 (= negative speed)
+            if (this.character.isColliding(enemy) && (this.character.speedY < -10)) {
                 enemy.die();
-
+                this.character.jump();
+                
+                // Show dead chicken for 500ms than remove
                 setTimeout(() => {
                     this.removeObjectFromMap(this.level.enemies, enemy);
-                }, 1000);
+                }, 500);
                 // console.log("CHICKEN DEAD ", this.chicken.isDead());
             } else if (this.character.isColliding(enemy)) {
                 this.character.hit();
