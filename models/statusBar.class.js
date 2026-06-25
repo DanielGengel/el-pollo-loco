@@ -9,8 +9,7 @@ export class StatusBar extends DrawableObject {
 
         this.imagesArr = images;
         this.loadImages(images);
-        console.log(this.imagesArr );
-        
+        // console.log(this.imagesArr);
 
         this.x = x;
         this.y = y;
@@ -22,6 +21,7 @@ export class StatusBar extends DrawableObject {
         this.percentage = percentage;
 
         const index = this.resolveImageIndex();
+        // Show picture of StatusBar according to percentage
         this.img = this.imageCache[this.imagesArr[index]];
     }
 
