@@ -51,10 +51,10 @@ export class World {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
             // Kill chicken only of this.character.speedY < -10 (= negative speed)
-            if (this.character.isColliding(enemy) && (this.character.speedY < -10)) {
+            if (this.character.isColliding(enemy) && this.character.speedY < -10) {
                 enemy.die();
                 this.character.jump();
-                
+
                 // Show dead chicken for 500ms than remove
                 setTimeout(() => {
                     this.removeObjectFromMap(this.level.enemies, enemy);
@@ -91,7 +91,6 @@ export class World {
     //         });
     // }
 
-
     // Character can collect coins and bottles
     checkCollisionWithCollectibles() {
         this.level.collectibleObjects.forEach((object) => {
@@ -120,11 +119,20 @@ export class World {
     }
 
     checkObjectThrown() {
-        if (this.keyboard.D) {
-            console.log("key D");
+        if (this.character.bottles > 0) {
+            if (this.keyboard.D) {
+                console.log("this.character.bottles ", this.character.bottles);
 
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection,);
-            this.throwableObject.push(bottle);
+                let bottle = new ThrowableObject(
+                    this.character.x + 100,
+                    this.character.y + 100,
+                    this.character.otherDirection,
+                );
+                this.throwableObject.push(bottle);
+                this.character.throwBottle();
+                // number of available bottles * 20 => status bar percentage
+                this.statusBarBottles.setPercentage(this.character.bottles * 20);
+            }
         }
     }
 

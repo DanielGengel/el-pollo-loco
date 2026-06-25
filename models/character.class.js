@@ -139,4 +139,12 @@ export class Character extends MoveableObject {
             this.bottles = 5;
         }
     }
+
+    throwBottle() {
+        this.bottles--;
+
+        if (this.bottles < 0) {
+            this.bottles = 0;
+        }
+    }
 }

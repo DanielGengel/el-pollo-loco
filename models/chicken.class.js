@@ -24,7 +24,7 @@ export class Chicken extends MoveableObject {
     animate() {
         // IntervalHub.startInterval(this.startCounter, 200);
         IntervalHub.startInterval(() => {
-            console.log("this chicken is dead ", this.isDead());
+            // console.log("this chicken is dead ", this.isDead());
 
             if (this.isDead()) {
                 this.playAnimation(ImageHelper.CHICKEN.chicken_normal_dead);
