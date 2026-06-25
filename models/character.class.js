@@ -12,11 +12,13 @@ export class Character extends MoveableObject {
     showFrame = true; // show frame around character
     coins = 0;
     bottles = 0;
+    lastAction = Date.now();
 
     constructor() {
         super();
         this.loadImage(ImageHelper.PEPE.idle[0]);
         this.loadImages(ImageHelper.PEPE.idle);
+        this.loadImages(ImageHelper.PEPE.long_idle);
         this.loadImages(ImageHelper.PEPE.walk);
         this.loadImages(ImageHelper.PEPE.jump);
         this.loadImages(ImageHelper.PEPE.hurt);
@@ -94,15 +96,25 @@ export class Character extends MoveableObject {
                 this.addImages(ImageHelper.PEPE.hurt);
             } else if (this.isAboveGround()) {
                 // console.log("is above ground");
+                this.lastAction = Date.now(); 
                 this.addImages(ImageHelper.PEPE.jump);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 // console.log("walking");
+                this.lastAction = Date.now();
                 this.addImages(ImageHelper.PEPE.walk);
             } else {
-                // console.log("is idle");
-                this.addImages(ImageHelper.PEPE.idle);
+                const idleTime = this.timePassedSinceLastAction();
+                if (idleTime > 5000) {
+                    this.addImages(ImageHelper.PEPE.long_idle);
+                } else {
+                    this.addImages(ImageHelper.PEPE.idle);
+                }
             }
         }, 150);
+    }
+
+    timePassedSinceLastAction() {
+        return Date.now() - this.lastAction;
     }
 
     addImages = (images) => {
