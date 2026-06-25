@@ -9,7 +9,7 @@ export class Bottle extends CollectibleObjects {
     static lastX = 200 + Math.random() * 150;
     x = Bottle.lastX += 150 + Math.random() * 500;
 // x = 200 + Math.random() * 2000;
-    y = 350;
+    y = 360;
     height = 90;
     width = 100;
     showFrame = true; // show frame around chicken
@@ -17,7 +17,7 @@ export class Bottle extends CollectibleObjects {
 
     constructor() {
         super();
-        this.loadImage(ImageHelper.ICONS.bottle[0]);
+        this.loadImage(ImageHelper.SALSA_BOTTLE.ground[1]);
 
         //this.x = -100 + Math.random() * 1000;
     }

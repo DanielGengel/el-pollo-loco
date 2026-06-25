@@ -1,4 +1,5 @@
 import { ImageHelper } from "../helper/imgHelper.class.js";
+import { IntervalHub } from "../helper/intervallHub.js";
 import { CollectibleObjects } from "./collectibleObjects.class.js";
 
 export class Coin extends CollectibleObjects {
@@ -22,7 +23,7 @@ export class Coin extends CollectibleObjects {
     }
 
     animate() {
-        setInterval(() => {
+        IntervalHub.startInterval(() => {
             this.playAnimation(ImageHelper.COINS.idle);
         }, 300);
     }

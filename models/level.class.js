@@ -5,7 +5,7 @@ export class Level {
     backgroundObjects;
     levelEndX = 2200;
 
-    constructor(enemies, clouds, collectibleObjects, backgroundObjects) {
+    constructor(enemies, clouds, backgroundObjects, collectibleObjects) {
         this.enemies = enemies;
         this.clouds = clouds;
         this.collectibleObjects = collectibleObjects;

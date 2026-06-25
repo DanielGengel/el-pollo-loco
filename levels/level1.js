@@ -11,11 +11,6 @@ import { Coin } from "../models/coins.class.js";
 export const level1 = new Level(
     [new Chicken(), new Chicken(), new Chicken(), new Chicken(), new Endboss()],
     [new Cloud(), new Cloud()],
-    [new Bottle(), new Bottle(), new Bottle(), 
-        new Bottle(), new Bottle(), new Bottle(),
-        new Bottle(), new Bottle(), new Bottle(),
-        new Coin(), new Coin(), new Coin(),
-        new Coin(), new Coin()],
     [
         new BackgroundObject(ImageHelper.BACKGROUND.sky[0], -719),
         new BackgroundObject(ImageHelper.BACKGROUND.clouds[1], -719),
@@ -47,4 +42,9 @@ export const level1 = new Level(
         new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719 * 3),
         new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719 * 3),
     ],
+    [new Bottle(), new Bottle(), new Bottle(), 
+        new Bottle(), new Bottle(), new Bottle(),
+        new Bottle(), new Bottle(), new Bottle(),
+        new Coin(), new Coin(), new Coin(),
+        new Coin(), new Coin()]
 );
