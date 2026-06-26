@@ -9,7 +9,7 @@ export class ThrowableObject extends MoveableObject {
     imgStart = ImageHelper.SALSA_BOTTLE.rotation[3];
     imgArrBottleRotation = ImageHelper.SALSA_BOTTLE.rotation;
     imgArrBottleSplash = ImageHelper.SALSA_BOTTLE.splash;
-
+showFrame = true; // show frame around chicken
     constructor(x, y, otherDirection) {
         super();
         this.loadImage(this.imgStart);
@@ -31,7 +31,7 @@ export class ThrowableObject extends MoveableObject {
         this.bottleAboveGround = true;
         this.bottleFlying = true;
 
-        // Correction factor if character looking in other direction
+        // Add 1x correction factor if character looking in other direction
         if (this.otherDirection) {
             this.x -= 100;
         }
@@ -45,6 +45,8 @@ export class ThrowableObject extends MoveableObject {
             }
         }, 25);
     }
+
+    
 
     animateFlyingBottle() {
         IntervalHub.startInterval(() => {

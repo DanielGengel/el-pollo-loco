@@ -7,9 +7,13 @@ export class Endboss extends MoveableObject {
     width = 300;
     y = -40;
     imgStart = ImageHelper.CHICKEN_BOSS.alert[0];
+    imgArrEndbossWalk = ImageHelper.CHICKEN_BOSS.walk;
     imgArrEndbossAlert = ImageHelper.CHICKEN_BOSS.alert 
+    imgArrEndbossAttack = ImageHelper.CHICKEN_BOSS.attack;
+    imgArrEndbossHurt = ImageHelper.CHICKEN_BOSS.hurt;
+    imgArrEndbossDead = ImageHelper.CHICKEN_BOSS.dead;
     showFrame = true; // show frame around chicken
-    offset = { top: 60, right: 20, bottom: 0, left: 20 };
+    offset = { top: 60, right: 40, bottom: 0, left: 40 };
 
     constructor() {
         super();

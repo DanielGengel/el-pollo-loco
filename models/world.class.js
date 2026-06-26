@@ -26,6 +26,7 @@ export class World {
     statusBarBottles = new StatusBarBottles();
     statusBarEndboss = new StatusBarEndboss();
     throwableObject = []; // Array to draw object thrown to map
+    // bottleAboveGround = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -44,6 +45,7 @@ export class World {
             this.checkCollisionWithEnemy();
             this.checkCollisionWithCollectibles();
             this.checkObjectThrown();
+            // this.checkCollisionOfBottleWithGround();
         }, 100);
     }
 
@@ -52,7 +54,7 @@ export class World {
             // console.log("checkCollision forEach((enemy)");
             // Kill chicken only of this.character.speedY < -10 (= negative speed)
             console.log("this.character.speedY", this.character.speedY);
-            
+
             if (this.character.isColliding(enemy) && this.character.speedY < 0) {
                 enemy.die();
                 this.character.jump();
@@ -121,38 +123,44 @@ export class World {
     }
 
     checkObjectThrown() {
-        if (this.character.bottles > 0) {
-            if (this.keyboard.D) {
-                console.log("this.character.bottles ", this.character.bottles);
+        // Unlimited bootles
+        // if (this.character.bottles > 0) {
+        if (this.keyboard.D) {
+            console.log("this.character.bottles ", this.character.bottles);
 
-                let bottle = new ThrowableObject(
-                    this.character.x + 100,
-                    this.character.y + 100,
-                    this.character.otherDirection,
-                );
-                // Array to draw object thrown to map
-                this.throwableObject.push(bottle); 
-                this.character.throwBottle();
-                // number of available bottles * 20 => status bar percentage
-                this.statusBarBottles.setPercentage(this.character.bottles * 20);
-                // Avoid character falling asleep while throwing bottles
-                this.character.lastAction = Date.now(); 
-            }
+            let bottle = new ThrowableObject(
+                this.character.x + 100,
+                this.character.y + 100,
+                this.character.otherDirection,
+            );
+            // Array to draw object thrown to map
+            this.throwableObject.push(bottle);
+            this.character.throwBottle();
+            // number of available bottles * 20 => status bar percentage
+            this.statusBarBottles.setPercentage(this.character.bottles * 20);
+            // Avoid character falling asleep while throwing bottles
+            this.character.lastAction = Date.now();
+            // this.bottleAboveGround = true;
         }
+        // }
     }
 
-    checkCollisionOfEndbossWithBottle() {
+    // checkCollisionOfEndbossWithBottle() {}
+
+    // checkCollisionOfBottleWithGround() {
+    //     console.log("this.throwableObject.bottleAboveGround", this.bottleAboveGround);
         
-    }
-
-
-
-
-
-
-
-
-
+    //     // if (this.bottleAboveGround === true) {
+    //     //     this.throwableObject.forEach((throwableObject, index) => {
+    //     //         if (throwableObject.speedY < -38) {
+    //     //             throwableObject.breakAndSplash();
+    //     //             setTimeout(() => {
+    //     //                 this.throwableObject.splice(index, 1);
+    //     //             }, 300);
+    //     //         }
+    //     //     });
+    //     // }
+    // }
 
     setWorld() {
         this.character.world = this; // to make the World accessible to the character
