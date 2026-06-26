@@ -6,14 +6,19 @@ export class Chicken extends MoveableObject {
     width = 80;
     height = 100;
     y = 330;
+    imgStart = ImageHelper.CHICKEN.chicken_normal[0];
+    imgArrChickenNormal = ImageHelper.CHICKEN.chicken_normal;
+    imgArrChickenDead = ImageHelper.CHICKEN.chicken_normal_dead;
     showFrame = true; // show frame around chicken
     offset = { top: 10, right: 0, bottom: 0, left: 0 };
+    
+
 
     constructor() {
         super();
-        this.loadImage(ImageHelper.CHICKEN.chicken_normal[0]);
-        this.loadImages(ImageHelper.CHICKEN.chicken_normal);
-        this.loadImages(ImageHelper.CHICKEN.chicken_normal_dead);
+        this.loadImage(this.imgStart);
+        this.loadImages(this.imgArrChickenNormal);
+        this.loadImages(this.imgArrChickenDead);
 
         // Chicken start position = 200px (position from character + random number)
         this.x = 200 + Math.random() * 2000;
@@ -27,9 +32,9 @@ export class Chicken extends MoveableObject {
             // console.log("this chicken is dead ", this.isDead());
 
             if (this.isDead()) {
-                this.playAnimation(ImageHelper.CHICKEN.chicken_normal_dead);
+                this.playAnimation(this.imgArrChickenDead);
             } else {
-                this.playAnimation(ImageHelper.CHICKEN.chicken_normal);
+                this.playAnimation(this.imgArrChickenNormal);
             }
         }, 200);
 

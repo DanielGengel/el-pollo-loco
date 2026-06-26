@@ -1,6 +1,5 @@
 import { IntervalHub } from "../helper/intervallHub.js";
 import { DrawableObject } from "./drawableObject.class.js";
-// import { ThrowableObject } from "./throwableObject.class.js";
 
 export class MoveableObject extends DrawableObject {
     otherDirection = false; // mirroring character image when walking left
@@ -39,6 +38,8 @@ export class MoveableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+            } else {
+                this.speedY = 0;
             }
         }, 1000 / 25);
     }

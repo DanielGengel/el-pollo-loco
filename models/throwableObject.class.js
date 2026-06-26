@@ -6,12 +6,15 @@ import { MoveableObject } from "./moveableObject.class.js";
 export class ThrowableObject extends MoveableObject {
     bottleAboveGround = false;
     bottleFlying = false;
+    imgStart = ImageHelper.SALSA_BOTTLE.rotation[3];
+    imgArrBottleRotation = ImageHelper.SALSA_BOTTLE.rotation;
+    imgArrBottleSplash = ImageHelper.SALSA_BOTTLE.splash;
 
     constructor(x, y, otherDirection) {
         super();
-        this.loadImage(ImageHelper.SALSA_BOTTLE.rotation[3]);
-        this.loadImages(ImageHelper.SALSA_BOTTLE.rotation);
-        this.loadImages(ImageHelper.SALSA_BOTTLE.splash);
+        this.loadImage(this.imgStart);
+        this.loadImages(this.imgArrBottleRotation);
+        this.loadImages(this.imgArrBottleSplash);
         this.x = x;
         this.y = y;
         this.otherDirection = otherDirection;
@@ -46,7 +49,7 @@ export class ThrowableObject extends MoveableObject {
     animateFlyingBottle() {
         IntervalHub.startInterval(() => {
             if (this.bottleAboveGround) {
-                this.playAnimation(ImageHelper.SALSA_BOTTLE.rotation);
+                this.playAnimation(this.imgArrBottleRotation);
             }
         }, 9000 / 60);
     }

@@ -8,6 +8,13 @@ export class Character extends MoveableObject {
     height = 300;
     y = 130;
     speed = 10;
+    imgStart = ImageHelper.PEPE.idle[0];
+    imgArrPepeIdle = ImageHelper.PEPE.idle;
+    imgArrPepeLongIdle = ImageHelper.PEPE.long_idle;
+    imgArrPepeWalk = ImageHelper.PEPE.walk;
+    imgArrPepeJump = ImageHelper.PEPE.jump;
+    imgArrPepeHurt = ImageHelper.PEPE.hurt;
+    imgArrPepeDead = ImageHelper.PEPE.dead;
     world; // this variable to access the variables in world.class.js
     showFrame = true; // show frame around character
     coins = 0;
@@ -16,13 +23,13 @@ export class Character extends MoveableObject {
 
     constructor() {
         super();
-        this.loadImage(ImageHelper.PEPE.idle[0]);
-        this.loadImages(ImageHelper.PEPE.idle);
-        this.loadImages(ImageHelper.PEPE.long_idle);
-        this.loadImages(ImageHelper.PEPE.walk);
-        this.loadImages(ImageHelper.PEPE.jump);
-        this.loadImages(ImageHelper.PEPE.hurt);
-        this.loadImages(ImageHelper.PEPE.dead);
+        this.loadImage(this.imgStart);
+        this.loadImages(this.imgArrPepeIdle);
+        this.loadImages(this.imgArrPepeLongIdle);
+        this.loadImages(this.imgArrPepeWalk);
+        this.loadImages(this.imgArrPepeJump);
+        this.loadImages(this.imgArrPepeHurt);
+        this.loadImages(this.imgArrPepeDead);
         this.applayGravity();
         this.animate();
     }
@@ -90,24 +97,24 @@ export class Character extends MoveableObject {
         IntervalHub.startInterval(() => {
             if (this.isDead()) {
                 // console.log("is above ground");
-                this.playAnimation(ImageHelper.PEPE.dead);
+                this.playAnimation(this.imgArrPepeDead);
             } else if (this.isHurt()) {
                 // console.log("is above ground");
-                this.playAnimation(ImageHelper.PEPE.hurt);
+                this.playAnimation(this.imgArrPepeHurt);
             } else if (this.isAboveGround()) {
                 // console.log("is above ground");
                 this.lastAction = Date.now(); 
-                this.playAnimation(ImageHelper.PEPE.jump);
+                this.playAnimation(this.imgArrPepeJump);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 // console.log("walking");
                 this.lastAction = Date.now();
-                this.playAnimation(ImageHelper.PEPE.walk);
+                this.playAnimation(this.imgArrPepeWalk);
             } else {
                 const idleTime = this.timePassedSinceLastAction();
                 if (idleTime > 5000) {
-                    this.playAnimation(ImageHelper.PEPE.long_idle);
+                    this.playAnimation(this.imgArrPepeLongIdle);
                 } else {
-                    this.playAnimation(ImageHelper.PEPE.idle);
+                    this.playAnimation(this.imgArrPepeIdle);
                 }
             }
         }, 150);

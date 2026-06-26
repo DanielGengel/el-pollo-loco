@@ -3,7 +3,7 @@ export class Level {
     clouds;
     collectibleObjects;
     backgroundObjects;
-    levelEndX = 2200;
+    levelEndX = 3000;
 
     constructor(enemies, clouds, backgroundObjects, collectibleObjects) {
         this.enemies = enemies;

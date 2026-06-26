@@ -25,7 +25,7 @@ export class World {
     statusBarCoins = new StatusBarCoins();
     statusBarBottles = new StatusBarBottles();
     statusBarEndboss = new StatusBarEndboss();
-    throwableObject = [];
+    throwableObject = []; // Array to draw object thrown to map
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -51,7 +51,9 @@ export class World {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
             // Kill chicken only of this.character.speedY < -10 (= negative speed)
-            if (this.character.isColliding(enemy) && this.character.speedY < -10) {
+            console.log("this.character.speedY", this.character.speedY);
+            
+            if (this.character.isColliding(enemy) && this.character.speedY < 0) {
                 enemy.die();
                 this.character.jump();
 
@@ -128,7 +130,8 @@ export class World {
                     this.character.y + 100,
                     this.character.otherDirection,
                 );
-                this.throwableObject.push(bottle);
+                // Array to draw object thrown to map
+                this.throwableObject.push(bottle); 
                 this.character.throwBottle();
                 // number of available bottles * 20 => status bar percentage
                 this.statusBarBottles.setPercentage(this.character.bottles * 20);
@@ -137,6 +140,19 @@ export class World {
             }
         }
     }
+
+    checkCollisionOfEndbossWithBottle() {
+        
+    }
+
+
+
+
+
+
+
+
+
 
     setWorld() {
         this.character.world = this; // to make the World accessible to the character
@@ -148,11 +164,6 @@ export class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.cameraX, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
-
-        //this.ctx.translate(-this.cameraX, 0);
-        // Space for fixed objects moving with camera
-        // this.addToMap(this.statusBar);
-        // this.ctx.translate(this.cameraX, 0);
 
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);

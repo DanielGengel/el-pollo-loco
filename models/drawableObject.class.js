@@ -28,11 +28,11 @@ export class DrawableObject {
     drawCollsionFrame(ctx) {
         if (this.showFrame) {
             // Picture frame
-            // ctx.beginPath();
-            // ctx.lineWidth = "2";
-            // ctx.strokeStyle = "blue";
-            // ctx.rect(this.x, this.y, this.width, this.height);
-            // ctx.stroke();
+            ctx.beginPath();
+            ctx.lineWidth = "2";
+            ctx.strokeStyle = "blue";
+            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.stroke();
 
             // Corrected picture frame (real frame)
             ctx.beginPath();
