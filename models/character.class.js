@@ -21,6 +21,15 @@ export class Character extends MoveableObject {
     bottles = 0;
     lastAction = Date.now();
 
+    // animations = {
+    //     idle: this.imgArrPepeIdle,
+    //     longIdle: this.imgArrPepeLongIdle,
+    //     walk: this.imgArrPepeWalk,
+    //     jump: this.imgArrPepeJump,
+    //     hurt: this.imgArrPepeHurt,
+    //     dead: this.imgArrPepeDead,
+    // };
+
     constructor() {
         super();
         this.loadImage(this.imgStart);
@@ -103,7 +112,7 @@ export class Character extends MoveableObject {
                 this.playAnimation(this.imgArrPepeHurt);
             } else if (this.isAboveGround()) {
                 // console.log("is above ground");
-                this.lastAction = Date.now(); 
+                this.lastAction = Date.now();
                 this.playAnimation(this.imgArrPepeJump);
             } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                 // console.log("walking");
@@ -118,7 +127,27 @@ export class Character extends MoveableObject {
                 }
             }
         }, 150);
+
+        // IntervalHub.startInterval(() => {
+        //     this.playAnimation(this.animations[this.getState()]);
+        // }, 150);
     }
+
+    // getState() {
+    //     if (this.isDead()) {
+    //         return "dead";
+    //     } else if (this.isHurt()) {
+    //         return "hurt";
+    //     } else if (this.isAboveGround()) {
+    //         this.lastAction = Date.now();
+    //         return "jump";
+    //     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+    //         this.lastAction = Date.now();
+    //         return "walk";
+    //     } else if (this.timePassedSinceLastAction() > 5000) {
+    //         return "longIdle";
+    //     } else return "idle";
+    // }
 
     timePassedSinceLastAction() {
         return Date.now() - this.lastAction;

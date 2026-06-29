@@ -7,9 +7,13 @@ import { Endboss } from "../models/endboss.class.js";
 import { CollectibleObjects } from "../models/collectibleObjects.class.js";
 import { Bottle } from "../models/bottles.class.js";
 import { Coin } from "../models/coins.class.js";
+import { ChickenSmall } from "../models/chickenSmall.class.js";
 
 export const level1 = new Level(
-    [new Chicken(), new Chicken(), new Chicken(), new Chicken(), new Endboss()],
+    [new Chicken(), new Chicken(), new Chicken(), new Chicken(),
+        new ChickenSmall(), new ChickenSmall(), new ChickenSmall(), 
+        new ChickenSmall(), new ChickenSmall(), 
+        new Endboss()],
     [new Cloud(), new Cloud()],
     [
         new BackgroundObject(ImageHelper.BACKGROUND.sky[0], -719),

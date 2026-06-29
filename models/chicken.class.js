@@ -38,6 +38,7 @@ export class Chicken extends MoveableObject {
             }
         }, 200);
 
+        // Only chicken alive can move
         IntervalHub.startInterval(() => {
             if (!this.isDead()) {
                 this.moveLeft();

@@ -19,6 +19,8 @@ export class MoveableObject extends DrawableObject {
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+        // console.log(this.currentImage++);
+        
     }
 
     moveRight() {

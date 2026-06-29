@@ -46,8 +46,6 @@ showFrame = true; // show frame around chicken
         }, 25);
     }
 
-    
-
     animateFlyingBottle() {
         IntervalHub.startInterval(() => {
             if (this.bottleAboveGround) {
