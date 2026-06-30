@@ -47,36 +47,52 @@ export class World {
             this.checkCollisionWithCollectibles();
             this.checkObjectThrown();
             this.checkCollisionBottleWithEnemy();
+            this.checkCollisionBottleWithGround();
             // this.checkCollisionOfBottleWithGround();
         }, 100);
     }
 
+    checkCollisionBottleWithGround() {
+        IntervalHub.startInterval(() => {
+            this.throwableObject.forEach((bottle, index) => {
+                if (!bottle.hasHit && bottle.y >= 340) {
+                    bottle.breakAndSplash();
+
+                    setTimeout(() => {
+                        this.throwableObject.splice(index, 1);
+                    }, 300);
+                }
+            }, 1000 / 60);
+        });
+    }
+
     checkCollisionBottleWithEnemy() {
         this.throwableObject.forEach((bottle, bottleIndex) => {
+            if (bottle.hasHit) return; // Avoid calling it to often
             this.level.enemies.forEach((enemy) => {
                 if (bottle.isColliding(enemy)) {
                     console.log("Bottle hit", enemy);
                     // kill enemy
-                    if (enemy instanceof Endboss) {
+                    if (enemy instanceof Endboss && enemy.energy > 0) {
                         console.log("this enemy instanceof Endboss, energy = ", enemy.energy);
                         enemy.hit();
-                this.statusBarEndboss.setPercentage(enemy.energy);
-                        
+                        this.statusBarEndboss.setPercentage(enemy.energy);
+                    } else {
+                        enemy.die();
+
+                        // bottle splash animation
+                        bottle.breakAndSplash();
+
+                        // remove enemy after death animation
+                        setTimeout(() => {
+                            this.removeObjectFromMap(this.level.enemies, enemy);
+                        }, 500);
+
+                        // remove bottle after splash animation
+                        setTimeout(() => {
+                            this.throwableObject.splice(bottleIndex, 1);
+                        }, 300);
                     }
-                    // enemy.die();
-
-                    // bottle splash animation
-                    bottle.breakAndSplash();
-
-                    // remove enemy after death animation
-                    setTimeout(() => {
-                        this.removeObjectFromMap(this.level.enemies, enemy);
-                    }, 500);
-
-                    // remove bottle after splash animation
-                    setTimeout(() => {
-                        this.throwableObject.splice(bottleIndex, 1);
-                    }, 300);
                 }
             });
         });
