@@ -12,6 +12,7 @@ import { StatusBarBottles } from "./statusBarBottles.class.js";
 import { StatusBarEndboss } from "./statusBarEndboss.class.js";
 import { Coin } from "./coins.class.js";
 import { Bottle } from "./bottles.class.js";
+import { Endboss } from "./endboss.class.js";
 
 export class World {
     character = new Character();
@@ -45,15 +46,47 @@ export class World {
             this.checkCollisionWithEnemy();
             this.checkCollisionWithCollectibles();
             this.checkObjectThrown();
+            this.checkCollisionBottleWithEnemy();
             // this.checkCollisionOfBottleWithGround();
         }, 100);
+    }
+
+    checkCollisionBottleWithEnemy() {
+        this.throwableObject.forEach((bottle, bottleIndex) => {
+            this.level.enemies.forEach((enemy) => {
+                if (bottle.isColliding(enemy)) {
+                    console.log("Bottle hit", enemy);
+                    // kill enemy
+                    if (enemy instanceof Endboss) {
+                        console.log("this enemy instanceof Endboss, energy = ", enemy.energy);
+                        enemy.hit();
+                this.statusBarEndboss.setPercentage(enemy.energy);
+                        
+                    }
+                    // enemy.die();
+
+                    // bottle splash animation
+                    bottle.breakAndSplash();
+
+                    // remove enemy after death animation
+                    setTimeout(() => {
+                        this.removeObjectFromMap(this.level.enemies, enemy);
+                    }, 500);
+
+                    // remove bottle after splash animation
+                    setTimeout(() => {
+                        this.throwableObject.splice(bottleIndex, 1);
+                    }, 300);
+                }
+            });
+        });
     }
 
     checkCollisionWithEnemy() {
         this.level.enemies.forEach((enemy) => {
             // console.log("checkCollision forEach((enemy)");
             // Kill chicken only of this.character.speedY < -10 (= negative speed)
-            console.log("this.character.speedY", this.character.speedY);
+            // console.log("this.character.speedY", this.character.speedY);
 
             if (this.character.isColliding(enemy) && this.character.speedY < 0) {
                 enemy.die();
@@ -149,7 +182,7 @@ export class World {
 
     // checkCollisionOfBottleWithGround() {
     //     console.log("this.throwableObject.bottleAboveGround", this.bottleAboveGround);
-        
+
     //     // if (this.bottleAboveGround === true) {
     //     //     this.throwableObject.forEach((throwableObject, index) => {
     //     //         if (throwableObject.speedY < -38) {

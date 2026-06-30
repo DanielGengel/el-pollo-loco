@@ -35,7 +35,7 @@ export class MoveableObject extends DrawableObject {
         this.speedY = 30;
     }
 
-    applayGravity() {
+    applyGravity() {
         IntervalHub.startInterval(() => {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
@@ -116,7 +116,7 @@ export class MoveableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
-        console.log(this.energy);
+        // console.log(this.energy);
     }
 
     isHurt() {

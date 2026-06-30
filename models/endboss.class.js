@@ -33,4 +33,14 @@ export class Endboss extends MoveableObject {
             // this.currentImage++;
         }, 200);
     }
+
+
+    // die() {
+    //     if (this.isDead()) return;
+
+    //     this.energy = 0;
+    //     console.log("enboss energy = ", this.energy);
+        
+    // }
+
 }

@@ -9,7 +9,9 @@ export class ThrowableObject extends MoveableObject {
     imgStart = ImageHelper.SALSA_BOTTLE.rotation[3];
     imgArrBottleRotation = ImageHelper.SALSA_BOTTLE.rotation;
     imgArrBottleSplash = ImageHelper.SALSA_BOTTLE.splash;
-showFrame = true; // show frame around chicken
+
+    offset = { top: 0, right: 0, bottom: 0, left: 0 };
+    showFrame = true; // show frame around chicken
     constructor(x, y, otherDirection) {
         super();
         this.loadImage(this.imgStart);
@@ -27,7 +29,7 @@ showFrame = true; // show frame around chicken
 
     throw() {
         this.speedY = 30;
-        this.applayGravity();
+        this.applyGravity();
         this.bottleAboveGround = true;
         this.bottleFlying = true;
 
@@ -37,7 +39,9 @@ showFrame = true; // show frame around chicken
         }
 
         IntervalHub.startInterval(() => {
-            // If character looking in other direction, reverse throw direction
+            // If bottle has hit, return;
+            if (this.hasHit) return;
+
             if (this.otherDirection) {
                 this.x -= 10;
             } else {
@@ -48,9 +52,22 @@ showFrame = true; // show frame around chicken
 
     animateFlyingBottle() {
         IntervalHub.startInterval(() => {
-            if (this.bottleAboveGround) {
+            if (!this.hasHit) {
                 this.playAnimation(this.imgArrBottleRotation);
+            } else {
+                this.playAnimation(this.imgArrBottleSplash);
             }
-        }, 9000 / 60);
+        }, 1000 / 60);
+    }
+
+    breakAndSplash() {
+        // this.loadImage("img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png");
+
+        // or start splash animation
+        // this.playAnimation(this.imgArrBottleSplash);
+
+        this.hasHit = true;
+        this.speedX = 0;
+        this.speedY = 0;
     }
 }

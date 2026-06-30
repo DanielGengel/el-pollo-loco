@@ -39,48 +39,11 @@ export class Character extends MoveableObject {
         this.loadImages(this.imgArrPepeJump);
         this.loadImages(this.imgArrPepeHurt);
         this.loadImages(this.imgArrPepeDead);
-        this.applayGravity();
+        this.applyGravity();
         this.animate();
     }
 
-    // animate() {
-
-    //     setInterval(() => {
-    //         // Walking animation
-    //         if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-    //             this.x += this.speed;
-    //             this.otherDirection = false;
-    //             console.log("charcter move forward...");
-    //         }
-
-    //         if (this.world.keyboard.LEFT && this.x > 0) {
-    //             this.x -= this.speed;
-    //             this.otherDirection = true;
-    //         }
-    //         this.world.cameraX = -this.x + 100;
-
-    //     }, 1000 / 60);
-
-    //     // setInterval(() => {
-    //         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-    //             console.log("charcter make steps...");
-
-    //             // Walk 'movement' animation
-    //             // this.playAnimation(ImageHelper.PEPE.walk, 200);
-    //             let index = this.currentImage % ImageHelper.PEPE.walk.length;
-    //             let path = ImageHelper.PEPE.walk[index];
-    //             this.img = this.imageCache[path];
-    //             this.currentImage++;
-    //         } else {
-    //             // Idle animation
-    //             this.playAnimation(ImageHelper.PEPE.idle, 200);
-    //             // let index = this.currentImage % ImageHelper.PEPE.idle.length;
-    //             // let path = ImageHelper.PEPE.idle[index];
-    //             // this.img = this.imageCache[path];
-    //             // this.currentImage++;
-    //         }
-    //     // }, 200);
-    // }
+    
 
     animate() {
         // Move character (60 FPS)
