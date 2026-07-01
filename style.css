@@ -1,9 +1,36 @@
+/* rye-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Rye';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/rye-v17-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+* {
+    margin: 0; /* Alle Abstände auf null setzen */
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
 body {
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    background: url(./assets/img/background.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+font-family: 'Rye';
+    font-size: 26px;
 }
 
 canvas {
-    background-color: black;
+    
+    background-color: white;
+    border: 1px solid white;
+    border-radius: 25px;
+    box-shadow: 10px 10px 10px burlywood;
 }

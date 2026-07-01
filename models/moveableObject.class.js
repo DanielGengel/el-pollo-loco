@@ -49,6 +49,7 @@ export class MoveableObject extends DrawableObject {
     // bottle should fall through ground, character until dead should not
     isAboveGround() {
         if (this.bottleAboveGround) {
+            console.log("bottleAboveGround");
             return true;
         } else 
             {

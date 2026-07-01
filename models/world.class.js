@@ -53,16 +53,10 @@ export class World {
     }
 
     checkCollisionBottleWithGround() {
-        IntervalHub.startInterval(() => {
-            this.throwableObject.forEach((bottle, index) => {
-                if (!bottle.hasHit && bottle.y >= 340) {
-                    bottle.breakAndSplash();
-
-                    setTimeout(() => {
-                        this.throwableObject.splice(index, 1);
-                    }, 300);
-                }
-            }, 1000 / 60);
+        this.throwableObject.forEach((bottle) => {
+            if (!bottle.hasHit && bottle.y >= 340) {
+                bottle.breakAndSplash(true);
+            }
         });
     }
 
@@ -77,11 +71,12 @@ export class World {
                         console.log("this enemy instanceof Endboss, energy = ", enemy.energy);
                         enemy.hit();
                         this.statusBarEndboss.setPercentage(enemy.energy);
+                        bottle.breakAndSplash(false);
                     } else {
                         enemy.die();
 
                         // bottle splash animation
-                        bottle.breakAndSplash();
+                        bottle.breakAndSplash(false);
 
                         // remove enemy after death animation
                         setTimeout(() => {
@@ -249,11 +244,11 @@ export class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        mo.drawCollsionFrame(this.ctx);
+        // mo.drawCollsionFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);
-            mo.drawCollsionFrame(this.ctx);
+            // dmo.drawCollsionFrame(this.ctx);
         }
     }
 
