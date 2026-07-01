@@ -1,5 +1,5 @@
 import { Character } from "./character.class.js";
-import { level1 } from "../levels/level1.js";
+import { createLevel1 } from "../levels/level1.js";
 import { MoveableObject } from "./moveableObject.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 import { StatusBar } from "./statusBar.class.js";
@@ -17,7 +17,8 @@ import { Endboss } from "./endboss.class.js";
 export class World {
     character = new Character();
     chicken = new Chicken();
-    level = level1;
+    level = createLevel1();
+    gameIsRunning = true; 
     canvas;
     ctx;
     keyboard;
@@ -39,6 +40,11 @@ export class World {
         // this.character.getRealFrame();
         this.run();
     }
+
+    // Create new game
+    destroyWorld() {
+    this.gameIsRunning = false;
+}
 
     run() {
         // console.log("checkCollision()");
@@ -212,6 +218,8 @@ export class World {
     }
 
     draw() {
+
+        if (!this.gameIsRunning) return;
         // clear content from canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.translate(this.cameraX, 0);

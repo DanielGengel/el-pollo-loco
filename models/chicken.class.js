@@ -21,7 +21,7 @@ export class Chicken extends MoveableObject {
         this.loadImages(this.imgArrChickenDead);
 
         // Chicken start position = 200px (position from character + random number)
-        this.x = 200 + Math.random() * 2000;
+        this.x = 500 + Math.random() * 2000;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }

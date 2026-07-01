@@ -9,46 +9,83 @@ import { Bottle } from "../models/bottles.class.js";
 import { Coin } from "../models/coins.class.js";
 import { ChickenSmall } from "../models/chickenSmall.class.js";
 
-export const level1 = new Level(
-    [new Chicken(), new Chicken(), new Chicken(), new Chicken(),
-        new ChickenSmall(), new ChickenSmall(), new ChickenSmall(), 
-        new ChickenSmall(), new ChickenSmall(), 
-        new Endboss()],
-    [new Cloud(), new Cloud()],
-    [
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.clouds[1], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], -719),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], -719),
+export function createLevel1() {
 
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.clouds[1], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 0),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 0),
+    const enemies = [];
+    const clouds = [];
+    const backgroundObjects = [];
+    const collectibles = [];
 
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.clouds[1], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719),
+    // Chickens
+    for (let i = 0; i < 5; i++) {
+        enemies.push(new Chicken());
+    }
 
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719 * 2),
-        new BackgroundObject(ImageHelper.BACKGROUND.clouds[0], 719 * 2),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[0], 719 * 2),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[0], 719 * 2),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[0], 719 * 2),
+    // Small chickens
+    for (let i = 0; i < 5; i++) {
+        enemies.push(new ChickenSmall());
+    }
 
-        new BackgroundObject(ImageHelper.BACKGROUND.sky[0], 719 * 3),
-        new BackgroundObject(ImageHelper.BACKGROUND.clouds[1], 719 * 3),
-        new BackgroundObject(ImageHelper.BACKGROUND.third_layer[1], 719 * 3),
-        new BackgroundObject(ImageHelper.BACKGROUND.second_layer[1], 719 * 3),
-        new BackgroundObject(ImageHelper.BACKGROUND.first_layer[1], 719 * 3),
-    ],
-    [new Bottle(), new Bottle(), new Bottle(), 
-        new Bottle(), new Bottle(), new Bottle(),
-        new Bottle(), new Bottle(), new Bottle(),
-        new Coin(), new Coin(), new Coin(),
-        new Coin(), new Coin()]
-);
+    // Endboss
+    enemies.push(new Endboss());
+
+    // Clouds
+    for (let i = 0; i < 2; i++) {
+        clouds.push(new Cloud());
+    }
+
+    // Background
+    const layers = [
+        "sky",
+        "clouds",
+        "third_layer",
+        "second_layer",
+        "first_layer"
+    ];
+
+    for (let section = -2; section <= 5; section++) {
+
+        const x = section * 719;
+
+        // Sky always uses image 0
+        backgroundObjects.push(
+            new BackgroundObject(ImageHelper.BACKGROUND.sky[0], x)
+        );
+
+        // Alternate other layers
+        const imageIndex = Math.abs(section % 2);
+
+        backgroundObjects.push(
+            new BackgroundObject(ImageHelper.BACKGROUND.clouds[imageIndex], x)
+        );
+
+        backgroundObjects.push(
+            new BackgroundObject(ImageHelper.BACKGROUND.third_layer[imageIndex], x)
+        );
+
+        backgroundObjects.push(
+            new BackgroundObject(ImageHelper.BACKGROUND.second_layer[imageIndex], x)
+        );
+
+        backgroundObjects.push(
+            new BackgroundObject(ImageHelper.BACKGROUND.first_layer[imageIndex], x)
+        );
+    }
+
+    // Bottles
+    for (let i = 0; i < 10; i++) {
+        collectibles.push(new Bottle());
+    }
+
+    // Coins
+    for (let i = 0; i < 5; i++) {
+        collectibles.push(new Coin());
+    }
+
+    return new Level(
+        enemies,
+        clouds,
+        backgroundObjects,
+        collectibles
+    );
+}

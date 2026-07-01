@@ -53,7 +53,7 @@ export class Character extends MoveableObject {
                 this.moveRight();
             }
 
-            if (this.world.keyboard.LEFT && this.x > 0) {
+            if (this.world.keyboard.LEFT && this.x > -1200) {
                 this.otherDirection = true; // Mirror character image
                 this.moveLeft();
             }

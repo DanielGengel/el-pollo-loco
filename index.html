@@ -9,6 +9,59 @@
 </head>
 <body>
     <h1>EL POLLO LOCO</h1>
-    <canvas id="canvas" width="720" height="480"></canvas>
+
+    <div class="overlayContainer">
+
+        <canvas id="canvas" width="720" height="480"></canvas>
+
+        <!-- START SCREEN -->
+        <div id="startScreen" class="overlay active">
+            <div class="menu">
+
+
+                <button id="btnStart">START GAME</button>
+                <button id="btnInfo">INFO</button>
+                <button id="btnMute">SOUNDS OFF</button>
+                <button id="btnImprint">IMPRINT</button>
+            </div>
+        </div>
+
+        <!-- GAME OVER SCREEN -->
+        <div id="gameOverScreen" class="overlay">
+            <div class="menu">
+                <h2>GAME OVER</h2>
+
+                <button id="btnRestart">PLAY AGAIN</button>
+                <button id="btnMenu">MAIN MENU</button>
+            </div>
+        </div>
+
+        <!-- INFO POPUP -->
+        <div id="infoPopup" class="popup hidden">
+            <h3>How to Play</h3>
+
+            <p>
+                Move with Arrow Keys.<br>
+                Jump with SPACE.<br>
+                Throw bottles with D.
+            </p>
+
+            <button class="closePopup">Close</button>
+        </div>
+
+        <!-- IMPRINT POPUP -->
+        <div id="imprintPopup" class="popup hidden">
+            <h3>Imprint</h3>
+
+            <p>
+                 Name<br>
+                 Address<br>
+                 Email
+            </p>
+
+            <button class="closePopup">Close</button>
+        </div>
+
+    </div>
 </body>
 </html>
