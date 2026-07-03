@@ -25,28 +25,27 @@ export class Endboss extends MoveableObject {
         this.loadImages(this.imgArrEndbossDead);
         this.x = 2500;
 
-        this.animate();
+        // this.animate();
+        IntervalHub.startInterval(this.animate, 200);
     }
 
-    animate() {
-        IntervalHub.startInterval(() => {
-            if (this.isDead()) {
-                // console.log("is above ground");
-                this.playAnimation(this.imgArrEndbossDead);
-            } else if (this.isHurt()) {
-                // console.log("is above ground");
-                this.playAnimation(this.imgArrEndbossHurt);
-                // this.playAnimation(this.imgArrEndbossAttack);
-            } else {
-                this.playAnimation(this.imgArrEndbossAlert);
-            }
+    animate = () => {
+        if (this.isDead()) {
+            // console.log("is above ground");
+            this.playAnimation(this.imgArrEndbossDead);
+        } else if (this.isHurt()) {
+            // console.log("is above ground");
+            this.playAnimation(this.imgArrEndbossHurt);
+            // this.playAnimation(this.imgArrEndbossAttack);
+        } else {
+            this.playAnimation(this.imgArrEndbossAlert);
+        }
 
-            // let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
-            // let path = ImageHelper.CHICKEN.chicken_normal[index];
-            // this.img = this.imageCache[path];
-            // this.currentImage++;
-        }, 200);
-    }
+        // let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
+        // let path = ImageHelper.CHICKEN.chicken_normal[index];
+        // this.img = this.imageCache[path];
+        // this.currentImage++;
+    };
 
     die() {
         if (this.isDead()) return;

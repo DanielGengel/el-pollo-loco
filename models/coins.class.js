@@ -19,12 +19,12 @@ export class Coin extends CollectibleObjects {
         super();
         this.loadImage(ImageHelper.COINS.idle[0]);
         this.loadImages(ImageHelper.COINS.idle);
-        this.animate();
+        // this.animate();
+        IntervalHub.startInterval(this.animate, 300);
+
     }
 
-    animate() {
-        IntervalHub.startInterval(() => {
+    animate = () => {
             this.playAnimation(ImageHelper.COINS.idle);
-        }, 300);
     }
 }

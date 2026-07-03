@@ -10,11 +10,14 @@ import { Coin } from "../models/coins.class.js";
 import { ChickenSmall } from "../models/chickenSmall.class.js";
 
 export function createLevel1() {
+console.log("Create Level 1");
 
     const enemies = [];
     const clouds = [];
     const backgroundObjects = [];
     const collectibles = [];
+    let bottleX = 300;
+    let coinX = 300;
 
     // Chickens
     for (let i = 0; i < 5; i++) {
@@ -73,14 +76,22 @@ export function createLevel1() {
     }
 
     // Bottles
-    for (let i = 0; i < 10; i++) {
-        collectibles.push(new Bottle());
-    }
+   for (let i = 0; i < 9; i++) {
+    const bottle = new Bottle();
+    bottle.x = bottleX;
+    collectibles.push(bottle);
+
+    bottleX += 150 + Math.random() * 500;
+}
 
     // Coins
-    for (let i = 0; i < 5; i++) {
-        collectibles.push(new Coin());
-    }
+    for (let i = 0; i < 9; i++) {
+    const coin = new Coin();
+    coin.x = coinX;
+    collectibles.push(coin);
+
+    coinX += 150 + Math.random() * 500;
+}
 
     return new Level(
         enemies,

@@ -1,4 +1,4 @@
-import { IntervalHub } from "../helper/intervallHub.js";
+// import { IntervalHub } from "../helper/intervallHub.js";
 import { DrawableObject } from "./drawableObject.class.js";
 
 export class MoveableObject extends DrawableObject {
@@ -35,15 +35,15 @@ export class MoveableObject extends DrawableObject {
         this.speedY = 30;
     }
 
-    applyGravity() {
-        IntervalHub.startInterval(() => {
+    applyGravity = () => {
+        
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             } else {
                 this.speedY = 0;
             }
-        }, 1000 / 25);
+        
     }
 
     // bottle should fall through ground, character until dead should not

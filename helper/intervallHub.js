@@ -15,9 +15,10 @@ export class IntervalHub {
 
     //Stoppt alle registrierten Intervalle und leert die Registry.
     static stopAllIntervals() {
-        console.log(IntervalHub.allIntervals.length);
+        console.log("IntervalHub.allIntervals.length => ", IntervalHub.allIntervals.length );
         IntervalHub.allIntervals.forEach(clearInterval);
-        // IntervalHub.allIntervals = [];
+        IntervalHub.allIntervals = [];
+        console.log("IntervalHub.allIntervals.length => ", IntervalHub.allIntervals.length );
     }
 
     // To stop single intervalls 

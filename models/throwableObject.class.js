@@ -55,18 +55,16 @@ export class ThrowableObject extends MoveableObject {
     }
 
     applyGravityToBottle() {
-    this.gravityInterval = IntervalHub.startInterval(() => {
-
-        if (this.y < 340 || this.speedY > 0) {
-            this.y -= this.speedY;
-            this.speedY -= this.acceleration;
-        } else {
-            this.y = 340;
-            this.speedY = 0;
-        }
-
-    }, 1000 / 25);
-}
+        this.gravityInterval = IntervalHub.startInterval(() => {
+            if (this.y < 340 || this.speedY > 0) {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            } else {
+                this.y = 340;
+                this.speedY = 0;
+            }
+        }, 1000 / 25);
+    }
 
     animateFlyingBottle() {
         this.animationInterval = IntervalHub.startInterval(() => {
@@ -79,36 +77,36 @@ export class ThrowableObject extends MoveableObject {
     }
 
     breakAndSplash(onGround = true) {
-    if (this.hasHit) return;
+        if (this.hasHit) return;
 
-    this.hasHit = true;
+        this.hasHit = true;
 
-    // stop horizontal movement
-    IntervalHub.stopInterval(this.moveInterval);
+        // stop horizontal movement
+        IntervalHub.stopInterval(this.moveInterval);
 
-    if (onGround) {
-        // Bottle already reached the ground
-        IntervalHub.stopInterval(this.gravityInterval);
-
-        this.speedY = 0;
-        this.y = 390;
-    } else {
-        // Bottle hit an enemy in the air.
-        // Gravity continues so the splash falls down.
-        this.speedY = 0;
-    }
-
-    setTimeout(() => {
-        IntervalHub.stopInterval(this.animationInterval);
-
-        // If gravity is still running (enemy hit), stop it once the splash
-        // reaches the ground.
-        if (!onGround) {
+        if (onGround) {
+            // Bottle already reached the ground
             IntervalHub.stopInterval(this.gravityInterval);
-            this.y = 340;
+
+            this.speedY = 0;
+            this.y = 390;
+        } else {
+            // Bottle hit an enemy in the air.
+            // Gravity continues so the splash falls down.
+            this.speedY = 0;
         }
 
-        this.img = this.imageCache[this.imgArrBottleSplash.at(-1)];
-    }, 300);
-}
+        setTimeout(() => {
+            IntervalHub.stopInterval(this.animationInterval);
+
+            // If gravity is still running (enemy hit), stop it once the splash
+            // reaches the ground.
+            if (!onGround) {
+                IntervalHub.stopInterval(this.gravityInterval);
+                this.y = 340;
+            }
+
+            this.img = this.imageCache[this.imgArrBottleSplash.at(-1)];
+        }, 300);
+    }
 }

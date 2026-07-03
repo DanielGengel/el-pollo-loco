@@ -39,62 +39,63 @@ export class Character extends MoveableObject {
         this.loadImages(this.imgArrPepeJump);
         this.loadImages(this.imgArrPepeHurt);
         this.loadImages(this.imgArrPepeDead);
-        this.applyGravity();
-        this.animate();
+        // this.applyGravity();
+        IntervalHub.startInterval(this.applyGravity, 1000 / 25);
+        // this.animate();
+        IntervalHub.startInterval(this.animate, 150);
+        IntervalHub.startInterval(this.checkKeyboard, 1000 / 60);
     }
 
-    
-
-    animate() {
+    checkKeyboard = () => {
         // Move character (60 FPS)
-        IntervalHub.startInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-                this.otherDirection = false; // Don't mirror character image
-                this.moveRight();
-            }
 
-            if (this.world.keyboard.LEFT && this.x > -1200) {
-                this.otherDirection = true; // Mirror character image
-                this.moveLeft();
-            }
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+            this.otherDirection = false; // Don't mirror character image
+            this.moveRight();
+        }
 
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
-                this.jump();
-            }
+        if (this.world.keyboard.LEFT && this.x > -1200) {
+            this.otherDirection = true; // Mirror character image
+            this.moveLeft();
+        }
 
-            this.world.cameraX = -this.x + 100;
-        }, 1000 / 60);
+        if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            this.jump();
+        }
 
+        this.world.cameraX = -this.x + 100;
+    };
+
+    animate = () => {
         // Animate character (every 200 ms)
-        IntervalHub.startInterval(() => {
-            if (this.isDead()) {
-                // console.log("is above ground");
-                this.playAnimation(this.imgArrPepeDead);
-            } else if (this.isHurt()) {
-                // console.log("is above ground");
-                this.playAnimation(this.imgArrPepeHurt);
-            } else if (this.isAboveGround()) {
-                // console.log("is above ground");
-                this.lastAction = Date.now();
-                this.playAnimation(this.imgArrPepeJump);
-            } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                // console.log("walking");
-                this.lastAction = Date.now();
-                this.playAnimation(this.imgArrPepeWalk);
+
+        if (this.isDead()) {
+            // console.log("is above ground");
+            this.playAnimation(this.imgArrPepeDead);
+        } else if (this.isHurt()) {
+            // console.log("is above ground");
+            this.playAnimation(this.imgArrPepeHurt);
+        } else if (this.isAboveGround()) {
+            // console.log("is above ground");
+            this.lastAction = Date.now();
+            this.playAnimation(this.imgArrPepeJump);
+        } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+            // console.log("walking");
+            this.lastAction = Date.now();
+            this.playAnimation(this.imgArrPepeWalk);
+        } else {
+            const idleTime = this.timePassedSinceLastAction();
+            if (idleTime > 5000) {
+                this.playAnimation(this.imgArrPepeLongIdle);
             } else {
-                const idleTime = this.timePassedSinceLastAction();
-                if (idleTime > 5000) {
-                    this.playAnimation(this.imgArrPepeLongIdle);
-                } else {
-                    this.playAnimation(this.imgArrPepeIdle);
-                }
+                this.playAnimation(this.imgArrPepeIdle);
             }
-        }, 150);
+        }
 
         // IntervalHub.startInterval(() => {
         //     this.playAnimation(this.animations[this.getState()]);
         // }, 150);
-    }
+    };
 
     // getState() {
     //     if (this.isDead()) {

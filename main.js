@@ -23,6 +23,8 @@ function init() {
 // Restart game at the end, but also first start = restart because
 // game is running in backgroud of starting screen
 function restartGame() {
+    console.log("restartGame");
+    
     world.destroyWorld(); // stop intervals, animations, sounds...
     IntervalHub.stopAllIntervals();
     world = new World(canvas, Keyboard);

@@ -1,8 +1,9 @@
 import { Chicken } from "./chicken.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
+import { MoveableObject } from "./moveableObject.class.js";
 
-export class ChickenSmall extends Chicken {
+export class ChickenSmall extends MoveableObject {
     width = 60;
     height = 70;
     y = 360;
@@ -14,32 +15,42 @@ export class ChickenSmall extends Chicken {
 
     constructor() {
         super();
+        
 
         // Reload the small chicken images (super() loaded the normal chicken images)
         this.loadImage(this.imgStart);
         this.loadImages(this.imgArrChickenNormal);
         this.loadImages(this.imgArrChickenDead);
 
+        // Chicken start position = 200px (position from character + random number)
+        this.x = 500 + Math.random() * 2000;
+
         this.speed = 0.2 + Math.random() * 0.75;
 
         // true = moving left, false = moving right
         this.moveLeftDirection = Math.random() < 0.5;
+
+        // this.animate();
+         IntervalHub.startInterval(this.animate, 200);
+         IntervalHub.startInterval(this.moveRandomly, 1000 / 60);
     }
 
-    animate() {
+    animate = () => {
         // Animation
-        IntervalHub.startInterval(() => {
+        // IntervalHub.startInterval(() => {
             if (this.isDead()) {
                 this.playAnimation(this.imgArrChickenDead);
             } else {
                 this.playAnimation(this.imgArrChickenNormal);
             }
-        }, 200);
+        // }, 200);
+    }
 
+    moveRandomly = () => {
         // Movement
-        IntervalHub.startInterval(() => {
+        // IntervalHub.startInterval(() => {
             // Stop dead chicken from moving before removing it from map
-            if (this.isDead()) return;
+            // if (this.isDead()) return;
 
             // Small chance to change direction every frame
             if (Math.random() < 0.01) {
@@ -53,6 +64,12 @@ export class ChickenSmall extends Chicken {
                 this.moveRight();
                 this.otherDirection = true;
             }
-        }, 1000 / 60);
+        // }, 1000 / 60);
+    }
+
+      die() {
+        if (this.isDead()) return;
+
+        this.energy = 0;
     }
 }

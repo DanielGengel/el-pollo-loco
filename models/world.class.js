@@ -18,7 +18,7 @@ export class World {
     character = new Character();
     chicken = new Chicken();
     level = createLevel1();
-    gameIsRunning = true; 
+    gameIsRunning = true;
     canvas;
     ctx;
     keyboard;
@@ -38,25 +38,22 @@ export class World {
         this.draw();
         this.setWorld();
         // this.character.getRealFrame();
-        this.run();
+        // this.run();
+        IntervalHub.startInterval(this.run, 100);
     }
 
     // Create new game
     destroyWorld() {
-    this.gameIsRunning = false;
-}
-
-    run() {
-        // console.log("checkCollision()");
-        IntervalHub.startInterval(() => {
-            this.checkCollisionWithEnemy();
-            this.checkCollisionWithCollectibles();
-            this.checkObjectThrown();
-            this.checkCollisionBottleWithEnemy();
-            this.checkCollisionBottleWithGround();
-            // this.checkCollisionOfBottleWithGround();
-        }, 100);
+        this.gameIsRunning = false;
     }
+
+    run = () => {
+        this.checkCollisionWithEnemy();
+        this.checkCollisionWithCollectibles();
+        this.checkObjectThrown();
+        this.checkCollisionBottleWithEnemy();
+        this.checkCollisionBottleWithGround();
+    };
 
     checkCollisionBottleWithGround() {
         this.throwableObject.forEach((bottle) => {
@@ -218,7 +215,6 @@ export class World {
     }
 
     draw() {
-
         if (!this.gameIsRunning) return;
         // clear content from canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

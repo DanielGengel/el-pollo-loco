@@ -11,8 +11,6 @@ export class Chicken extends MoveableObject {
     imgArrChickenDead = ImageHelper.CHICKEN.chicken_normal_dead;
     showFrame = true; // show frame around chicken
     offset = { top: 10, right: 0, bottom: 0, left: 0 };
-    
-
 
     constructor() {
         super();
@@ -23,12 +21,16 @@ export class Chicken extends MoveableObject {
         // Chicken start position = 200px (position from character + random number)
         this.x = 500 + Math.random() * 2000;
         this.speed = 0.15 + Math.random() * 0.25;
-        this.animate();
+        // this.animate();
+        IntervalHub.startInterval(this.animate, 200);
+         // Only chicken alive can move
+         IntervalHub.startInterval(this.checkIfChickenIsAlive, 1000 / 60);
+
     }
 
-    animate() {
+    animate = () => {
         // IntervalHub.startInterval(this.startCounter, 200);
-        IntervalHub.startInterval(() => {
+       
             // console.log("this chicken is dead ", this.isDead());
 
             if (this.isDead()) {
@@ -36,14 +38,15 @@ export class Chicken extends MoveableObject {
             } else {
                 this.playAnimation(this.imgArrChickenNormal);
             }
-        }, 200);
+        }
 
+        checkIfChickenIsAlive = () => {
         // Only chicken alive can move
-        IntervalHub.startInterval(() => {
+       
             if (!this.isDead()) {
                 this.moveLeft();
             }
-        }, 1000 / 60);
+       
     }
 
     // startCounter = () => {

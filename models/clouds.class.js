@@ -15,6 +15,7 @@ export class Cloud extends MoveableObject {
         this.x = -100 + Math.random() * 1000;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
+        
     }
 
     animate() {
