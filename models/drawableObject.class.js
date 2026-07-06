@@ -1,3 +1,5 @@
+import { getPreloadedImage } from "../helper/preload.js";
+
 export class DrawableObject {
     x = 120;
     y = 280;
@@ -8,15 +10,39 @@ export class DrawableObject {
     imageCache = {};
     currentImage = 0;
 
+    // loadImage(path) {
+    //     this.img = new Image();
+    //     this.img.src = path;
+    // }
+
+    // loadImages(imageArray) {
+    //     imageArray.forEach((path) => {
+    //         let img = new Image();
+    //         img.src = path;
+    //         this.imageCache[path] = img;
+    //     });
+    // }
+
     loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
+        const preloadedImage = getPreloadedImage(path);
+
+        if (preloadedImage) {
+            this.img = preloadedImage;
+        } else {
+            this.img = new Image();
+            this.img.src = path;
+        }
     }
 
     loadImages(imageArray) {
         imageArray.forEach((path) => {
-            let img = new Image();
-            img.src = path;
+            let img = getPreloadedImage(path);
+
+            if (!img) {
+                img = new Image();
+                img.src = path;
+            }
+
             this.imageCache[path] = img;
         });
     }

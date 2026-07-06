@@ -2,10 +2,15 @@
 import { World } from "./models/world.class.js";
 import { Keyboard } from "./helper/keyboard.class.js";
 import { IntervalHub } from "./helper/intervallHub.js";
+import { preloadImages } from "./helper/preload.js";
 
 let canvas;
 let world;
+let preloadPromise;
+let gameIsStarting = false;
 
+const loadingScreen = document.getElementById("loadingScreen");
+const countdown = document.getElementById("countdown");
 const startScreen = document.getElementById("startScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const infoPopup = document.getElementById("infoPopup");
@@ -17,7 +22,34 @@ init();
 
 function init() {
     canvas = document.getElementById("canvas");
+    preloadPromise = preloadImages();
 }
+
+function showCountdown() {
+
+    loadingScreen.classList.add("active");
+
+    let seconds = 3;
+    countdown.textContent = seconds;
+
+    const timer = setInterval(() => {
+
+        seconds--;
+        countdown.textContent = seconds;
+
+        if (seconds === 0) {
+
+            clearInterval(timer);
+
+            loadingScreen.classList.remove("active");
+
+            startGame();
+            gameIsStarting = false;
+        }
+
+    }, 1000);
+}
+
 
 function startGame() {
     if (world) {
@@ -83,9 +115,22 @@ window.addEventListener("keyup", (event) => {
     if (event.code === "KeyD") Keyboard.D = false;
 });
 
-document.getElementById("btnStart").onclick = () => {
+document.getElementById("btnStart").onclick = async () => {
+    if (gameIsStarting) return;
+
+    gameIsStarting = true;
     startScreen.classList.remove("active");
-    startGame();
+    loadingScreen.classList.add("active");
+    countdown.textContent = "Loading...";
+
+    try {
+        await preloadPromise;
+        showCountdown();
+    } catch (error) {
+        console.error("Image could not be loaded:", error);
+        countdown.textContent = "Loading failed";
+        gameIsStarting = false;
+    }
 };
 
 // document.getElementById("btnRestart").onclick = () => {
