@@ -15,6 +15,8 @@ export class Endboss extends MoveableObject {
     showFrame = true; // show frame around chicken
     offset = { top: 60, right: 40, bottom: 0, left: 40 };
     isDead = false;
+    world;
+    endbossIsWalking = false;
 
     constructor() {
         super();
@@ -25,9 +27,11 @@ export class Endboss extends MoveableObject {
         this.loadImages(this.imgArrEndbossHurt);
         this.loadImages(this.imgArrEndbossDead);
         this.x = 2500;
+          this.speed = 0.5;
 
         // this.animate();
         IntervalHub.startInterval(this.animate, 200);
+         IntervalHub.startInterval(this.checkIfCharacterIsNear, 1000 / 60);
     }
 
     animate = () => {
@@ -38,6 +42,8 @@ export class Endboss extends MoveableObject {
             // console.log("is above ground");
             this.playAnimation(this.imgArrEndbossHurt);
             // this.playAnimation(this.imgArrEndbossAttack);
+        } else if (this.endbossIsWalking) {
+            this.playAnimation(this.imgArrEndbossWalk);
         } else {
             this.playAnimation(this.imgArrEndbossAlert);
         }
@@ -47,6 +53,33 @@ export class Endboss extends MoveableObject {
         // this.img = this.imageCache[path];
         // this.currentImage++;
     };
+
+
+checkIfCharacterIsNear = () => {
+        if (!this.world) {
+            return;
+        }
+
+        if (this.isDead) {
+            return;
+        }
+
+        if (this.characterIsNear()) {
+            this.endbossIsWalking = true;
+        }
+
+        if (this.endbossIsWalking) {
+            this.otherDirection = false;
+            this.moveLeft();
+        }
+    };
+
+    characterIsNear() {
+        return this.world.character.x > this.x - 600;
+    }
+
+
+
 
     die() {
     this.isDead = true;

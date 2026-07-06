@@ -237,6 +237,9 @@ export class World {
 
     setWorld() {
         this.character.world = this; // to make the World accessible to the character
+        this.level.enemies.forEach((enemy) => {
+            enemy.world = this;
+        });
         // this.character.animate();
     }
 
