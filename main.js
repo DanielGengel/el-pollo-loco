@@ -10,24 +10,59 @@ const startScreen = document.getElementById("startScreen");
 const gameOverScreen = document.getElementById("gameOverScreen");
 const infoPopup = document.getElementById("infoPopup");
 const imprintPopup = document.getElementById("imprintPopup");
+const winScreen = document.getElementById("winScreen");
+const loseScreen = document.getElementById("loseScreen");
 
-// Preload game as background for starting screen
 init();
 
 function init() {
-    console.log("init");
     canvas = document.getElementById("canvas");
-    world = new World(canvas, Keyboard);
 }
 
-// Restart game at the end, but also first start = restart because
-// game is running in backgroud of starting screen
-function restartGame() {
-    console.log("restartGame");
-    
-    world.destroyWorld(); // stop intervals, animations, sounds...
+function startGame() {
+    if (world) {
+        world.destroyWorld();
+    }
+
     IntervalHub.stopAllIntervals();
+    resetKeyboard();
     world = new World(canvas, Keyboard);
+    // IntervalHub(checkGameState, 100);
+    IntervalHub.startInterval(checkGameState, 100);
+}
+
+function stopGame() {
+    if (world) {
+        world.destroyWorld();
+    }
+
+    IntervalHub.stopAllIntervals();
+    resetKeyboard();
+}
+
+function checkGameState() {
+    if (!world) return;
+
+    if (!world.gameIsRunning) {
+        stopGame();
+
+        if (world.gameResult === "won") {
+            winScreen.classList.add("active");
+        }
+
+        if (world.gameResult === "lost") {
+            loseScreen.classList.add("active");
+        }
+    }
+}
+
+function resetKeyboard() {
+    Keyboard.LEFT = false;
+    Keyboard.RIGHT = false;
+    Keyboard.UP = false;
+    Keyboard.DOWN = false;
+    Keyboard.SPACE = false;
+    Keyboard.D = false;
 }
 
 window.addEventListener("keydown", (event) => {
@@ -48,23 +83,21 @@ window.addEventListener("keyup", (event) => {
     if (event.code === "KeyD") Keyboard.D = false;
 });
 
-
-
 document.getElementById("btnStart").onclick = () => {
     startScreen.classList.remove("active");
-    restartGame();
+    startGame();
 };
 
-document.getElementById("btnRestart").onclick = () => {
-    gameOverScreen.classList.remove("active");
+// document.getElementById("btnRestart").onclick = () => {
+//     gameOverScreen.classList.remove("active");
+//     startGame();
+// };
 
-    // restartGame();
-};
-
-document.getElementById("btnMenu").onclick = () => {
-    gameOverScreen.classList.remove("active");
-    startScreen.classList.add("active");
-};
+// document.getElementById("btnMenu").onclick = () => {
+//     stopGame();
+//     gameOverScreen.classList.remove("active");
+//     startScreen.classList.add("active");
+// };
 
 document.getElementById("btnInfo").onclick = () => {
     infoPopup.classList.remove("hidden");
@@ -89,4 +122,14 @@ document.getElementById("btnMute").onclick = function () {
     this.textContent = muted ? "🔇 UNMUTE" : "🔊 MUTE";
 
     // mute / unmute all sounds here
+};
+
+document.getElementById("btnRestartWin").onclick = () => {
+    winScreen.classList.remove("active");
+    startGame();
+};
+
+document.getElementById("btnRestartLose").onclick = () => {
+    loseScreen.classList.remove("active");
+    startGame();
 };

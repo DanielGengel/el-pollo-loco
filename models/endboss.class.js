@@ -14,6 +14,7 @@ export class Endboss extends MoveableObject {
     imgArrEndbossDead = ImageHelper.CHICKEN_BOSS.dead;
     showFrame = true; // show frame around chicken
     offset = { top: 60, right: 40, bottom: 0, left: 40 };
+    isDead = false;
 
     constructor() {
         super();
@@ -30,7 +31,7 @@ export class Endboss extends MoveableObject {
     }
 
     animate = () => {
-        if (this.isDead()) {
+        if (this.isDead) {
             // console.log("is above ground");
             this.playAnimation(this.imgArrEndbossDead);
         } else if (this.isHurt()) {
@@ -48,9 +49,6 @@ export class Endboss extends MoveableObject {
     };
 
     die() {
-        if (this.isDead()) return;
-
-        this.energy = 0;
-        console.log("enboss energy = ", this.energy);
-    }
+    this.isDead = true;
+}
 }

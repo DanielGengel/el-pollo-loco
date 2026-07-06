@@ -86,6 +86,24 @@ canvas {
     visibility: visible;
 }
 
+#startScreen {
+    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.6)), url("./assets/img/background.png");
+    background-position: center;
+    background-size: cover;
+}
+
+#winScreen {
+    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.6)), url("./assets/img/background.png");
+    background-position: center;
+    background-size: cover;
+}
+
+#loseScreen {
+    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.6)), url("./assets/img/background.png");
+    background-position: center;
+    background-size: cover;
+}
+
 .menu {
     display: flex;
     flex-direction: column;

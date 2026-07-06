@@ -30,6 +30,8 @@ export class World {
     throwableObject = []; // Array to draw object thrown to map
     // bottleAboveGround = false;
 
+    gameResult = "";
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
@@ -47,12 +49,36 @@ export class World {
         this.gameIsRunning = false;
     }
 
+    checkGameOver() {
+        // Player lost
+        if (this.character.isDead()) {
+            // setTimeout to show character dead animation
+            setTimeout(() => {
+                this.gameIsRunning = false;
+                this.gameResult = "lost";
+            }, 1500); // animation length
+        }
+
+        // Player won
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Endboss && enemy.isDead) {
+                // setTimeout to show endboss dead animation
+                setTimeout(() => {
+                    this.gameIsRunning = false;
+                    this.gameResult = "won";
+                }, 1000); // animation length
+            }
+        });
+    }
+
     run = () => {
         this.checkCollisionWithEnemy();
         this.checkCollisionWithCollectibles();
         this.checkObjectThrown();
         this.checkCollisionBottleWithEnemy();
         this.checkCollisionBottleWithGround();
+
+        this.checkGameOver();
     };
 
     checkCollisionBottleWithGround() {

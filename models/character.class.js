@@ -49,6 +49,10 @@ export class Character extends MoveableObject {
     checkKeyboard = () => {
         // Move character (60 FPS)
 
+        if (this.isDead()) {
+            return;
+        }
+
         if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
             this.otherDirection = false; // Don't mirror character image
             this.moveRight();
