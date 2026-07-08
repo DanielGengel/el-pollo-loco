@@ -42,7 +42,7 @@ canvas {
     background-color: white;
     border: 1px solid white;
     border-radius: 25px;
-    box-shadow: 10px 10px 10px burlywood;
+    box-shadow: 10px 10px 10px rgba(255, 255, 255, 0.8);
 }
 
 /* body {
@@ -57,6 +57,8 @@ canvas {
     position: relative;
     width: 720px;
     margin: auto;
+    border-radius: 25px;
+    border: 1px solid white;
 }
 
 canvas {
@@ -168,4 +170,94 @@ button:hover {
 
 .hidden {
     display: none;
+}
+
+.mobileControls {
+    display: none;
+}
+
+#turnDeviceOverlay {
+    display: none;
+}
+
+@media (pointer: coarse), (max-width: 900px) {
+    body {
+        overflow: hidden;
+    }
+
+    body > h1 {
+        display: none;
+    }
+
+    .overlayContainer {
+        width: 100vw;
+        height: 100dvh;
+        margin: 0;
+    }
+
+    canvas {
+        width: 100vw;
+        height: 100dvh;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .overlay {
+        border-radius: 0;
+    }
+
+    .mobileControls {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 16px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 18px;
+        z-index: 150;
+        pointer-events: none;
+    }
+
+    .mobileControlGroup {
+        display: flex;
+        gap: 12px;
+        pointer-events: auto;
+    }
+
+    .mobileButton {
+        width: 82px;
+        height: 54px;
+        padding: 0;
+        border-radius: 10px;
+        font-size: 14px;
+        opacity: 0.9;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+    }
+
+    .popup {
+        width: 90vw;
+    }
+}
+
+@media (pointer: coarse) and (orientation: portrait), (max-width: 900px) and (orientation: portrait) {
+    #turnDeviceOverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 300;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        text-align: center;
+    }
+
+    #turnDeviceOverlay p {
+        font-size: 20px;
+    }
 }

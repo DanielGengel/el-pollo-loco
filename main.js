@@ -23,6 +23,7 @@ init();
 function init() {
     canvas = document.getElementById("canvas");
     preloadPromise = preloadImages();
+    initMobileButtons();
 }
 
 function showCountdown() {
@@ -114,6 +115,52 @@ window.addEventListener("keyup", (event) => {
     if (event.code === "Space") Keyboard.SPACE = false;
     if (event.code === "KeyD") Keyboard.D = false;
 });
+
+function initMobileButtons() {
+    addMobileButton("btnMobileLeft", "LEFT");
+    addMobileButton("btnMobileRight", "RIGHT");
+    addMobileButton("btnMobileJump", "SPACE");
+    addMobileButton("btnMobileThrow", "D");
+}
+
+function addMobileButton(buttonId, key) {
+    let button = document.getElementById(buttonId);
+
+    button.addEventListener("touchstart", (event) => {
+        event.preventDefault();
+        Keyboard[key] = true;
+    });
+
+    button.addEventListener("touchend", (event) => {
+        event.preventDefault();
+        Keyboard[key] = false;
+    });
+
+    button.addEventListener("touchcancel", (event) => {
+        event.preventDefault();
+        Keyboard[key] = false;
+    });
+
+    button.addEventListener("touchmove", (event) => {
+        event.preventDefault();
+    });
+
+    button.addEventListener("mousedown", () => {
+        Keyboard[key] = true;
+    });
+
+    button.addEventListener("mouseup", () => {
+        Keyboard[key] = false;
+    });
+
+    button.addEventListener("mouseleave", () => {
+        Keyboard[key] = false;
+    });
+
+    button.addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+    });
+}
 
 document.getElementById("btnStart").onclick = async () => {
     if (gameIsStarting) return;

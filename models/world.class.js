@@ -29,6 +29,7 @@ export class World {
     statusBarEndboss = new StatusBarEndboss();
     throwableObject = []; // Array to draw object thrown to map
     // bottleAboveGround = false;
+    lastThrow = 0;
 
     gameResult = "";
 
@@ -42,6 +43,7 @@ export class World {
         // this.character.getRealFrame();
         // this.run();
         IntervalHub.startInterval(this.run, 100);
+        IntervalHub.startInterval(this.checkObjectThrown, 1000 / 60);
     }
 
     // Create new game
@@ -74,7 +76,7 @@ export class World {
     run = () => {
         this.checkCollisionWithEnemy();
         this.checkCollisionWithCollectibles();
-        this.checkObjectThrown();
+        // this.checkObjectThrown();
         this.checkCollisionBottleWithEnemy();
         this.checkCollisionBottleWithGround();
 
@@ -195,28 +197,33 @@ export class World {
         }
     }
 
-    checkObjectThrown() {
+    checkObjectThrown = () => {
         // Unlimited bootles
         // if (this.character.bottles > 0) {
         if (this.keyboard.D) {
-            console.log("this.character.bottles ", this.character.bottles);
+            let justThrown = new Date().getTime() / 1000;
+            if (justThrown - this.lastThrow > 0.5) {
+                console.log("this.character.bottles ", this.character.bottles);
 
-            let bottle = new ThrowableObject(
-                this.character.x + 100,
-                this.character.y + 100,
-                this.character.otherDirection,
-            );
-            // Array to draw object thrown to map
-            this.throwableObject.push(bottle);
-            this.character.throwBottle();
-            // number of available bottles * 20 => status bar percentage
-            this.statusBarBottles.setPercentage(this.character.bottles * 20);
-            // Avoid character falling asleep while throwing bottles
-            this.character.lastAction = Date.now();
-            // this.bottleAboveGround = true;
+                let bottle = new ThrowableObject(
+                    this.character.x + 100,
+                    this.character.y + 100,
+                    this.character.otherDirection,
+                );
+
+                // Array to draw object thrown to map
+                this.throwableObject.push(bottle);
+                this.character.throwBottle();
+                // number of available bottles * 20 => status bar percentage
+                this.statusBarBottles.setPercentage(this.character.bottles * 20);
+                // Avoid character falling asleep while throwing bottles
+                this.character.lastAction = Date.now();
+                // this.bottleAboveGround = true;
+                this.lastThrow = justThrown;
+            }
         }
         // }
-    }
+    };
 
     // checkCollisionOfEndbossWithBottle() {}
 
