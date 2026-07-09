@@ -87,7 +87,6 @@ export class World {
         this.throwableObject.forEach((bottle) => {
             if (!bottle.hasHit && bottle.y >= 340) {
                 bottle.breakAndSplash(true);
-                
             }
         });
     }
@@ -99,11 +98,16 @@ export class World {
                 if (bottle.isColliding(enemy)) {
                     console.log("Bottle hit", enemy);
                     // kill enemy
-                    if (enemy instanceof Endboss && enemy.energy > 0) {
+                    if (enemy instanceof Endboss) {
                         console.log("this enemy instanceof Endboss, energy = ", enemy.energy);
+
                         enemy.hit();
                         this.statusBarEndboss.setPercentage(enemy.energy);
                         bottle.breakAndSplash(false);
+
+                        if (enemy.energy === 0) {
+                            enemy.die();
+                        }
                     } else {
                         enemy.die();
 
@@ -131,7 +135,14 @@ export class World {
             // Kill chicken only of this.character.speedY < -10 (= negative speed)
             // console.log("this.character.speedY", this.character.speedY);
 
-            if (this.character.isColliding(enemy) && this.character.speedY < 0) {
+            const characterIsColliding = this.character.isColliding(enemy);
+
+            if (!characterIsColliding) {
+                enemy.hasHitCharacter = false;
+                return;
+            }
+
+            if (characterIsColliding && this.character.speedY < 0 && !(enemy instanceof Endboss)) {
                 enemy.die();
                 this.character.jump();
 
@@ -140,9 +151,10 @@ export class World {
                     this.removeObjectFromMap(this.level.enemies, enemy);
                 }, 500);
                 // console.log("CHICKEN DEAD ", this.chicken.isDead());
-            } else if (this.character.isColliding(enemy)) {
+            } else if (!enemy.hasHitCharacter) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage(this.character.energy);
+                enemy.hasHitCharacter = true;
             }
         });
     }
@@ -201,7 +213,10 @@ export class World {
     checkObjectThrown = () => {
         // Unlimited bootles
         // if (this.character.bottles > 0) {
+        // if ((this.keyboard.D) && (this.character.bottles > 0))
         if (this.keyboard.D) {
+            console.log("this.character.bottles ", this.character.bottles);
+
             let justThrown = new Date().getTime() / 1000;
             if (justThrown - this.lastThrow > 0.5) {
                 console.log("this.character.bottles ", this.character.bottles);
@@ -221,7 +236,6 @@ export class World {
                 this.character.lastAction = Date.now();
                 // this.bottleAboveGround = true;
                 this.lastThrow = justThrown;
-                
             }
         }
         // }

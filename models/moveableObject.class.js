@@ -113,7 +113,7 @@ export class MoveableObject extends DrawableObject {
 
     hit() {
         // Decrease energy level of character
-        this.energy -= 5;
+        this.energy -= 20;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
