@@ -3,6 +3,7 @@ import { World } from "./models/world.class.js";
 import { Keyboard } from "./helper/keyboard.class.js";
 import { IntervalHub } from "./helper/intervallHub.js";
 import { preloadImages } from "./helper/preload.js";
+import { SoundHub } from './helper/soundHub.class.js';
 
 let canvas;
 let world;
@@ -24,10 +25,13 @@ function init() {
     canvas = document.getElementById("canvas");
     preloadPromise = preloadImages();
     initMobileButtons();
+    SoundHub.loadVolume();
+    initVolumeControls();
 }
 
 function showCountdown() {
 
+    SoundHub.playLoop(SoundHub.backgroundMusic);
     loadingScreen.classList.add("active");
 
     let seconds = 3;
@@ -56,12 +60,13 @@ function startGame() {
     if (world) {
         world.destroyWorld();
     }
-
     IntervalHub.stopAllIntervals();
     resetKeyboard();
     world = new World(canvas, Keyboard);
     // IntervalHub(checkGameState, 100);
     IntervalHub.startInterval(checkGameState, 100);
+     SoundHub.playOne(SoundHub.gameStart);
+     
 }
 
 function stopGame() {
@@ -70,6 +75,7 @@ function stopGame() {
     }
 
     IntervalHub.stopAllIntervals();
+     SoundHub.pauseAll();
     resetKeyboard();
 }
 
@@ -208,13 +214,13 @@ document.querySelectorAll(".closePopup").forEach((button) => {
 
 let muted = false;
 
-document.getElementById("btnMute").onclick = function () {
-    muted = !muted;
+// document.getElementById("btnMute").onclick = function () {
+//     muted = !muted;
 
-    this.textContent = muted ? "🔇 UNMUTE" : "🔊 MUTE";
+//     this.textContent = muted ? "🔇 UNMUTE" : "🔊 MUTE";
 
-    // mute / unmute all sounds here
-};
+//     // mute / unmute all sounds here
+// };
 
 document.getElementById("btnRestartWin").onclick = () => {
     winScreen.classList.remove("active");
@@ -225,3 +231,60 @@ document.getElementById("btnRestartLose").onclick = () => {
     loseScreen.classList.remove("active");
     startGame();
 };
+
+
+function initVolumeControls() {
+
+    const slider = document.getElementById("volumeSlider");
+    const muteButton = document.getElementById("btnMute");
+
+    slider.value = SoundHub.masterVolume * 100;
+
+    updateMuteButton();
+
+    slider.addEventListener("input", () => {
+
+        const volume = slider.value / 100;
+
+        SoundHub.setVolume(volume);
+
+        updateMuteButton();
+
+    });
+
+    muteButton.addEventListener("click", () => {
+
+        if (SoundHub.masterVolume === 0) {
+
+            SoundHub.setVolume(1);
+
+        } else {
+
+            SoundHub.setVolume(0);
+
+        }
+
+        slider.value = SoundHub.masterVolume * 100;
+
+        updateMuteButton();
+
+    });
+
+}
+
+
+function updateMuteButton() {
+
+    const button = document.getElementById("btnMute");
+
+    if (SoundHub.masterVolume === 0) {
+
+        button.textContent = "🔇 SOUNDS OFF";
+
+    } else {
+
+        button.textContent = "🔊 SOUNDS ON";
+
+    }
+
+}

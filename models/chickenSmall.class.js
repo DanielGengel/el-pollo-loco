@@ -2,6 +2,7 @@ import { Chicken } from "./chicken.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
 import { MoveableObject } from "./moveableObject.class.js";
+import { SoundHub } from '../helper/soundHub.class.js';
 
 export class ChickenSmall extends MoveableObject {
     width = 60;
@@ -68,6 +69,7 @@ export class ChickenSmall extends MoveableObject {
     }
 
       die() {
+        SoundHub.playOne(SoundHub.chickenDead2); 
         if (this.isDead()) return;
 
         this.energy = 0;

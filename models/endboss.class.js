@@ -1,6 +1,7 @@
 import { MoveableObject } from "./moveableObject.class.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
+import { SoundHub } from "../helper/soundHub.class.js";
 
 export class Endboss extends MoveableObject {
     height = 500;
@@ -27,11 +28,11 @@ export class Endboss extends MoveableObject {
         this.loadImages(this.imgArrEndbossHurt);
         this.loadImages(this.imgArrEndbossDead);
         this.x = 2500;
-          this.speed = 0.5;
+        this.speed = 0.5;
 
         // this.animate();
         IntervalHub.startInterval(this.animate, 200);
-         IntervalHub.startInterval(this.checkIfCharacterIsNear, 1000 / 60);
+        IntervalHub.startInterval(this.checkIfCharacterIsNear, 1000 / 60);
     }
 
     animate = () => {
@@ -54,8 +55,7 @@ export class Endboss extends MoveableObject {
         // this.currentImage++;
     };
 
-
-checkIfCharacterIsNear = () => {
+    checkIfCharacterIsNear = () => {
         if (!this.world) {
             return;
         }
@@ -71,6 +71,7 @@ checkIfCharacterIsNear = () => {
         if (this.endbossIsWalking) {
             this.otherDirection = false;
             this.moveLeft();
+            SoundHub.playOne(SoundHub.endbossApproach);
         }
     };
 
@@ -78,10 +79,9 @@ checkIfCharacterIsNear = () => {
         return this.world.character.x > this.x - 600;
     }
 
-
-
-
     die() {
-    this.isDead = true;
-}
+        SoundHub.playOne(SoundHub.chickenDead);
+
+        this.isDead = true;
+    }
 }

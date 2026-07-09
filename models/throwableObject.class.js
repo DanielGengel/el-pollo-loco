@@ -2,6 +2,7 @@ import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 import { MoveableObject } from "./moveableObject.class.js";
 // import { Character } from "./character.class.js";
+import { SoundHub } from "../helper/soundHub.class.js";
 
 export class ThrowableObject extends MoveableObject {
     bottleAboveGround = false;
@@ -83,14 +84,15 @@ export class ThrowableObject extends MoveableObject {
 
         // stop horizontal movement
         IntervalHub.stopInterval(this.moveInterval);
-
+SoundHub.pauseOne(SoundHub.bottleBreak);
         if (onGround) {
             // Bottle already reached the ground
             IntervalHub.stopInterval(this.gravityInterval);
-
+            SoundHub.playOne(SoundHub.bottleBreak);
             this.speedY = 0;
             this.y = 390;
         } else {
+            SoundHub.playOne(SoundHub.bottleBreak);
             // Bottle hit an enemy in the air.
             // Gravity continues so the splash falls down.
             this.speedY = 0;

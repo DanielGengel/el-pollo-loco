@@ -2,6 +2,7 @@ import { MoveableObject } from "./moveableObject.class.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 // import { World } from "./world.class.js";
+import { SoundHub } from '../helper/soundHub.class.js';
 
 export class Character extends MoveableObject {
     width = 130;
@@ -76,23 +77,32 @@ export class Character extends MoveableObject {
         if (this.isDead()) {
             // console.log("is above ground");
             this.playAnimation(this.imgArrPepeDead);
+            SoundHub.playOne(SoundHub.characterDead);
         } else if (this.isHurt()) {
             // console.log("is above ground");
             this.playAnimation(this.imgArrPepeHurt);
+            SoundHub.playOne(SoundHub.characterDamage);
         } else if (this.isAboveGround()) {
             // console.log("is above ground");
             this.lastAction = Date.now();
             this.playAnimation(this.imgArrPepeJump);
+            SoundHub.pauseOne(SoundHub.characterRun);
+            SoundHub.playOne(SoundHub.characterJump);
         } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             // console.log("walking");
             this.lastAction = Date.now();
             this.playAnimation(this.imgArrPepeWalk);
+            SoundHub.playOne(SoundHub.characterRun);
         } else {
+            SoundHub.pauseOne(SoundHub.characterRun);
             const idleTime = this.timePassedSinceLastAction();
             if (idleTime > 5000) {
                 this.playAnimation(this.imgArrPepeLongIdle);
+                
+                SoundHub.playOne(SoundHub.characterSnoring);
             } else {
                 this.playAnimation(this.imgArrPepeIdle);
+                // SoundHub.playOne(SoundHub.characterSnoring);
             }
         }
 
@@ -129,19 +139,23 @@ export class Character extends MoveableObject {
     // };
 
     collectCoin() {
+        SoundHub.pauseOne(SoundHub.collectSound);
         this.coins++;
 
         if (this.coins > 5) {
             this.coins = 5;
         }
+        SoundHub.playOne(SoundHub.collectSound)
     }
 
     collectBottle() {
+        SoundHub.pauseOne(SoundHub.bottleCollectSound);
         this.bottles++;
 
         if (this.bottles > 5) {
             this.bottles = 5;
         }
+        SoundHub.playOne(SoundHub.bottleCollectSound)
     }
 
     throwBottle() {
@@ -150,5 +164,6 @@ export class Character extends MoveableObject {
         if (this.bottles < 0) {
             this.bottles = 0;
         }
+
     }
 }

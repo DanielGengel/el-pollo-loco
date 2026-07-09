@@ -1,5 +1,6 @@
 // import { IntervalHub } from "../helper/intervallHub.js";
 import { DrawableObject } from "./drawableObject.class.js";
+import { SoundHub } from '../helper/soundHub.class.js';
 
 export class MoveableObject extends DrawableObject {
     otherDirection = false; // mirroring character image when walking left
@@ -33,6 +34,7 @@ export class MoveableObject extends DrawableObject {
 
     jump() {
         this.speedY = 30;
+        SoundHub.playOne(SoundHub.characterJump)
     }
 
     applyGravity = () => {

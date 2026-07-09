@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="style.css" />
+        <link rel="shortcut icon" href="./assets/img/favicon.png" type="image/x-icon" />
         <script src="main.js" type="module"></script>
         <title>EL POLLO LOCO</title>
     </head>
@@ -12,6 +13,12 @@
 
         <div class="overlayContainer">
             <canvas id="canvas" width="720" height="480"></canvas>
+
+            <!-- Always visible -->
+            <div class="gameVolumeSettings">
+                <span class="speakerIcon">🔊</span>
+                <input id="volumeSlider" type="range" min="0" max="100" value="100" />
+            </div>
 
             <div id="loadingScreen" class="overlay">
                 <div class="menu">
@@ -81,7 +88,7 @@
                 <button class="closePopup">Close</button>
             </div>
 
-            <div id="mobileControls" class="mobileControls">
+            <!-- <div id="mobileControls" class="mobileControls">
                 <div class="mobileControlGroup">
                     <button class="mobileButton" id="btnMobileLeft">LEFT</button>
                     <button class="mobileButton" id="btnMobileRight">RIGHT</button>
@@ -90,6 +97,21 @@
                 <div class="mobileControlGroup">
                     <button class="mobileButton" id="btnMobileJump">JUMP</button>
                     <button class="mobileButton" id="btnMobileThrow">THROW</button>
+                </div>
+            </div> -->
+
+            <div id="gameControls" class="gameControls hidden">
+                <div class="mobileControlGroup">
+                    <button class="gameButton" id="btnMobileLeft">⬅️</button>
+                    <button class="gameButton" id="btnMobileRight">➡️</button>
+                </div>
+
+                <div class="mobileControlGroup">
+                    <button class="gameButton" id="btnMobileJump">⬆️</button>
+
+                    <button class="gameButton" id="btnMobileThrow">
+                        <img src="./assets/img/6_salsa_bottle/2_salsa_bottle_on_ground.png" alt="Throw bottle" />
+                    </button>
                 </div>
             </div>
         </div>
@@ -102,5 +124,3 @@
         </div>
     </body>
 </html>
-
-

@@ -87,6 +87,7 @@ export class World {
         this.throwableObject.forEach((bottle) => {
             if (!bottle.hasHit && bottle.y >= 340) {
                 bottle.breakAndSplash(true);
+                
             }
         });
     }
@@ -220,6 +221,7 @@ export class World {
                 this.character.lastAction = Date.now();
                 // this.bottleAboveGround = true;
                 this.lastThrow = justThrown;
+                
             }
         }
         // }
