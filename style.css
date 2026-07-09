@@ -33,7 +33,7 @@ body {
     background-position: center;
     background-size: cover;
     font-family: "Rye";
-    font-size: 26px;
+    font-size: 20px;
 }
 
 canvas {
@@ -55,8 +55,24 @@ canvas {
     z-index: 50;
 }
 
-.speakerIcon {
+/* .speakerIcon {
     font-size: 22px;
+} */
+
+.speakerButton {
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    font-size: 22px;
+    cursor: pointer;
+
+    color: white;
+}
+
+.speakerButton:hover {
+    background: transparent;
+    transform: scale(1.1);
 }
 
 #volumeSlider {

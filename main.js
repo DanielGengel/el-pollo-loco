@@ -3,7 +3,7 @@ import { World } from "./models/world.class.js";
 import { Keyboard } from "./helper/keyboard.class.js";
 import { IntervalHub } from "./helper/intervallHub.js";
 import { preloadImages } from "./helper/preload.js";
-import { SoundHub } from './helper/soundHub.class.js';
+import { SoundHub } from "./helper/soundHub.class.js";
 
 let canvas;
 let world;
@@ -30,7 +30,6 @@ function init() {
 }
 
 function showCountdown() {
-
     SoundHub.playLoop(SoundHub.backgroundMusic);
     loadingScreen.classList.add("active");
 
@@ -38,12 +37,10 @@ function showCountdown() {
     countdown.textContent = seconds;
 
     const timer = setInterval(() => {
-
         seconds--;
         countdown.textContent = seconds;
 
         if (seconds === 0) {
-
             clearInterval(timer);
 
             loadingScreen.classList.remove("active");
@@ -51,10 +48,8 @@ function showCountdown() {
             startGame();
             gameIsStarting = false;
         }
-
     }, 1000);
 }
-
 
 function startGame() {
     if (world) {
@@ -65,8 +60,7 @@ function startGame() {
     world = new World(canvas, Keyboard);
     // IntervalHub(checkGameState, 100);
     IntervalHub.startInterval(checkGameState, 100);
-     SoundHub.playOne(SoundHub.gameStart);
-     
+    SoundHub.playOne(SoundHub.gameStart);
 }
 
 function stopGame() {
@@ -75,7 +69,7 @@ function stopGame() {
     }
 
     IntervalHub.stopAllIntervals();
-     SoundHub.pauseAll();
+    SoundHub.pauseAll();
     resetKeyboard();
 }
 
@@ -232,59 +226,64 @@ document.getElementById("btnRestartLose").onclick = () => {
     startGame();
 };
 
-
 function initVolumeControls() {
-
     const slider = document.getElementById("volumeSlider");
     const muteButton = document.getElementById("btnMute");
+    document.getElementById("btnMute").onclick = toggleMute;
+    document.getElementById("btnMuteIcon").onclick = toggleMute;
 
     slider.value = SoundHub.masterVolume * 100;
 
-    updateMuteButton();
+    updateMuteButtons();
 
     slider.addEventListener("input", () => {
-
         const volume = slider.value / 100;
 
         SoundHub.setVolume(volume);
 
-        updateMuteButton();
-
+        updateMuteButtons();
     });
 
-    muteButton.addEventListener("click", () => {
+    // muteButton.addEventListener("click", () => {
 
-        if (SoundHub.masterVolume === 0) {
+    //     if (SoundHub.masterVolume === 0) {
 
-            SoundHub.setVolume(1);
+    //         SoundHub.setVolume(1);
 
-        } else {
+    //     } else {
 
-            SoundHub.setVolume(0);
+    //         SoundHub.setVolume(0);
 
-        }
+    //     }
 
-        slider.value = SoundHub.masterVolume * 100;
+    //     slider.value = SoundHub.masterVolume * 100;
 
-        updateMuteButton();
+    //     updateMuteButton();
 
-    });
-
+    // });
 }
 
-
-function updateMuteButton() {
-
-    const button = document.getElementById("btnMute");
+function updateMuteButtons() {
+    const textButton = document.getElementById("btnMute");
+    const iconButton = document.getElementById("btnMuteIcon");
 
     if (SoundHub.masterVolume === 0) {
-
-        button.textContent = "🔇 SOUNDS OFF";
-
+        textButton.textContent = "🔇 SOUNDS OFF";
+        iconButton.textContent = "🔇";
     } else {
+        textButton.textContent = "🔊 SOUNDS ON";
+        iconButton.textContent = "🔊";
+    }
+}
 
-        button.textContent = "🔊 SOUNDS ON";
-
+function toggleMute() {
+    if (SoundHub.masterVolume === 0) {
+        SoundHub.setVolume(0.2);
+    } else {
+        SoundHub.setVolume(0);
     }
 
+    volumeSlider.value = SoundHub.masterVolume * 100;
+
+    updateMuteButtons();
 }
