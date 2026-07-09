@@ -1,10 +1,7 @@
 import { Character } from "./character.class.js";
 import { createLevel1 } from "../levels/level1.js";
-import { MoveableObject } from "./moveableObject.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
-import { StatusBar } from "./statusBar.class.js";
 import { ThrowableObject } from "./throwableObject.class.js";
-import { CollectibleObjects } from "./collectibleObjects.class.js";
 import { Chicken } from "./chicken.class.js";
 import { StatusBarHealth } from "./statusBarHealth.class.js";
 import { StatusBarCoins } from "./statusBarCoins.class.js";
@@ -27,12 +24,15 @@ export class World {
     statusBarCoins = new StatusBarCoins();
     statusBarBottles = new StatusBarBottles();
     statusBarEndboss = new StatusBarEndboss();
-    throwableObject = []; // Array to draw object thrown to map
-    // bottleAboveGround = false;
+    throwableObject = [];
     lastThrow = 0;
-
     gameResult = "";
 
+    /**
+     * Creates the game world and starts the game checks.
+     * @param {HTMLCanvasElement} canvas -> The place where the game is drawn
+     * @param {Object} keyboard -> The pressed keyboard buttons
+     */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
@@ -40,92 +40,128 @@ export class World {
 
         this.draw();
         this.setWorld();
-        // this.character.getRealFrame();
-        // this.run();
         IntervalHub.startInterval(this.run, 100);
         IntervalHub.startInterval(this.checkObjectThrown, 1000 / 60);
     }
 
-    // Create new game
-    destroyWorld() {
-        this.gameIsRunning = false;
+    /**
+     * Draws the whole game again and again.
+     */
+    draw() {
+        if (!this.gameIsRunning) return;
+
+        this.clearCanvas();
+        this.drawMoveableGameObjects();
+        this.drawFixedGameObjects();
+
+        requestAnimationFrame(() => this.draw());
     }
 
-    checkGameOver() {
-        // Player lost
-        if (this.character.isDead()) {
-            // setTimeout to show character dead animation
-            setTimeout(() => {
-                this.gameIsRunning = false;
-                this.gameResult = "lost";
-            }, 1500); // animation length
-        }
+    /**
+     * Clears the old picture from the canvas.
+     */
+    clearCanvas() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
 
-        // Player won
-        this.level.enemies.forEach((enemy) => {
-            if (enemy instanceof Endboss && enemy.isDead) {
-                // setTimeout to show endboss dead animation
-                setTimeout(() => {
-                    this.gameIsRunning = false;
-                    this.gameResult = "won";
-                }, 1000); // animation length
-            }
+    /**
+     * Draws all objects that move with the camera.
+     */
+    drawMoveableGameObjects() {
+        this.ctx.translate(this.cameraX, 0);
+
+        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsToMap(this.throwableObject);
+        this.addObjectsToMap(this.level.collectibleObjects);
+
+        this.ctx.translate(-this.cameraX, 0);
+    }
+
+    /**
+     * Draws all objects that always stay at the same screen place.
+     */
+    drawFixedGameObjects() {
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarEndboss);
+    }
+
+    /**
+     * Draws many objects on the map.
+     * @param {Array} objects -> The objects that should be drawn
+     */
+    addObjectsToMap(objects) {
+        objects.forEach((object) => {
+            this.addToMap(object);
         });
     }
 
+    /**
+     * Draws one object on the map.
+     * @param {Object} mo -> The object that should be drawn
+     */
+    addToMap(mo) {
+        if (mo.otherDirection) {
+            this.flipImage(mo);
+        }
+
+        mo.draw(this.ctx);
+
+        if (mo.otherDirection) {
+            this.flipImageBack(mo);
+        }
+    }
+
+    /**
+     * Turns the picture around when the object looks left.
+     * @param {Object} mo -> The object that should be turned around
+     */
+    flipImage(mo) {
+        this.ctx.save();
+        this.ctx.translate(mo.width, 0);
+        this.ctx.scale(-1, 1);
+        mo.x = mo.x * -1;
+    }
+
+    /**
+     * Turns the picture back to normal after drawing.
+     * @param {Object} mo -> The object that was turned around
+     */
+    flipImageBack(mo) {
+        mo.x = mo.x * -1;
+        this.ctx.restore();
+    }
+
+    /**
+     * Gives the character and enemies access to this world.
+     */
+    setWorld() {
+        this.character.world = this;
+
+        this.level.enemies.forEach((enemy) => {
+            enemy.world = this;
+        });
+    }
+
+    /**
+     * Checks the important game actions again and again.
+     */
     run = () => {
         this.checkCollisionWithEnemy();
         this.checkCollisionWithCollectibles();
-        // this.checkObjectThrown();
         this.checkCollisionBottleWithEnemy();
         this.checkCollisionBottleWithGround();
-
+        this.checkCollisionBottleWithCharacter();
         this.checkGameOver();
     };
 
-    checkCollisionBottleWithGround() {
-        this.throwableObject.forEach((bottle) => {
-            if (!bottle.hasHit && bottle.y >= 340) {
-                bottle.breakAndSplash(true);
-                
-            }
-        });
-    }
-
-    checkCollisionBottleWithEnemy() {
-        this.throwableObject.forEach((bottle, bottleIndex) => {
-            if (bottle.hasHit) return; // Avoid calling it to often
-            this.level.enemies.forEach((enemy) => {
-                if (bottle.isColliding(enemy)) {
-                    console.log("Bottle hit", enemy);
-                    // kill enemy
-                    if (enemy instanceof Endboss && enemy.energy > 0) {
-                        console.log("this enemy instanceof Endboss, energy = ", enemy.energy);
-                        
-                        enemy.hit();
-                        this.statusBarEndboss.setPercentage(enemy.energy);
-                        bottle.breakAndSplash(false);
-                    } else {
-                        enemy.die();
-
-                        // bottle splash animation
-                        bottle.breakAndSplash(false);
-
-                        // remove enemy after death animation
-                        setTimeout(() => {
-                            this.removeObjectFromMap(this.level.enemies, enemy);
-                        }, 500);
-
-                        // remove bottle after splash animation
-                        setTimeout(() => {
-                            this.throwableObject.splice(bottleIndex, 1);
-                        }, 300);
-                    }
-                }
-            });
-        });
-    }
-
+    /**
+     * Checks if the character touches an enemy.
+     */
     checkCollisionWithEnemy() {
         this.level.enemies.forEach((enemy) => {
             const characterIsColliding = this.character.isColliding(enemy);
@@ -143,6 +179,10 @@ export class World {
         });
     }
 
+    /**
+     * Hurts the character when the endboss hits him.
+     * @param {Endboss} enemy -> The endboss
+     */
     checkEndbossHit(enemy) {
         if (!this.canEndbossHitCharacter(enemy)) return;
 
@@ -151,6 +191,11 @@ export class World {
         enemy.lastCharacterHit = new Date().getTime();
     }
 
+    /**
+     * Checks if the endboss is allowed to hit again.
+     * @param {Endboss} enemy -> The endboss
+     * @returns {boolean} -> True when the endboss can hit
+     */
     canEndbossHitCharacter(enemy) {
         const now = new Date().getTime();
 
@@ -159,6 +204,10 @@ export class World {
         return now - enemy.lastCharacterHit >= 500;
     }
 
+    /**
+     * Checks if a normal enemy gets killed or hurts the character.
+     * @param {Object} enemy -> The normal enemy
+     */
     checkNormalEnemyHit(enemy) {
         if (this.character.speedY < 0) {
             this.killNormalEnemy(enemy);
@@ -169,6 +218,10 @@ export class World {
         }
     }
 
+    /**
+     * Kills a normal enemy and removes it after a short time.
+     * @param {Object} enemy -> The enemy that should die
+     */
     killNormalEnemy(enemy) {
         enemy.die();
         this.character.jump();
@@ -178,49 +231,162 @@ export class World {
         }, 500);
     }
 
-    // checkCollisionWithBottle() {
-    //         this.level.collectibleObjects.forEach((object) => {
-    //             // console.log("checkCollision forEach((enemy)");
-    //             if (this.character.isColliding(object)) {
-
-    //                 console.log("remove bottle ", object);
-
-    //                 // this.character.hit();
-    //                 // this.statusBar.setPercentage(this.character.energy);
-    //             }
-    //         });
-    //     }
-
-    // checkCollisionWithBottle() {
-    //     this.level.collectibleObjects =
-    //         this.level.collectibleObjects.filter((object) => {
-    //             if (this.character.isColliding(object)) {
-    //                 console.log("remove bottle", object);
-    //                 return false; // entfernen
-    //             }
-    //             return true; // behalten
-    //         });
-    // }
-
-    // Character can collect coins and bottles
+    /**
+     * Checks if the character collects coins or bottles.
+     */
     checkCollisionWithCollectibles() {
         this.level.collectibleObjects.forEach((object) => {
             if (this.character.isColliding(object)) {
-                if (object instanceof Coin) {
-                    this.character.collectCoin();
-                    this.statusBarCoins.setPercentage(this.character.coins * 20);
-                }
-
-                if (object instanceof Bottle) {
-                    this.character.collectBottle();
-                    this.statusBarBottles.setPercentage(this.character.bottles * 20);
-                }
-
-                this.removeObjectFromMap(this.level.collectibleObjects, object);
+                this.collectObject(object);
             }
         });
     }
 
+    /**
+     * Collects one object and removes it from the map.
+     * @param {Object} object -> The object that the character collects
+     */
+    collectObject(object) {
+        if (object instanceof Coin) {
+            this.collectCoin();
+        }
+
+        if (object instanceof Bottle) {
+            this.collectBottle();
+        }
+
+        this.removeObjectFromMap(this.level.collectibleObjects, object);
+    }
+
+    /**
+     * Gives one coin to the character and updates the coin bar.
+     */
+    /**
+     * Gives one coin to the character and checks if health can be restored.
+     */
+    collectCoin() {
+        this.character.collectCoin();
+        this.healCharacterWithCoins();
+        this.statusBarCoins.setPercentage(this.character.coins * 20);
+    }
+
+    /**
+     * Gives the character 20 percent energy when he collected 5 coins.
+     * This only works when the character already lost energy.
+     */
+    healCharacterWithCoins() {
+        if (this.character.coins >= 5 && this.character.energy < 100) {
+            this.character.energy += 20;
+
+            if (this.character.energy > 100) {
+                this.character.energy = 100;
+            }
+
+            this.character.coins = 0;
+            this.statusBarHealth.setPercentage(this.character.energy);
+        }
+    }
+
+    /**
+     * Gives one bottle to the character and updates the bottle bar.
+     */
+    collectBottle() {
+        this.character.collectBottle();
+        this.statusBarBottles.setPercentage(this.character.bottles * 20);
+    }
+
+    /**
+     * Checks if a thrown bottle hits an enemy.
+     */
+    checkCollisionBottleWithEnemy() {
+        this.throwableObject.forEach((bottle, bottleIndex) => {
+            if (bottle.hasHit) return;
+
+            this.checkBottleHitEnemies(bottle, bottleIndex);
+        });
+    }
+
+    /**
+     * Checks one bottle against all enemies.
+     * @param {ThrowableObject} bottle -> The thrown bottle
+     * @param {number} bottleIndex -> The place of the bottle in the bottle list
+     */
+    checkBottleHitEnemies(bottle, bottleIndex) {
+        this.level.enemies.forEach((enemy) => {
+            if (bottle.isColliding(enemy)) {
+                this.hitEnemyWithBottle(enemy, bottle, bottleIndex);
+            }
+        });
+    }
+
+    /**
+     * Decides what happens when a bottle hits an enemy.
+     * @param {Object} enemy -> The enemy that was hit
+     * @param {ThrowableObject} bottle -> The bottle that hit the enemy
+     * @param {number} bottleIndex -> The place of the bottle in the bottle list
+     */
+    hitEnemyWithBottle(enemy, bottle, bottleIndex) {
+        if (enemy instanceof Endboss && enemy.energy > 0) {
+            this.hitEndbossWithBottle(enemy, bottle);
+        } else {
+            this.killEnemyWithBottle(enemy, bottle, bottleIndex);
+        }
+    }
+
+    /**
+     * Hurts the endboss with a bottle and kills him after 5 hits
+     * @param {Endboss} enemy -> The endboss
+     * @param {ThrowableObject} bottle -> The bottle that hit the endboss
+     */
+    hitEndbossWithBottle(enemy, bottle) {
+        enemy.hit();
+        this.statusBarEndboss.setPercentage(enemy.energy);
+        bottle.breakAndSplash(false);
+
+        if (enemy.energy <= 0) {
+            enemy.die();
+        }
+    }
+
+    /**
+     * Kills a normal enemy with a bottle.
+     * @param {Object} enemy -> The enemy that should die
+     * @param {ThrowableObject} bottle -> The bottle that hit the enemy
+     * @param {number} bottleIndex -> The place of the bottle in the bottle list
+     */
+    killEnemyWithBottle(enemy, bottle, bottleIndex) {
+        enemy.die();
+        bottle.breakAndSplash(false);
+
+        this.removeEnemyAfterDeath(enemy);
+        this.removeBottleAfterSplash(bottleIndex);
+    }
+
+    /**
+     * Removes an enemy after the death animation.
+     * @param {Object} enemy -> The enemy that should be removed
+     */
+    removeEnemyAfterDeath(enemy) {
+        setTimeout(() => {
+            this.removeObjectFromMap(this.level.enemies, enemy);
+        }, 500);
+    }
+
+    /**
+     * Removes a bottle after the splash animation.
+     * @param {number} bottleIndex -> The place of the bottle in the bottle list
+     */
+    removeBottleAfterSplash(bottleIndex) {
+        setTimeout(() => {
+            this.throwableObject.splice(bottleIndex, 1);
+        }, 300);
+    }
+
+    /**
+     * Removes one object from a list.
+     * @param {Array} array -> The list where the object is inside
+     * @param {Object} objectToRemove -> The object that should be removed
+     */
     removeObjectFromMap(array, objectToRemove) {
         const index = array.indexOf(objectToRemove);
 
@@ -229,116 +395,132 @@ export class World {
         }
     }
 
-    checkObjectThrown = () => {
-        // Unlimited bootles
-        // if (this.character.bottles > 0) {
-        // if ((this.keyboard.D) && (this.character.bottles > 0))
-        if ((this.keyboard.D)) {
-            console.log("this.character.bottles ", this.character.bottles);
-            
-            let justThrown = new Date().getTime() / 1000;
-            if (justThrown - this.lastThrow > 0.5) {
-                console.log("this.character.bottles ", this.character.bottles);
-
-                let bottle = new ThrowableObject(
-                    this.character.x + 100,
-                    this.character.y + 100,
-                    this.character.otherDirection,
-                );
-
-                // Array to draw object thrown to map
-                this.throwableObject.push(bottle);
-                this.character.throwBottle();
-                // number of available bottles * 20 => status bar percentage
-                this.statusBarBottles.setPercentage(this.character.bottles * 20);
-                // Avoid character falling asleep while throwing bottles
-                this.character.lastAction = Date.now();
-                // this.bottleAboveGround = true;
-                this.lastThrow = justThrown;
-                
+    /**
+     * Checks if a bottle hits the ground.
+     */
+    checkCollisionBottleWithGround() {
+        this.throwableObject.forEach((bottle) => {
+            if (!bottle.hasHit && bottle.y >= 340) {
+                bottle.breakAndSplash(true);
             }
+        });
+    }
+
+    /**
+     * Checks if a thrown bottle hits the character.
+     */
+    checkCollisionBottleWithCharacter() {
+        this.throwableObject.forEach((bottle) => {
+            if (this.bottleCanHitCharacter(bottle)) {
+                this.hitCharacterWithBottle(bottle);
+            }
+        });
+    }
+
+    /**
+     * Checks if the bottle is allowed to hit the character.
+     * @param {ThrowableObject} bottle -> The thrown bottle
+     * @returns {boolean} -> True when the bottle can hit the character
+     */
+    bottleCanHitCharacter(bottle) {
+        return !bottle.hasHit && bottle.isColliding(this.character);
+    }
+
+    /**
+     * Hurts the character when his own bottle hits him.
+     * @param {ThrowableObject} bottle -> The bottle that hit the character
+     */
+    hitCharacterWithBottle(bottle) {
+        this.character.hit();
+        this.statusBarHealth.setPercentage(this.character.energy);
+        bottle.breakAndSplash(false);
+    }
+
+    /**
+     * Stops the game world.
+     */
+    destroyWorld() {
+        this.gameIsRunning = false;
+    }
+
+    /**
+     * Checks if the player won or lost the game.
+     */
+    checkGameOver() {
+        this.checkPlayerLost();
+        this.checkPlayerWon();
+    }
+
+    /**
+     * Checks if the character is dead.
+     */
+    checkPlayerLost() {
+        if (this.character.isDead()) {
+            this.showGameResultAfterTime("lost", 1500);
         }
-        // }
+    }
+
+    /**
+     * Checks if the endboss is dead.
+     */
+    checkPlayerWon() {
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Endboss && enemy.isDead) {
+                this.showGameResultAfterTime("won", 1500);
+            }
+        });
+    }
+
+    /**
+     * Shows the win or lose screen. Game result => world.gameResult
+     * @param {string} result -> The result of the game
+     * @param {number} time -> The time before the screen is shown
+     */
+    showGameResultAfterTime(result, time) {
+        setTimeout(() => {
+            this.gameIsRunning = false;
+            this.gameResult = result;
+        }, time);
+    }
+
+    /**
+     * Checks if the player throws a bottle.
+     */
+    checkObjectThrown = () => {
+        if (this.keyboard.D && this.canThrowBottle()) {
+            this.throwBottle();
+        }
     };
 
-    // checkCollisionOfEndbossWithBottle() {}
+    /**
+     * Checks if enough time passed to throw the next bottle.
+     * @returns {boolean} -> True when the character can throw a bottle
+     */
+    canThrowBottle() {
+        const justThrown = new Date().getTime() / 1000;
 
-    // checkCollisionOfBottleWithGround() {
-    //     console.log("this.throwableObject.bottleAboveGround", this.bottleAboveGround);
-
-    //     // if (this.bottleAboveGround === true) {
-    //     //     this.throwableObject.forEach((throwableObject, index) => {
-    //     //         if (throwableObject.speedY < -38) {
-    //     //             throwableObject.breakAndSplash();
-    //     //             setTimeout(() => {
-    //     //                 this.throwableObject.splice(index, 1);
-    //     //             }, 300);
-    //     //         }
-    //     //     });
-    //     // }
-    // }
-
-    setWorld() {
-        this.character.world = this; // to make the World accessible to the character
-        this.level.enemies.forEach((enemy) => {
-            enemy.world = this;
-        });
-        // this.character.animate();
+        return justThrown - this.lastThrow > 0.5;
     }
 
-    draw() {
-        if (!this.gameIsRunning) return;
-        // clear content from canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.cameraX, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
+    /**
+     * Creates a bottle and throws it from the character.
+     */
+    throwBottle() {
+        const justThrown = new Date().getTime() / 1000;
+        const bottle = this.createBottle();
 
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.clouds);
-        this.addObjectsToMap(this.throwableObject);
-        this.addObjectsToMap(this.level.collectibleObjects);
-
-        this.ctx.translate(-this.cameraX, 0);
-        // Space for fixed objects moving with camera
-        this.addToMap(this.statusBarHealth);
-        this.addToMap(this.statusBarCoins);
-        this.addToMap(this.statusBarBottles);
-        this.addToMap(this.statusBarEndboss);
-
-        requestAnimationFrame(() => this.draw());
+        this.throwableObject.push(bottle);
+        this.character.throwBottle();
+        this.statusBarBottles.setPercentage(this.character.bottles * 20);
+        this.character.lastAction = Date.now();
+        this.lastThrow = justThrown;
     }
 
-    addObjectsToMap(objects) {
-        objects.forEach((object) => {
-            this.addToMap(object);
-        });
-    }
-
-    addToMap(mo) {
-        if (mo.otherDirection) {
-            this.flipImage(mo);
-        }
-        mo.draw(this.ctx);
-        // mo.drawCollsionFrame(this.ctx);
-
-        if (mo.otherDirection) {
-            this.flipImageBack(mo);
-            // dmo.drawCollsionFrame(this.ctx);
-        }
-    }
-
-    flipImage(mo) {
-        // If left-key is pressed, mirror image of character
-        this.ctx.save(); // save ctx to only mirror image of character
-        this.ctx.translate(mo.width, 0);
-        this.ctx.scale(-1, 1);
-        mo.x = mo.x * -1;
-    }
-
-    flipImageBack(mo) {
-        // If left-key is pressed, mirror only image of character, restore rest
-        mo.x = mo.x * -1;
-        this.ctx.restore();
+    /**
+     * Creates a new bottle at the character place.
+     * @returns {ThrowableObject} -> The new bottle
+     */
+    createBottle() {
+        return new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
     }
 }

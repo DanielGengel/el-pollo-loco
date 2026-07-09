@@ -236,7 +236,7 @@ function checkGameState() {
 
 /**
  * Shows the win or lose screen. Game result => world.gameResult
- * @param {string} result -> The result of the game.
+ * @param {string} result -> The result of the game
  */
 function showGameResult(result) {
     if (result === "won") {
