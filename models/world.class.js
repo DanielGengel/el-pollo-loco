@@ -521,6 +521,12 @@ export class World {
      * @returns {ThrowableObject} -> The new bottle
      */
     createBottle() {
-        return new ThrowableObject(this.character.x + 100, this.character.y + 100, this.character.otherDirection);
+        let bottleX = this.character.x + 100;
+
+        if (this.character.otherDirection) {
+            bottleX = this.character.x - 20;
+        }
+
+        return new ThrowableObject(bottleX, this.character.y + 100, this.character.otherDirection);
     }
 }
