@@ -87,6 +87,7 @@ export class World {
         this.throwableObject.forEach((bottle) => {
             if (!bottle.hasHit && bottle.y >= 340) {
                 bottle.breakAndSplash(true);
+                
             }
         });
     }
@@ -98,16 +99,12 @@ export class World {
                 if (bottle.isColliding(enemy)) {
                     console.log("Bottle hit", enemy);
                     // kill enemy
-                    if (enemy instanceof Endboss) {
+                    if (enemy instanceof Endboss && enemy.energy > 0) {
                         console.log("this enemy instanceof Endboss, energy = ", enemy.energy);
-
+                        
                         enemy.hit();
                         this.statusBarEndboss.setPercentage(enemy.energy);
                         bottle.breakAndSplash(false);
-
-                        if (enemy.energy === 0) {
-                            enemy.die();
-                        }
                     } else {
                         enemy.die();
 
@@ -131,10 +128,6 @@ export class World {
 
     checkCollisionWithEnemy() {
         this.level.enemies.forEach((enemy) => {
-            // console.log("checkCollision forEach((enemy)");
-            // Kill chicken only of this.character.speedY < -10 (= negative speed)
-            // console.log("this.character.speedY", this.character.speedY);
-
             const characterIsColliding = this.character.isColliding(enemy);
 
             if (!characterIsColliding) {
@@ -142,21 +135,47 @@ export class World {
                 return;
             }
 
-            if (characterIsColliding && this.character.speedY < 0 && !(enemy instanceof Endboss)) {
-                enemy.die();
-                this.character.jump();
-
-                // Show dead chicken for 500ms than remove
-                setTimeout(() => {
-                    this.removeObjectFromMap(this.level.enemies, enemy);
-                }, 500);
-                // console.log("CHICKEN DEAD ", this.chicken.isDead());
-            } else if (!enemy.hasHitCharacter) {
-                this.character.hit();
-                this.statusBarHealth.setPercentage(this.character.energy);
-                enemy.hasHitCharacter = true;
+            if (enemy instanceof Endboss) {
+                this.checkEndbossHit(enemy);
+            } else {
+                this.checkNormalEnemyHit(enemy);
             }
         });
+    }
+
+    checkEndbossHit(enemy) {
+        if (!this.canEndbossHitCharacter(enemy)) return;
+
+        this.character.hit();
+        this.statusBarHealth.setPercentage(this.character.energy);
+        enemy.lastCharacterHit = new Date().getTime();
+    }
+
+    canEndbossHitCharacter(enemy) {
+        const now = new Date().getTime();
+
+        if (!enemy.lastCharacterHit) return true;
+
+        return now - enemy.lastCharacterHit >= 500;
+    }
+
+    checkNormalEnemyHit(enemy) {
+        if (this.character.speedY < 0) {
+            this.killNormalEnemy(enemy);
+        } else if (!enemy.hasHitCharacter) {
+            this.character.hit();
+            this.statusBarHealth.setPercentage(this.character.energy);
+            enemy.hasHitCharacter = true;
+        }
+    }
+
+    killNormalEnemy(enemy) {
+        enemy.die();
+        this.character.jump();
+
+        setTimeout(() => {
+            this.removeObjectFromMap(this.level.enemies, enemy);
+        }, 500);
     }
 
     // checkCollisionWithBottle() {
@@ -214,9 +233,9 @@ export class World {
         // Unlimited bootles
         // if (this.character.bottles > 0) {
         // if ((this.keyboard.D) && (this.character.bottles > 0))
-        if (this.keyboard.D) {
+        if ((this.keyboard.D)) {
             console.log("this.character.bottles ", this.character.bottles);
-
+            
             let justThrown = new Date().getTime() / 1000;
             if (justThrown - this.lastThrow > 0.5) {
                 console.log("this.character.bottles ", this.character.bottles);
@@ -236,6 +255,7 @@ export class World {
                 this.character.lastAction = Date.now();
                 // this.bottleAboveGround = true;
                 this.lastThrow = justThrown;
+                
             }
         }
         // }
