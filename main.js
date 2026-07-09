@@ -23,7 +23,6 @@ init();
 
 /**
  * Gets one HTML element by its id
- *
  * @param {string} id -> The id of the HTML element
  * @returns {HTMLElement} -> The actual HTML element
  */
@@ -106,7 +105,6 @@ function initClosePopupButtons() {
 /**
  * Adds the close popup click event to one button.
  * It is used for every button with the closePopup class.
- *
  * @param {Element} button -> The close button.
  */
 function addClosePopupClick(button) {
@@ -141,7 +139,6 @@ function showLoadingMessage() {
 
 /**
  * Shows a loading error
- *
  * @param {Error} error -> image loading error
  */
 function showLoadingError(error) {
@@ -163,7 +160,6 @@ function showCountdown() {
 /**
  * Starts the one-second countdown timer.
  * The timer updates the countdown text every second.
- *
  * @param {number} seconds -> The first countdown number
  */
 function startCountdownTimer(seconds) {
@@ -240,7 +236,6 @@ function checkGameState() {
 
 /**
  * Shows the win or lose screen. Game result => world.gameResult
- *
  * @param {string} result -> The result of the game.
  */
 function showGameResult(result) {
@@ -279,7 +274,6 @@ function initMobileButtons() {
 /**
  * Connects one mobile button to one game key
  * Buttons work for touch and mouse input
- *
  * @param {string} buttonId -> The id of the mobile button.
  * @param {string} key -> The Keyboard property that should change.
  */
@@ -295,7 +289,6 @@ function addMobileButton(buttonId, key) {
 /**
  * Adds the touch START event to one mobile button
  * The matching game key becomes true.
- *
  * @param {HTMLElement} button -> mobile button
  * @param {string} key -> The Keyboard property that should change
  */
@@ -305,8 +298,6 @@ function addTouchStart(button, key) {
 
 /**
  * Adds touch END events to one mobile button.
- * The matching game key becomes false.
- *
  * @param {HTMLElement} button -< mobile button
  * @param {string} key -> The property that should change
  */
@@ -318,7 +309,6 @@ function addTouchEnd(button, key) {
 
 /**
  * Adds the mouse down event to one mobile button.
- *
  * @param {HTMLElement} button -> mobile button
  * @param {string} key -> The Keyboard property that should change
  */
@@ -328,7 +318,6 @@ function addMouseStart(button, key) {
 
 /**
  * Adds mouse end events to one mobile buttons...
- *
  * @param {HTMLElement} button 
  * @param {string} key
  */
@@ -339,7 +328,6 @@ function addMouseEnd(button, key) {
 
 /**
  * keeps the game controls feeling like game buttons
- *
  * @param {HTMLElement} button
  */
 function addNoContextMenu(button) {
@@ -349,7 +337,6 @@ function addNoContextMenu(button) {
 /**
  * STARTING one mobile key after a touch event
  * It also prevents browser touch behavior.
- *
  * @param {string} key 
  * @param {TouchEvent} event
  */
@@ -360,7 +347,6 @@ function startMobileKey(key, event) {
 
 /**
  * STOPPING mobile key after a touch event
- *
  * @param {string} key 
  * @param {TouchEvent} event
  */
@@ -371,7 +357,6 @@ function stopMobileKey(key, event) {
 
 /**
  * STARTING mobile key 
- *
  * @param {string} key 
  */
 function startMouseKey(key) {
@@ -380,7 +365,6 @@ function startMouseKey(key) {
 
 /**
  * STARTING mobile key 
- *
  * @param {string} key 
  */
 function stopMouseKey(key) {
@@ -389,7 +373,6 @@ function stopMouseKey(key) {
 
 /**
  * Prevent scrolling while touching a mobile button...
- *
  * @param {TouchEvent} event
  */
 function preventTouchMove(event) {
@@ -398,7 +381,6 @@ function preventTouchMove(event) {
 
 /**
  * This is used for the mobile button context menu
- *
  * @param {Event} event
  */
 function preventDefaultEvent(event) {
@@ -459,7 +441,6 @@ function initVolumeControls() {
 /**
  * Connects the volume slider.
  * Moving the slider changes the game volume.
- *
  * @param {HTMLInputElement} slider
  */
 function addVolumeSliderEvent(slider) {
@@ -467,8 +448,7 @@ function addVolumeSliderEvent(slider) {
 }
 
 /**
- * Handles changes on the volume slider
- *
+ * Handles changes on the volume slide
  * @param {HTMLInputElement} slider 
  */
 function handleVolumeInput(slider) {
@@ -478,7 +458,6 @@ function handleVolumeInput(slider) {
 /**
  * Connects both mute buttons (Start-Screen and game controll)
  * Clicking either button toggles sound on or off
- *
  * @param {HTMLElement} textButton -> text mute button at Start-Screen
  * @param {HTMLElement} iconButton - icon mute buton in the game 
  *  */
