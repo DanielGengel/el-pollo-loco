@@ -20,7 +20,7 @@ function createEnemies() {
 
     // Small chickens
     for (let i = 0; i < 5; i++) {
-        enemies.push(new ChickenSmall()); // Ensure this line is present
+        enemies.push(new ChickenSmall()); 
     }
 
     // Endboss

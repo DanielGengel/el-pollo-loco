@@ -1,6 +1,5 @@
-// import { IntervalHub } from "../helper/intervallHub.js";
 import { DrawableObject } from "./drawableObject.class.js";
-import { SoundHub } from '../helper/soundHub.class.js';
+import { SoundHub } from "../helper/soundHub.class.js";
 
 export class MoveableObject extends DrawableObject {
     otherDirection = false; // mirroring character image when walking left
@@ -15,141 +14,139 @@ export class MoveableObject extends DrawableObject {
     collisionBox = { x: 0, y: 0, width: 0, height: 0 };
     offset = { top: 120, right: 35, bottom: 15, left: 20 };
 
+    /**
+     * Shows the next picture from the animations
+     * @param {Array} images -> The pictures for the animation
+     */
     playAnimation(images) {
-        let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1
+        let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
-        // console.log(this.currentImage++);
-        
     }
 
+    /**
+     * Moves the character and small Chickens to the right.
+     */
     moveRight() {
         this.x += this.speed;
     }
 
+    /**
+     * Moves the character, chickens and endboss to the left.
+     */
     moveLeft() {
         this.x -= this.speed;
     }
 
+    /**
+     * Makes the character jump and plays the jump sound.
+     */
     jump() {
         this.speedY = 30;
-        SoundHub.playOne(SoundHub.characterJump)
+        SoundHub.playOne(SoundHub.characterJump);
     }
 
+    /**
+     * Pulls the character down after jumping or throwing.
+     */
     applyGravity = () => {
-        
-            if (this.isAboveGround() || this.speedY > 0) {
-                this.y -= this.speedY;
-                this.speedY -= this.acceleration;
-            } else {
-                this.speedY = 0;
-            }
-        
-    }
+        if (this.isAboveGround() || this.speedY > 0) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+        } else {
+            this.speedY = 0;
+        }
+    };
 
-    // bottle should fall through ground, character until dead should not
+    /**
+     * Checks if the character is still above the ground
+     * @returns {boolean} -> True when the object is above the ground
+     */
     isAboveGround() {
         if (this.bottleAboveGround) {
             console.log("bottleAboveGround");
             return true;
-        } else 
-            {
+        } else {
             return this.y < 130;
         }
     }
 
+    /**
+     * Sets the real box that is used for touching other objects.
+     */
     getRealFrame() {
-        // this.collisionBox.x = this.x + this.offset.left;
-        // this.collisionBox.y = this.y + this.offset.top;
-        // this.collisionBox.width = this.width - this.offset.left - this.offset.right;
-        // this.collisionBox.height = this.height - this.offset.top - this.offset.bottom;
-
-        // Mirror coordinates if character walks in other direction
         if (this.otherDirection) {
-            this.collisionBox.x = this.x + this.offset.right;
-            this.collisionBox.y = this.y + this.offset.top;
-            this.collisionBox.width = this.width - this.offset.left - this.offset.right;
-            this.collisionBox.height = this.height - this.offset.top - this.offset.bottom;
+            this.setRealFrameToLeft();
         } else {
-            {
-                this.collisionBox.x = this.x + this.offset.left;
-                this.collisionBox.y = this.y + this.offset.top;
-                this.collisionBox.width = this.width - this.offset.left - this.offset.right;
-                this.collisionBox.height = this.height - this.offset.top - this.offset.bottom;
-            }
+            this.setRealFrameToRight();
         }
     }
 
+    /**
+     * Sets the real box when the object looks left.
+     */
+    setRealFrameToLeft() {
+        this.collisionBox.x = this.x + this.offset.right;
+        this.collisionBox.y = this.y + this.offset.top;
+        this.collisionBox.width = this.width - this.offset.left - this.offset.right;
+        this.collisionBox.height = this.height - this.offset.top - this.offset.bottom;
+    }
+
+    /**
+     * Sets the real box when the object looks right.
+     */
+    setRealFrameToRight() {
+        this.collisionBox.x = this.x + this.offset.left;
+        this.collisionBox.y = this.y + this.offset.top;
+        this.collisionBox.width = this.width - this.offset.left - this.offset.right;
+        this.collisionBox.height = this.height - this.offset.top - this.offset.bottom;
+    }
+
+    /**
+     * Checks if this object touches another object.
+     * @param {MoveableObject} mO -> The other object
+     * @returns {boolean} -> True when both objects touch
+     */
     isColliding(mO) {
         this.getRealFrame();
         mO.getRealFrame();
-        // console.log("this.x =>", this.x);
-        // console.log("this.y =>", this.y);
-        // console.log("this.width =>", this.width);
-        // console.log("this.height =>", this.height);
-        // console.log("this.collisionBox.x =>", this.collisionBox.x);
-        // console.log("this.collisionBox.y =>", this.collisionBox.y);
-        // console.log("this.collisionBox.width =>", this.collisionBox.width);
-        // console.log("this.collisionBox.height =>", this.collisionBox.height);
 
         return (
-            // this.collisionBox.x + this.collisionBox.width > mO.x &&
-            // this.collisionBox.y + this.collisionBox.height > mO.y &&
-            // this.collisionBox.x < mO.x + mO.width &&
-            // this.collisionBox.y < mO.y + mO.height
-
             this.collisionBox.x + this.collisionBox.width > mO.collisionBox.x &&
             this.collisionBox.y + this.collisionBox.height > mO.collisionBox.y &&
             this.collisionBox.x < mO.collisionBox.x + mO.collisionBox.width &&
             this.collisionBox.y < mO.collisionBox.y + mO.collisionBox.height
-
-            // this.x + this.width > mO.x &&
-            // this.y + this.height > mO.y &&
-            // this.x < mO.x + mO.width &&
-            // this.y < mO.y + mO.height
         );
     }
 
+    /**
+     * Takes 20 energy away from the character or endboss.
+     */
     hit() {
-        // Decrease energy level of character
         this.energy -= 20;
+
         if (this.energy < 0) {
             this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
         }
-        // console.log(this.energy);
     }
 
+    /**
+     * Checks if the character or endboss were hit a short moment ago.
+     * @returns {boolean} -> True when the object is still hurt
+     */
     isHurt() {
-        let timePassed = new Date().getTime() - this.lastHit; // Time diff. in ms
-        return timePassed < 1000; // 1000 milli seconds
+        let timePassed = new Date().getTime() - this.lastHit;
+        return timePassed < 1000;
     }
 
+    /**
+     * Checks if the character or endboss has no energy left.
+     * @returns {boolean} -> True when the object is dead
+     */
     isDead() {
         return this.energy === 0;
     }
 }
-
-// playAnimation(images, timer) {
-//         IntervalHub.startInterval(() => this.addImages(images), timer);
-//     }
-
-//     addImages = (images) => {
-//         let i = this.currentImage % images.length; // let i = 7 % 6; =>  1, Rest 1
-//         let path = images[i];
-//         this.img = this.imageCache[path];
-//         this.currentImage++;
-//     };
-
-//     moveRight() {
-//         console.log("moving right");
-//     }
-
-//     moveLeft() {
-//         IntervalHub.startInterval(() => this.x -= this.speed, 1000/ 60);
-//         // setInterval(() => {
-//         //     this.x -= this.speed;
-//         // }, 1000 / 60);
-//     }

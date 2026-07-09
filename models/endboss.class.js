@@ -13,12 +13,15 @@ export class Endboss extends MoveableObject {
     imgArrEndbossAttack = ImageHelper.CHICKEN_BOSS.attack;
     imgArrEndbossHurt = ImageHelper.CHICKEN_BOSS.hurt;
     imgArrEndbossDead = ImageHelper.CHICKEN_BOSS.dead;
-    showFrame = true; // show frame around chicken
+    showFrame = false; // show frame around chicken
     offset = { top: 60, right: 40, bottom: 0, left: 40 };
     isDead = false;
     world;
     endbossIsWalking = false;
 
+    /**
+     * Creates the endboss and starts his animation and checks.
+     */
     constructor() {
         super();
         this.loadImage(this.imgStart);
@@ -30,31 +33,28 @@ export class Endboss extends MoveableObject {
         this.x = 2500;
         this.speed = 0.5;
 
-        // this.animate();
         IntervalHub.startInterval(this.animate, 200);
         IntervalHub.startInterval(this.checkIfCharacterIsNear, 1000 / 60);
     }
 
+    /**
+     * Shows the correct endboss animation depending on endboss state
+     */
     animate = () => {
         if (this.isDead) {
-            // console.log("is above ground");
             this.playAnimation(this.imgArrEndbossDead);
         } else if (this.isHurt()) {
-            // console.log("is above ground");
             this.playAnimation(this.imgArrEndbossHurt);
-            // this.playAnimation(this.imgArrEndbossAttack);
         } else if (this.endbossIsWalking) {
             this.playAnimation(this.imgArrEndbossWalk);
         } else {
             this.playAnimation(this.imgArrEndbossAlert);
         }
-
-        // let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
-        // let path = ImageHelper.CHICKEN.chicken_normal[index];
-        // this.img = this.imageCache[path];
-        // this.currentImage++;
     };
 
+    /**
+     * Checks if the character is near and start moving the endboss.
+     */
     checkIfCharacterIsNear = () => {
         if (!this.world) {
             return;
@@ -75,13 +75,19 @@ export class Endboss extends MoveableObject {
         }
     };
 
+    /**
+     * Checks if the character is close to the endboss.
+     * @returns {boolean} -> True when the character is close
+     */
     characterIsNear() {
         return this.world.character.x > this.x - 600;
     }
 
+    /**
+     * Kills the endboss and plays the death sound.
+     */
     die() {
         SoundHub.playOne(SoundHub.chickenDead);
-
         this.isDead = true;
     }
 }

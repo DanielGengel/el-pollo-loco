@@ -89,8 +89,10 @@ function initButtonEvents() {
     getElement("btnStart").onclick = handleStartClick;
     getElement("btnInfo").onclick = showInfoPopup;
     getElement("btnImprint").onclick = showImprintPopup;
-    getElement("btnRestartWin").onclick = restartAfterWin;
-    getElement("btnRestartLose").onclick = restartAfterLose;
+    getElement("btnRestartWin").onclick = restartAfterWinning;
+    getElement("btnRestartLose").onclick = restartAfterLosing;
+    getElement("btnMenuWin").onclick = backToMenuAfterWinning;
+    getElement("btnMenuLose").onclick = backToMenuAfterLosing;
     initClosePopupButtons();
 }
 
@@ -212,7 +214,7 @@ function stopGame() {
 }
 
 /**
- * Destroys the current world if one exists, preventing old worlds 
+ * Destroys the current world if one exists, preventing old worlds
  * from running in the background
  */
 function destroyWorldIfNeeded() {
@@ -222,7 +224,7 @@ function destroyWorldIfNeeded() {
 }
 
 /**
- * Checks if the game is still running, and if the game ended, 
+ * Checks if the game is still running, and if the game ended,
  * it shows the correct end screen
  */
 function checkGameState() {
@@ -248,7 +250,7 @@ function showGameResult(result) {
 }
 
 /**
- * Sets all game keys to false, this prevents stuck movement 
+ * Sets all game keys to false, this prevents stuck movement
  * after a restart.
  */
 function resetKeyboard() {
@@ -318,7 +320,7 @@ function addMouseStart(button, key) {
 
 /**
  * Adds mouse end events to one mobile buttons...
- * @param {HTMLElement} button 
+ * @param {HTMLElement} button
  * @param {string} key
  */
 function addMouseEnd(button, key) {
@@ -337,7 +339,7 @@ function addNoContextMenu(button) {
 /**
  * STARTING one mobile key after a touch event
  * It also prevents browser touch behavior.
- * @param {string} key 
+ * @param {string} key
  * @param {TouchEvent} event
  */
 function startMobileKey(key, event) {
@@ -347,7 +349,7 @@ function startMobileKey(key, event) {
 
 /**
  * STOPPING mobile key after a touch event
- * @param {string} key 
+ * @param {string} key
  * @param {TouchEvent} event
  */
 function stopMobileKey(key, event) {
@@ -356,16 +358,16 @@ function stopMobileKey(key, event) {
 }
 
 /**
- * STARTING mobile key 
- * @param {string} key 
+ * STARTING mobile key
+ * @param {string} key
  */
 function startMouseKey(key) {
     Keyboard[key] = true;
 }
 
 /**
- * STARTING mobile key 
- * @param {string} key 
+ * STARTING mobile key
+ * @param {string} key
  */
 function stopMouseKey(key) {
     Keyboard[key] = false;
@@ -412,7 +414,7 @@ function closePopups() {
 /**
  * Restarts the game after winning
  */
-function restartAfterWin() {
+function restartAfterWinning() {
     winScreen.classList.remove("active");
     startGame();
 }
@@ -420,9 +422,25 @@ function restartAfterWin() {
 /**
  * Restarts the game after losing.
  */
-function restartAfterLose() {
+function restartAfterLosing() {
     loseScreen.classList.remove("active");
     startGame();
+}
+
+/**
+ * Leads back to main menu after winning
+ */
+function backToMenuAfterWinning() {
+    winScreen.classList.remove("active");
+    startScreen.classList.add("active");
+}
+
+/**
+ * Leads back to main menu after loosing
+ */
+function backToMenuAfterLosing() {
+    loseScreen.classList.remove("active");
+    startScreen.classList.add("active");
 }
 
 /**
@@ -449,7 +467,7 @@ function addVolumeSliderEvent(slider) {
 
 /**
  * Handles changes on the volume slide
- * @param {HTMLInputElement} slider 
+ * @param {HTMLInputElement} slider
  */
 function handleVolumeInput(slider) {
     SoundHub.setVolume(slider.value / 100);
@@ -459,7 +477,7 @@ function handleVolumeInput(slider) {
  * Connects both mute buttons (Start-Screen and game controll)
  * Clicking either button toggles sound on or off
  * @param {HTMLElement} textButton -> text mute button at Start-Screen
- * @param {HTMLElement} iconButton - icon mute buton in the game 
+ * @param {HTMLElement} iconButton - icon mute buton in the game
  *  */
 function addMuteButtonEvents(textButton, iconButton) {
     textButton.onclick = toggleMute;
