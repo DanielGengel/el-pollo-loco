@@ -228,62 +228,36 @@ document.getElementById("btnRestartLose").onclick = () => {
 
 function initVolumeControls() {
     const slider = document.getElementById("volumeSlider");
-    const muteButton = document.getElementById("btnMute");
-    document.getElementById("btnMute").onclick = toggleMute;
-    document.getElementById("btnMuteIcon").onclick = toggleMute;
-
-    slider.value = SoundHub.masterVolume * 100;
-
-    updateMuteButtons();
-
-    slider.addEventListener("input", () => {
-        const volume = slider.value / 100;
-
-        SoundHub.setVolume(volume);
-
-        updateMuteButtons();
-    });
-
-    // muteButton.addEventListener("click", () => {
-
-    //     if (SoundHub.masterVolume === 0) {
-
-    //         SoundHub.setVolume(1);
-
-    //     } else {
-
-    //         SoundHub.setVolume(0);
-
-    //     }
-
-    //     slider.value = SoundHub.masterVolume * 100;
-
-    //     updateMuteButton();
-
-    // });
-}
-
-function updateMuteButtons() {
     const textButton = document.getElementById("btnMute");
     const iconButton = document.getElementById("btnMuteIcon");
 
-    if (SoundHub.masterVolume === 0) {
-        textButton.textContent = "🔇 SOUNDS OFF";
-        iconButton.textContent = "🔇";
-    } else {
-        textButton.textContent = "🔊 SOUNDS ON";
-        iconButton.textContent = "🔊";
-    }
+    SoundHub.initControls(slider, textButton, iconButton);
+
+    slider.addEventListener("input", () => {
+        SoundHub.setVolume(slider.value / 100);
+    });
+
+    textButton.onclick = () => SoundHub.toggleMute();
+    iconButton.onclick = () => SoundHub.toggleMute();
 }
 
-function toggleMute() {
-    if (SoundHub.masterVolume === 0) {
-        SoundHub.setVolume(0.2);
-    } else {
-        SoundHub.setVolume(0);
-    }
+// function updateMuteButtons() {
+//     const textButton = document.getElementById("btnMute");
+//     const iconButton = document.getElementById("btnMuteIcon");
 
-    volumeSlider.value = SoundHub.masterVolume * 100;
+//     if (SoundHub.isMuted()) {
+//         textButton.textContent = "🔇 SOUNDS OFF";
+//         iconButton.textContent = "🔇";
+//     } else {
+//         textButton.textContent = "🔊 SOUNDS ON";
+//         iconButton.textContent = "🔊";
+//     }
+// }
 
-    updateMuteButtons();
-}
+// function toggleMute() {
+//     SoundHub.toggleMute();
+
+//     volumeSlider.value = SoundHub.masterVolume * 100;
+
+//     updateMuteButtons();
+// }

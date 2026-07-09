@@ -61,6 +61,9 @@ export class SoundHub {
 
     static masterVolume = 0.2;
     static backgroundVolumeFactor = 0.3;
+    static slider = null;
+static textButton = null;
+static iconButton = null;
 
     static setVolume(volume) {
         this.masterVolume = volume;
@@ -71,6 +74,8 @@ export class SoundHub {
         // Background music is always quieter
         this.backgroundMusic.volume = volume * this.backgroundVolumeFactor;
         localStorage.setItem("masterVolume", volume);
+
+        this.updateControls();
     }
 
     static loadVolume() {
@@ -80,6 +85,44 @@ export class SoundHub {
             this.setVolume(Number(saved));
         }
     }
+
+    static initControls(slider, textButton, iconButton) {
+    this.slider = slider;
+    this.textButton = textButton;
+    this.iconButton = iconButton;
+
+    this.updateControls();
+}
+
+    static toggleMute() {
+    if (this.masterVolume === 0) {
+        this.setVolume(0.2);
+    } else {
+        this.setVolume(0);
+    }
+}
+
+static updateControls() {
+
+    if (this.slider) {
+        this.slider.value = this.masterVolume * 100;
+    }
+
+    if (this.textButton) {
+        this.textButton.textContent =
+            this.isMuted() ? "🔇 SOUNDS OFF" : "🔊 SOUNDS ON";
+    }
+
+    if (this.iconButton) {
+        this.iconButton.textContent =
+            this.isMuted() ? "🔇" : "🔊";
+    }
+
+}
+
+static isMuted() {
+    return this.masterVolume === 0;
+}
 
     // // Spielt eine einzelne Audiodatei ab
     // static playOne(sound) {  // instrumentId nur wichtig für die Visualisierung
