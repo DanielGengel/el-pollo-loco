@@ -10,6 +10,10 @@ export class DrawableObject {
     imageCache = {};
     currentImage = 0;
 
+    /**
+     * Loads one picture for the object.
+     * @param {string} path -> The path to the picture
+     */
     loadImage(path) {
         const preloadedImage = getPreloadedImage(path);
 
@@ -21,6 +25,10 @@ export class DrawableObject {
         }
     }
 
+    /**
+     * Loads many pictures and saves them for later.
+     * @param {Array} imageArray -> The picture paths that should be loaded
+     */
     loadImages(imageArray) {
         imageArray.forEach((path) => {
             let img = getPreloadedImage(path);
@@ -34,10 +42,18 @@ export class DrawableObject {
         });
     }
 
+    /**
+     * Draws the object on the canvas.
+     * @param {CanvasRenderingContext2D} ctx -> The canvas tool for drawing
+     */
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    /**
+     * Draws the blue and red frames around the object.
+     * @param {CanvasRenderingContext2D} ctx -> The canvas tool for drawing
+     */
     drawCollsionFrame(ctx) {
         if (this.showFrame) {
             // Picture frame

@@ -3,64 +3,142 @@ import { BackgroundObject } from "../models/background.class.js";
 import { Cloud } from "../models/clouds.class.js";
 import { Chicken } from "../models/chicken.class.js";
 import { Endboss } from "../models/endboss.class.js";
-import { CollectibleObjects } from "../models/collectibleObjects.class.js";
 import { Bottle } from "../models/bottles.class.js";
 import { Coin } from "../models/coins.class.js";
 import { ChickenSmall } from "../models/chickenSmall.class.js";
 import { Level } from "../models/level.class.js";
 
-
-function createEnemies() {
-    const enemies = [];
-
-    // Chickens
-    for (let i = 0; i < 5; i++) {
-        enemies.push(new Chicken());
+export class Level1 extends Level {
+    /**
+     * Creates level 1 with enemies, clouds, background and collectibles.
+     */
+    constructor() {
+        super(
+            Level1.createEnemies(),
+            Level1.createClouds(),
+            Level1.createBackgroundObjects(),
+            Level1.createCollectibles()
+        );
     }
 
-    // Small chickens
-    for (let i = 0; i < 5; i++) {
-        enemies.push(new ChickenSmall()); 
+    /**
+     * Creates all enemies for level 1.
+     * @returns {Array} -> The enemies for the level
+     */
+    static createEnemies() {
+        const enemies = [];
+
+        Level1.addChickens(enemies);
+        Level1.addSmallChickens(enemies);
+        Level1.addEndboss(enemies);
+
+        return enemies;
     }
 
-    // Endboss
-    enemies.push(new Endboss());
-
-    return enemies;
-}
-
-function createClouds() {
-    const clouds = [];
-
-    for (let i = 0; i < 2; i++) {
-        clouds.push(new Cloud());
+    /**
+     * Adds normal chickens to the enemy array
+     * @param {Array} enemies -> The enemy list
+     */
+    static addChickens(enemies) {
+        for (let i = 0; i < 5; i++) {
+            enemies.push(new Chicken());
+        }
     }
 
-    return clouds;
-}
+    /**
+     * Adds small chickens to the enemy array
+     * @param {Array} enemies -> The enemy list
+     */
+    static addSmallChickens(enemies) {
+        for (let i = 0; i < 5; i++) {
+            enemies.push(new ChickenSmall());
+        }
+    }
 
-function createBackgroundObjects() {
-    const backgroundObjects = [];
-    const layers = [
-        "sky",
-        "clouds",
-        "third_layer",
-        "second_layer",
-        "first_layer"
-    ];
+    /**
+     * Adds the endboss to the enemy array
+     * @param {Array} enemies -> The enemy list
+     */
+    static addEndboss(enemies) {
+        enemies.push(new Endboss());
+    }
 
-    for (let section = -2; section <= 5; section++) {
+    /**
+     * Creates all clouds for level 1.
+     * @returns {Array} -> The clouds for the level
+     */
+    static createClouds() {
+        const clouds = [];
 
+        for (let i = 0; i < 2; i++) {
+            clouds.push(new Cloud());
+        }
+
+        return clouds;
+    }
+
+    /**
+     * Creates all background pictures 
+     * @returns {Array} -> The background pictures for the level
+     */
+    static createBackgroundObjects() {
+        const backgroundObjects = [];
+        const layers = Level1.getBackgroundLayers();
+
+        for (let section = -2; section <= 5; section++) {
+            Level1.addBackgroundSection(backgroundObjects, layers, section);
+        }
+
+        return backgroundObjects;
+    }
+
+    /**
+     * Gives back the background layer names.
+     * @returns {Array} -> The background layer names
+     */
+    static getBackgroundLayers() {
+        return [
+            "sky",
+            "clouds",
+            "third_layer",
+            "second_layer",
+            "first_layer"
+        ];
+    }
+
+    /**
+     * Adds one full background part to the background list.
+     * @param {Array} backgroundObjects -> The background list
+     * @param {Array} layers -> The background layer names
+     * @param {number} section -> The number of the background part
+     */
+    static addBackgroundSection(backgroundObjects, layers, section) {
         const x = section * 719;
+        const imageIndex = Math.abs(section % 2);
 
-        // Sky always uses image 0
+        Level1.addSky(backgroundObjects, x);
+        Level1.addBackgroundLayers(backgroundObjects, layers, imageIndex, x);
+    }
+
+    /**
+     * Adds the sky picture to the background list.
+     * @param {Array} backgroundObjects -> The background list
+     * @param {number} x -> The place from left to right
+     */
+    static addSky(backgroundObjects, x) {
         backgroundObjects.push(
             new BackgroundObject(ImageHelper.BACKGROUND.sky[0], x)
         );
+    }
 
-        // Alternate other layers
-        const imageIndex = Math.abs(section % 2);
-
+    /**
+     * Adds all other background layer pictures.
+     * @param {Array} backgroundObjects -> The background list
+     * @param {Array} layers -> The background layer names
+     * @param {number} imageIndex -> The picture number for this background part
+     * @param {number} x -> The place from left to right
+     */
+    static addBackgroundLayers(backgroundObjects, layers, imageIndex, x) {
         for (const layer of layers.slice(1)) {
             backgroundObjects.push(
                 new BackgroundObject(ImageHelper.BACKGROUND[layer][imageIndex], x)
@@ -68,46 +146,54 @@ function createBackgroundObjects() {
         }
     }
 
-    return backgroundObjects;
-}
+    /**
+     * Creates all bottles and coins for level 1.
+     * @returns {Array} -> The collectibles for the level
+     */
+    static createCollectibles() {
+        const collectibles = [];
 
-function createCollectibles() {
-    let bottleX = 300;
-    let coinX = 300;
+        Level1.addBottles(collectibles);
+        Level1.addCoins(collectibles);
 
-    const collectibles = [];
-
-    // Bottles
-    for (let i = 0; i < 9; i++) {
-        const bottle = new Bottle();
-        bottle.x = bottleX;
-        collectibles.push(bottle);
-        bottleX += 150 + Math.random() * 500;
+        return collectibles;
     }
 
-    // Coins
-    for (let i = 0; i < 9; i++) {
-        const coin = new Coin();
-        coin.x = coinX;
-        collectibles.push(coin);
-        coinX += 150 + Math.random() * 500;
+    /**
+     * Adds bottles to the collectible list.
+     * @param {Array} collectibles -> The collectible list
+     */
+    static addBottles(collectibles) {
+        let bottleX = 300;
+
+        for (let i = 0; i < 9; i++) {
+            const bottle = new Bottle();
+            bottle.x = bottleX;
+            collectibles.push(bottle);
+            bottleX += 150 + Math.random() * 500;
+        }
     }
 
-    return collectibles;
+    /**
+     * Adds coins to the collectible list.
+     * @param {Array} collectibles -> The collectible list
+     */
+    static addCoins(collectibles) {
+        let coinX = 300;
+
+        for (let i = 0; i < 9; i++) {
+            const coin = new Coin();
+            coin.x = coinX;
+            collectibles.push(coin);
+            coinX += 150 + Math.random() * 500;
+        }
+    }
 }
 
+/**
+ * Creates level 1.
+ * @returns {Level1} -> The first level
+ */
 export function createLevel1() {
-    console.log("Create Level 1");
-
-    const enemies = createEnemies();
-    const clouds = createClouds();
-    const backgroundObjects = createBackgroundObjects();
-    const collectibles = createCollectibles();
-
-    return new Level(
-        enemies,
-        clouds,
-        backgroundObjects,
-        collectibles
-    );
+    return new Level1();
 }

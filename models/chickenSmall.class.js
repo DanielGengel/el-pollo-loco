@@ -14,6 +14,9 @@ export class ChickenSmall extends MoveableObject {
     imgArrChickenNormal = ImageHelper.CHICKEN.chicken_small;
     imgArrChickenDead = ImageHelper.CHICKEN.chicken_small_dead;
 
+    /**
+     * Creates a small chicken and starts its movement and animation.
+     */
     constructor() {
         super();
         
@@ -36,6 +39,9 @@ export class ChickenSmall extends MoveableObject {
          IntervalHub.startInterval(this.moveRandomly, 1000 / 60);
     }
 
+    /**
+     * Shows the small chicken walk or dead animation.
+     */
     animate = () => {
         // Animation
         // IntervalHub.startInterval(() => {
@@ -47,6 +53,9 @@ export class ChickenSmall extends MoveableObject {
         // }, 200);
     }
 
+    /**
+     * Moves the small chicken left and right.
+     */
     moveRandomly = () => {
         // Movement
         // IntervalHub.startInterval(() => {
@@ -68,6 +77,9 @@ export class ChickenSmall extends MoveableObject {
         // }, 1000 / 60);
     }
 
+    /**
+     * Kills the small chicken and plays the death sound.
+     */
       die() {
         SoundHub.playOne(SoundHub.chickenDead2); 
         if (this.isDead()) return;

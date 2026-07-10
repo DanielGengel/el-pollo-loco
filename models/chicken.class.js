@@ -13,6 +13,9 @@ export class Chicken extends MoveableObject {
     showFrame = true; // show frame around chicken
     offset = { top: 10, right: 0, bottom: 0, left: 0 };
 
+    /**
+     * Creates a chicken and starts its animation and movement.
+     */
     constructor() {
         super();
         this.loadImage(this.imgStart);
@@ -29,11 +32,11 @@ export class Chicken extends MoveableObject {
 
     }
 
+    /**
+     * Shows the chicken walk or dead animation.
+     */
     animate = () => {
-        // IntervalHub.startInterval(this.startCounter, 200);
-       
-            // console.log("this chicken is dead ", this.isDead());
-
+ 
             if (this.isDead()) {
                 this.playAnimation(this.imgArrChickenDead);
             } else {
@@ -41,35 +44,20 @@ export class Chicken extends MoveableObject {
             }
         }
 
+    /**
+     * Checks if the chicken is alive and moves it left.
+     */
         checkIfChickenIsAlive = () => {
         // Only chicken alive can move
-       
             if (!this.isDead()) {
                 this.moveLeft();
             }
        
     }
 
-    // startCounter = () => {
-    //                let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
-    //         let path = ImageHelper.CHICKEN.chicken_normal[index];
-    //         this.img = this.imageCache[path];
-    //         this.currentImage++;
-    //             };
-
-    //  animate() {
-
-    //     setInterval(() => {
-    //         this.playAnimation(ImageHelper.CHICKEN.chicken_normal);
-    //         // let index = this.currentImage % ImageHelper.CHICKEN.chicken_normal.length;
-    //         // let path = ImageHelper.CHICKEN.chicken_normal[index];
-    //         // this.img = this.imageCache[path];
-    //         // this.currentImage++;
-    //     }, 200);
-    //     this.moveLeft();
-    // }
-
-
+    /**
+     * Kills the chicken and plays the death sound.
+     */
     die() {
         console.log("chicken DEAD --- PLAY SOUND");
         

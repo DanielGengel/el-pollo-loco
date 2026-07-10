@@ -6,8 +6,10 @@ export class Cloud extends MoveableObject {
     y = 20;
     width = 500;
     height = 250;
-    
 
+    /**
+     * Creates the clouds and starts its animation
+     */
     constructor() {
         super();
         this.loadImage(ImageHelper.BACKGROUND.clouds[0]);
@@ -15,9 +17,10 @@ export class Cloud extends MoveableObject {
         this.x = -100 + Math.random() * 1000;
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
-        
     }
-
+    /**
+     * Shows the cloud animation.
+     */
     animate() {
         IntervalHub.startInterval(() => this.moveLeft(), 1000 / 60);
     }

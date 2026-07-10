@@ -10,9 +10,12 @@ export class Bottle extends CollectibleObjects {
     height = 90;
     width = 100;
     imgArrBottleGround = ImageHelper.SALSA_BOTTLE.ground;
-    showFrame = true; // show frame around chicken
+    showFrame = true; // show frame around bottle
     offset = { top: 10, right: 40, bottom: 5, left: 40 }; // Offset values for real collision frame
 
+    /**
+     * Creates a bottle that the character can collect.
+     */
     constructor() {
         super();
         // Choose either picture one or two (left/right) for bottle placement
