@@ -31,26 +31,37 @@ export class Endboss extends MoveableObject {
         this.loadImages(this.imgArrEndbossHurt);
         this.loadImages(this.imgArrEndbossDead);
         this.x = 2500;
-        this.speed = 0.5;
+        this.speed = 2.5;
 
         IntervalHub.startInterval(this.animate, 200);
         IntervalHub.startInterval(this.checkIfCharacterIsNear, 1000 / 60);
     }
 
     /**
-     * Shows the correct endboss animation depending on endboss state
-     */
-    animate = () => {
-        if (this.isDead) {
-            this.playAnimation(this.imgArrEndbossDead);
-        } else if (this.isHurt()) {
-            this.playAnimation(this.imgArrEndbossHurt);
-        } else if (this.endbossIsWalking) {
-            this.playAnimation(this.imgArrEndbossWalk);
-        } else {
-            this.playAnimation(this.imgArrEndbossAlert);
-        }
-    };
+ * Shows the correct endboss animation depending on endboss state.
+ */
+animate = () => {
+    if (this.isDead) {
+        this.playAnimation(this.imgArrEndbossDead);
+    } else if (this.isHurt()) {
+        this.playAnimation(this.imgArrEndbossHurt);
+    } else if (this.endbossIsWalking) {
+        this.playWalkAndAlertAnimation();
+    } else {
+        this.playAnimation(this.imgArrEndbossAlert);
+    }
+};
+
+/**
+ * Switches between walk and alert while the endboss is walking.
+ */
+playWalkAndAlertAnimation() {
+    if (this.currentImage % 2 === 0) {
+        this.playAnimation(this.imgArrEndbossWalk);
+    } else {
+        this.playAnimation(this.imgArrEndbossAlert);
+    }
+}
 
     /**
      * Checks if the character is near and start moving the endboss.

@@ -201,7 +201,7 @@ export class World {
 
         if (!enemy.lastCharacterHit) return true;
 
-        return now - enemy.lastCharacterHit >= 500;
+        return now - enemy.lastCharacterHit >= 250;
     }
 
     /**
