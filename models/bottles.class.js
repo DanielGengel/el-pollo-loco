@@ -10,7 +10,7 @@ export class Bottle extends CollectibleObjects {
     height = 90;
     width = 100;
     imgArrBottleGround = ImageHelper.SALSA_BOTTLE.ground;
-    showFrame = true; // show frame around bottle
+    showFrame = false; // show frame around bottle
     offset = { top: 10, right: 40, bottom: 5, left: 40 }; // Offset values for real collision frame
 
     /**

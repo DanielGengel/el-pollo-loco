@@ -8,7 +8,8 @@ export class ChickenSmall extends MoveableObject {
     width = 60;
     height = 70;
     y = 360;
-    offset = { top: 20, right: 0, bottom: 0, left: 0 };
+    showFrame = false;
+    offset = { top: 0, right: 0, bottom: 0, left: 0 };
 
     imgStart = ImageHelper.CHICKEN.chicken_small[0];
     imgArrChickenNormal = ImageHelper.CHICKEN.chicken_small;

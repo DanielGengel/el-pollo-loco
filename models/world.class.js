@@ -40,7 +40,7 @@ export class World {
 
         this.draw();
         this.setWorld();
-        IntervalHub.startInterval(this.run, 100);
+        IntervalHub.startInterval(this.run, 10);
         IntervalHub.startInterval(this.checkObjectThrown, 1000 / 60);
     }
 
@@ -209,6 +209,8 @@ export class World {
      * @param {Object} enemy -> The normal enemy
      */
     checkNormalEnemyHit(enemy) {
+        if (enemy.isDead()) return;
+
         if (this.character.speedY < 0) {
             this.killNormalEnemy(enemy);
         } else if (!enemy.hasHitCharacter) {

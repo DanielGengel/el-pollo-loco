@@ -5,7 +5,7 @@ export class MoveableObject extends DrawableObject {
     otherDirection = false; // mirroring character image when walking left
     speedY = 0; // fall speed of character
     acceleration = 3;
-    showFrame = false; // if true => drawCollsionFrame around character and chicken
+    showFrame = false; // if true => drawCollsionFrame around all moveable onjects
     energy = 100;
     lastHit = 0;
     bottleAboveGround = false;

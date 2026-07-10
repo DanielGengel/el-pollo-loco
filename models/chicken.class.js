@@ -10,7 +10,7 @@ export class Chicken extends MoveableObject {
     imgStart = ImageHelper.CHICKEN.chicken_normal[0];
     imgArrChickenNormal = ImageHelper.CHICKEN.chicken_normal;
     imgArrChickenDead = ImageHelper.CHICKEN.chicken_normal_dead;
-    showFrame = true; // show frame around chicken
+    showFrame = false; // show frame around chicken
     offset = { top: 10, right: 0, bottom: 0, left: 0 };
 
     /**
