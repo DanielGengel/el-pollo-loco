@@ -41,6 +41,10 @@ body {
     font-family: "Rye";
     font-size: 20px;
 }
+h1 {
+    position: absolute;
+    top: 40px;
+}
 
 canvas {
     background-color: white;
@@ -176,7 +180,7 @@ canvas {
 button {
     font-family: "Rye";
     padding: 12px 28px;
-    font-size: 18px;
+    font-size: 24px;
     cursor: pointer;
     border: none;
     border-radius: 10px;
@@ -188,7 +192,7 @@ button {
 }
 /* Separated to not affect the speaker-icon-button */
 .menu button {
-    width: 200px;
+    width: 250px;
 }
 
 button:hover {
@@ -226,6 +230,28 @@ button:hover {
     display: none;
 }
 
+@media (min-width: 1500px) {
+   
+/* Separated to not affect the speaker-icon-button */
+.menu button {
+    font-size: 36px;
+    width: 350px;
+    height: 100px;
+}
+
+.speakerButton:hover {
+    background: transparent;
+    transform: scale(1.8);
+}
+
+#volumeSlider {
+    width: 120px;
+    height: 60px;
+    cursor: pointer;
+    accent-color: #ff8c00;
+}
+}
+
 @media (pointer: coarse), (max-width: 900px) {
    html,
     body {
@@ -255,37 +281,6 @@ button:hover {
     .overlay {
         border-radius: 0;
     }
-
-    /* .mobileControls {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 16px;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 18px;
-        z-index: 150;
-        pointer-events: none;
-    }
-
-    .mobileControlGroup {
-        display: flex;
-        gap: 12px;
-        pointer-events: auto;
-    }
-
-    .mobileButton {
-        width: 82px;
-        height: 54px;
-        padding: 0;
-        border-radius: 10px;
-        font-size: 14px;
-        opacity: 0.9;
-        touch-action: none;
-        user-select: none;
-        -webkit-user-select: none;
-        -webkit-touch-callout: none;
-    } */
 
     .hidden {
         display: none;
@@ -328,9 +323,6 @@ button:hover {
         width: 38px;
         height: 38px;
 
-        /* width: 64px;
-    height: 64px; */
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -340,17 +332,10 @@ button:hover {
 
         background: linear-gradient(to bottom, #b7cbe3 0%, #8fa9c7 45%, #6f89ad 100%);
 
-        /* box-shadow:
-            inset 0 3px 0 rgba(255, 255, 255, 0.45),
-            0 2px 4px rgba(0, 0, 0, 0.35); */
-
         color: white;
         font-size: 36px;
     }
 
-    /* .popup {
-        width: 90vw;
-    } */
 }
 
 @media (pointer: coarse) and (orientation: portrait), (max-width: 900px) and (orientation: portrait) {
