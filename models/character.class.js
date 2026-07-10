@@ -81,7 +81,7 @@ export class Character extends MoveableObject {
      * Checks if the character should move left.
      */
     checkMoveLeft() {
-        if (this.world.keyboard.LEFT && this.x > -1200) {
+        if (this.world.keyboard.LEFT && this.x > -2000) {
             this.otherDirection = true;
             this.moveLeft();
         }

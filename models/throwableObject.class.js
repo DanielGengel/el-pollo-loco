@@ -15,7 +15,7 @@ export class ThrowableObject extends MoveableObject {
     animationInterval;
 
     offset = { top: 0, right: 0, bottom: 0, left: 0 };
-    showFrame = true;
+    showFrame = false;
 
     /**
      * Creates a new bottle and throws it.

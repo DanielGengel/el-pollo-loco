@@ -85,7 +85,7 @@ export class Level1 extends Level {
         const backgroundObjects = [];
         const layers = Level1.getBackgroundLayers();
 
-        for (let section = -2; section <= 5; section++) {
+        for (let section = -3; section <= 5; section++) {
             Level1.addBackgroundSection(backgroundObjects, layers, section);
         }
 
@@ -147,47 +147,84 @@ export class Level1 extends Level {
     }
 
     /**
-     * Creates all bottles and coins for level 1.
-     * @returns {Array} -> The collectibles for the level
-     */
-    static createCollectibles() {
-        const collectibles = [];
+ * Creates all bottles and coins for level 1.
+ * @returns {Array} -> The collectibles for the level
+ */
+static createCollectibles() {
+    const collectibles = [];
+    const levelEndX = 3500;
 
-        Level1.addBottles(collectibles);
-        Level1.addCoins(collectibles);
+    Level1.addStartBottles(collectibles);
+    Level1.addStartCoins(collectibles);
+    Level1.addBottles(collectibles, levelEndX);
+    Level1.addCoins(collectibles, levelEndX);
 
-        return collectibles;
+    return collectibles;
+}
+
+/**
+ * Adds 3 bottles at the very left side of the level.
+ * @param {Array} collectibles -> The collectible list
+ */
+static addStartBottles(collectibles) {
+    const bottlePlaces = [-2000, -1900, -1800];
+
+    bottlePlaces.forEach((x) => {
+        const bottle = new Bottle();
+        bottle.x = x;
+        collectibles.push(bottle);
+    });
+}
+
+/**
+ * Adds 2 coins at the very left side of the level.
+ * @param {Array} collectibles -> The collectible list
+ */
+static addStartCoins(collectibles) {
+    const coinPlaces = [-1950, -1850];
+
+    coinPlaces.forEach((x) => {
+        const coin = new Coin();
+        coin.x = x;
+        collectibles.push(coin);
+    });
+}
+
+/**
+ * Adds bottles to the collectible list.
+ * @param {Array} collectibles -> The collectible list
+ * @param {number} levelEndX -> The last place where bottles are allowed
+ */
+static addBottles(collectibles, levelEndX) {
+    let bottleX = 300;
+
+    for (let i = 0; i < 9; i++) {
+        if (bottleX > levelEndX) return;
+
+        const bottle = new Bottle();
+        bottle.x = bottleX;
+        collectibles.push(bottle);
+        bottleX += 150 + Math.random() * 500;
     }
+}
 
-    /**
-     * Adds bottles to the collectible list.
-     * @param {Array} collectibles -> The collectible list
-     */
-    static addBottles(collectibles) {
-        let bottleX = 300;
+/**
+ * Adds coins to the collectible list.
+ * @param {Array} collectibles -> The collectible list
+ * @param {number} levelEndX -> The last place where coins are allowed
+ */
+static addCoins(collectibles, levelEndX) {
+    let coinX = 300;
 
-        for (let i = 0; i < 9; i++) {
-            const bottle = new Bottle();
-            bottle.x = bottleX;
-            collectibles.push(bottle);
-            bottleX += 150 + Math.random() * 500;
-        }
+    for (let i = 0; i < 9; i++) {
+        if (coinX > levelEndX) return;
+
+        const coin = new Coin();
+        coin.x = coinX;
+        collectibles.push(coin);
+        coinX += 150 + Math.random() * 500;
     }
-
-    /**
-     * Adds coins to the collectible list.
-     * @param {Array} collectibles -> The collectible list
-     */
-    static addCoins(collectibles) {
-        let coinX = 300;
-
-        for (let i = 0; i < 9; i++) {
-            const coin = new Coin();
-            coin.x = coinX;
-            collectibles.push(coin);
-            coinX += 150 + Math.random() * 500;
-        }
-    }
+}
 }
 
 /**
