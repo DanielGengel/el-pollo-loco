@@ -15,6 +15,7 @@ const loadingScreen = getElement("loadingScreen");
 const countdown = getElement("countdown");
 const startScreen = getElement("startScreen");
 const infoPopup = getElement("infoPopup");
+const tippsPopup = getElement("tippsPopup");
 const imprintPopup = getElement("imprintPopup");
 const winScreen = getElement("winScreen");
 const loseScreen = getElement("loseScreen");
@@ -88,6 +89,7 @@ function setKeyboardValue(keyCode, value) {
 function initButtonEvents() {
     getElement("btnStart").onclick = handleStartClick;
     getElement("btnInfo").onclick = showInfoPopup;
+    getElement("btnTipps").onclick = showTippsPopup;
     getElement("btnImprint").onclick = showImprintPopup;
     getElement("btnRestartWin").onclick = restartAfterWinning;
     getElement("btnRestartLose").onclick = restartAfterLosing;
@@ -397,6 +399,13 @@ function showInfoPopup() {
 }
 
 /**
+ * Opens the tipps popup for the game controls.
+ */
+function showTippsPopup() {
+    tippsPopup.classList.remove("hidden");
+}
+
+/**
  * Opens the imprint popup
  */
 function showImprintPopup() {
@@ -408,6 +417,7 @@ function showImprintPopup() {
  */
 function closePopups() {
     infoPopup.classList.add("hidden");
+    tippsPopup.classList.add("hidden");
     imprintPopup.classList.add("hidden");
 }
 

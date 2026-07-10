@@ -487,7 +487,7 @@ export class World {
      * Checks if the player throws a bottle.
      */
     checkObjectThrown = () => {
-        if (this.keyboard.D && this.canThrowBottle()) {
+        if (this.keyboard.D && this.canThrowBottle() && this.character.bottles > 0) {
             this.throwBottle();
         }
     };

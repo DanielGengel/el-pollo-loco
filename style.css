@@ -65,9 +65,6 @@ canvas {
     z-index: 50;
 }
 
-/* .speakerIcon {
-    font-size: 22px;
-} */
 
 .speakerButton {
     padding: 0;
@@ -90,14 +87,6 @@ canvas {
     cursor: pointer;
     accent-color: #ff8c00;
 }
-
-/* body {
-    margin: 0;
-    background: #111;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-} */
 
 .overlayContainer {
     position: relative;
@@ -216,6 +205,13 @@ button:hover {
     border-radius: 12px;
 
     z-index: 200;
+}
+
+
+#tippsPopup {
+    font-size: 16px;
+     width: 600px;
+     height: 350px;
 }
 
 .hidden {
