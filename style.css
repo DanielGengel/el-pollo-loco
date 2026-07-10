@@ -230,9 +230,9 @@ button:hover {
    
 /* Separated to not affect the speaker-icon-button */
 .menu button {
-    font-size: 36px;
-    width: 350px;
-    height: 100px;
+    font-size: 30px;
+    width: 300px;
+    padding: 2px 28px;
 }
 
 .speakerButton:hover {
