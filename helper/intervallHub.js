@@ -1,30 +1,33 @@
 export class IntervalHub {
-    // Speichert alle registrierten Interval-IDs
+    // Save all Interval-IDs
     static allIntervals = [];
 
-    // Startet ein neues Intervall und
-    // fügt es dem Array allIntervals hinzu
+    /**
+     * Starts a new interval and saves it in the interval list.
+     * @param {Function} func -> The function that should run again and again
+     * @param {number} timer -> The time between each run
+     * @returns {number} -> The id of the new interval
+     */
     static startInterval(func, timer) {
         const newInterval = setInterval(func, timer);
         IntervalHub.allIntervals.push(newInterval);
-        // console.log("<<<<< startInterval >>>>>");
-        // console.log("func ==> ", func);
         return newInterval;
-        
     }
 
-    //Stoppt alle registrierten Intervalle und leert die Registry.
+    /**
+     * Stops all intervals and clears the interval list.
+     */
     static stopAllIntervals() {
-        console.log("IntervalHub.allIntervals.length => ", IntervalHub.allIntervals.length );
         IntervalHub.allIntervals.forEach(clearInterval);
         IntervalHub.allIntervals = [];
-        console.log("IntervalHub.allIntervals.length => ", IntervalHub.allIntervals.length );
     }
 
-    // To stop single intervalls 
+    /**
+     * Stops one interval and removes it from the interval list.
+     * @param {number} id -> The id of the interval that should stop
+     */
     static stopInterval(id) {
     clearInterval(id);
-    console.log("Clear single intervall...id => ", id);
     // remove from array
     const index = this.allIntervals.indexOf(id);
     if (index !== -1) {
@@ -32,5 +35,3 @@ export class IntervalHub {
     }
 }
 }
-
-
