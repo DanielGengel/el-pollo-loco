@@ -9,6 +9,7 @@ export class MoveableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     bottleAboveGround = false;
+    groundY = 130;
 
     // New coordinates for real frame
     collisionBox = { x: 0, y: 0, width: 0, height: 0 };
@@ -47,29 +48,59 @@ export class MoveableObject extends DrawableObject {
         SoundHub.playOne(SoundHub.characterJump);
     }
 
-    /**
-     * Pulls the character down after jumping or throwing.
-     */
-    applyGravity = () => {
-        if (this.isAboveGround() || this.speedY > 0) {
-            this.y -= this.speedY;
-            this.speedY -= this.acceleration;
-        } else {
-            this.speedY = 0;
-        }
-    };
+    groundY = 130;
 
-    /**
-     * Checks if the character is still above the ground
-     * @returns {boolean} -> True when the object is above the ground
-     */
-    isAboveGround() {
-        if (this.bottleAboveGround) {
-            return true;
-        } else {
-            return this.y < 130;
-        }
+/**
+ * Pulls the character down after jumping or throwing.
+ */
+applyGravity = () => {
+    if (this.bottleAboveGround) {
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration;
+        return;
     }
+
+    if (this.isAboveGround() || this.speedY > 0) {
+        this.moveWithGravity();
+    } else {
+        this.stopOnGround();
+    }
+};
+
+/**
+ * Moves the object with gravity but stops before it falls too deep.
+ */
+moveWithGravity() {
+    const nextY = this.y - this.speedY;
+
+    if (nextY > this.groundY) {
+        this.y = this.groundY;
+        this.speedY = 0;
+    } else {
+        this.y = nextY;
+        this.speedY -= this.acceleration;
+    }
+}
+
+/**
+ * Stops the object exactly on the ground.
+ */
+stopOnGround() {
+    this.y = this.groundY;
+    this.speedY = 0;
+}
+
+/**
+ * Checks if the character is still above the ground.
+ * @returns {boolean} -> True when the object is above the ground
+ */
+isAboveGround() {
+    if (this.bottleAboveGround) {
+        return true;
+    } else {
+        return this.y < this.groundY;
+    }
+}
 
     /**
      * Sets the real box that is used for touching other objects.

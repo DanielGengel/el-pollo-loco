@@ -7,6 +7,7 @@ export class Character extends MoveableObject {
     width = 130;
     height = 300;
     y = 130;
+    groundY = 130;
     speed = 10;
     imgStart = ImageHelper.PEPE.idle[0];
     imgArrPepeIdle = ImageHelper.PEPE.idle;
