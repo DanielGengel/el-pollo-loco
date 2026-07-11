@@ -1,12 +1,14 @@
 import { MoveableObject } from "./moveableObject.class.js";
 import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
-import { SoundHub } from '../helper/soundHub.class.js';
+import { SoundHub } from "../helper/soundHub.class.js";
 
 export class Character extends MoveableObject {
     width = 130;
     height = 300;
+    /** y: Starting position at the ground level for the character */
     y = 130;
+    /** groundY: Landing position at the ground level for the character */
     groundY = 130;
     speed = 10;
     imgStart = ImageHelper.PEPE.idle[0];
@@ -16,8 +18,9 @@ export class Character extends MoveableObject {
     imgArrPepeJump = ImageHelper.PEPE.jump;
     imgArrPepeHurt = ImageHelper.PEPE.hurt;
     imgArrPepeDead = ImageHelper.PEPE.dead;
-    world; // this variable to access the variables in world.class.js
-    showFrame = false; // show frame around character
+    world;
+    /** true: show frame around character for development purposes */
+    showFrame = false;
     coins = 0;
     bottles = 0;
     lastAction = Date.now();
@@ -206,7 +209,7 @@ export class Character extends MoveableObject {
         SoundHub.pauseOne(SoundHub.collectSound);
         this.coins++;
         this.limitCoins();
-        SoundHub.playOne(SoundHub.collectSound)
+        SoundHub.playOne(SoundHub.collectSound);
     }
 
     /**
@@ -225,7 +228,7 @@ export class Character extends MoveableObject {
         SoundHub.pauseOne(SoundHub.bottleCollectSound);
         this.bottles++;
         this.limitBottles();
-        SoundHub.playOne(SoundHub.bottleCollectSound)
+        SoundHub.playOne(SoundHub.bottleCollectSound);
     }
 
     /**

@@ -9,6 +9,7 @@ export class StatusBar extends DrawableObject {
      * @param {Array} images -> The pictures for the status bar
      * @param {number} x -> The place from left to right
      * @param {number} y -> The place from top to bottom
+     * x/y: x and y positions of the status bars
      */
     constructor(images, x, y) {
         super();

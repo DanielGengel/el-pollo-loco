@@ -3,6 +3,7 @@ import { ImageHelper } from "../helper/imgHelper.class.js";
 import { IntervalHub } from "../helper/intervallHub.js";
 
 export class Cloud extends MoveableObject {
+    /** y: Position of the clouds from top to bottom */
     y = 20;
     width = 500;
     height = 250;

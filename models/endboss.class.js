@@ -6,6 +6,7 @@ import { SoundHub } from "../helper/soundHub.class.js";
 export class Endboss extends MoveableObject {
     height = 500;
     width = 300;
+    /** y: this is the endboss position from top to bottom. */
     y = -40;
     imgStart = ImageHelper.CHICKEN_BOSS.alert[0];
     imgArrEndbossWalk = ImageHelper.CHICKEN_BOSS.walk;

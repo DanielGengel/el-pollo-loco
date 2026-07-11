@@ -4,15 +4,16 @@ import { CollectibleObjects } from "./collectibleObjects.class.js";
 
 export class Coin extends CollectibleObjects {
 
-    // Create randome distance between each coin and avoid them being stacked above each other
+    /** Create random distance between each coin and avoid them being stacked above each other */
     static lastX = 200 + Math.random() * 150;
+    /** x: this is the coin position from left to right. */
     x = Coin.lastX += 150 + Math.random() * 500;
-
-    // x = 200 + Math.random() * 2000;
+    /** y: this is the coin position from top to bottom. */
     y = 20 + Math.random() * 100;
     height = 150;
     width = 150;
-    showFrame = false; // show frame around chicken
+    /** true: Show frame around coins for development purposes */
+    showFrame = false; 
     offset = { top: 40, right: 40, bottom: 40, left: 40 }; // Offset values for real collision frame
 
     /**

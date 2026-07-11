@@ -2,16 +2,19 @@ import { DrawableObject } from "./drawableObject.class.js";
 import { SoundHub } from "../helper/soundHub.class.js";
 
 export class MoveableObject extends DrawableObject {
-    otherDirection = false; // mirroring character image when walking left
-    speedY = 0; // fall speed of character
+    /** Mirroring the character image when walking left */
+    otherDirection = false;
+    /** Fall speed of character */
+    speedY = 0;
     acceleration = 3;
-    showFrame = false; // if true => drawCollsionFrame around all moveable onjects
+    /** If true => drawCollsionFrame around all moveable objects */
+    showFrame = false;
     energy = 100;
     lastHit = 0;
     bottleAboveGround = false;
     groundY = 130;
 
-    // New coordinates for real frame
+    /** New coordinates for real frame  */
     collisionBox = { x: 0, y: 0, width: 0, height: 0 };
     offset = { top: 120, right: 35, bottom: 15, left: 20 };
 
@@ -50,57 +53,57 @@ export class MoveableObject extends DrawableObject {
 
     groundY = 130;
 
-/**
- * Pulls the character down after jumping or throwing.
- */
-applyGravity = () => {
-    if (this.bottleAboveGround) {
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
-        return;
+    /**
+     * Pulls the character down after jumping or throwing.
+     */
+    applyGravity = () => {
+        if (this.bottleAboveGround) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+            return;
+        }
+
+        if (this.isAboveGround() || this.speedY > 0) {
+            this.moveWithGravity();
+        } else {
+            this.stopOnGround();
+        }
+    };
+
+    /**
+     * Moves the object with gravity but stops before it falls too deep.
+     */
+    moveWithGravity() {
+        const nextY = this.y - this.speedY;
+
+        if (nextY > this.groundY) {
+            this.y = this.groundY;
+            this.speedY = 0;
+        } else {
+            this.y = nextY;
+            this.speedY -= this.acceleration;
+        }
     }
 
-    if (this.isAboveGround() || this.speedY > 0) {
-        this.moveWithGravity();
-    } else {
-        this.stopOnGround();
-    }
-};
-
-/**
- * Moves the object with gravity but stops before it falls too deep.
- */
-moveWithGravity() {
-    const nextY = this.y - this.speedY;
-
-    if (nextY > this.groundY) {
+    /**
+     * Stops the object exactly on the ground.
+     */
+    stopOnGround() {
         this.y = this.groundY;
         this.speedY = 0;
-    } else {
-        this.y = nextY;
-        this.speedY -= this.acceleration;
     }
-}
 
-/**
- * Stops the object exactly on the ground.
- */
-stopOnGround() {
-    this.y = this.groundY;
-    this.speedY = 0;
-}
-
-/**
- * Checks if the character is still above the ground.
- * @returns {boolean} -> True when the object is above the ground
- */
-isAboveGround() {
-    if (this.bottleAboveGround) {
-        return true;
-    } else {
-        return this.y < this.groundY;
+    /**
+     * Checks if the character is still above the ground.
+     * @returns {boolean} -> True when the object is above the ground
+     */
+    isAboveGround() {
+        if (this.bottleAboveGround) {
+            return true;
+        } else {
+            return this.y < this.groundY;
+        }
     }
-}
 
     /**
      * Sets the real box that is used for touching other objects.

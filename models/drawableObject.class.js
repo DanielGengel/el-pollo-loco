@@ -1,7 +1,9 @@
 import { getPreloadedImage } from "../helper/preload.js";
 
 export class DrawableObject {
+    /** x: this is the object position from left to right. */
     x = 120;
+    /** y: this is the object position from top to bottom. */
     y = 280;
     width = 100;
     height = 150;
@@ -52,19 +54,19 @@ export class DrawableObject {
     }
 
     /**
-     * Draws the blue and red frames around the object.
+     * Draws blue and red frames around the object for development purposes
+     * Blue = the actual picture frame
+     * Red = the corrected collision frame 
      * @param {CanvasRenderingContext2D} ctx -> The canvas tool for drawing
      */
     drawCollsionFrame(ctx) {
         if (this.showFrame) {
-            // Picture frame
             ctx.beginPath();
             ctx.lineWidth = "2";
             ctx.strokeStyle = "blue";
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.stroke();
 
-            // Corrected picture frame (real frame)
             ctx.beginPath();
             ctx.lineWidth = "2";
             ctx.strokeStyle = "red";
