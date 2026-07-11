@@ -3,6 +3,7 @@ import { Keyboard } from "./helper/keyboard.class.js";
 import { IntervalHub } from "./helper/intervallHub.js";
 import { preloadImages } from "./helper/preload.js";
 import { SoundHub } from "./helper/soundHub.class.js";
+import { MobileControls } from "./helper/mobileControls.class.js";
 
 let canvas;
 let world;
@@ -37,7 +38,7 @@ function getElement(id) {
 function init() {
     canvas = getElement("canvas");
     preloadPromise = preloadImages();
-    initMobileButtons();
+    MobileControls.init();
     initKeyboardEvents();
     initButtonEvents();
     SoundHub.loadVolume();
@@ -264,132 +265,7 @@ function resetKeyboard() {
     Keyboard.D = false;
 }
 
-/**
- * Connects all mobile game buttons.
- * The buttons control walking left and right, jumping, and throwing.
- */
-function initMobileButtons() {
-    addMobileButton("btnMobileLeft", "LEFT");
-    addMobileButton("btnMobileRight", "RIGHT");
-    addMobileButton("btnMobileJump", "SPACE");
-    addMobileButton("btnMobileThrow", "D");
-}
 
-/**
- * Connects one mobile button to one game key
- * Buttons work for touch and mouse input
- * @param {string} buttonId -> The id of the mobile button.
- * @param {string} key -> The Keyboard property that should change.
- */
-function addMobileButton(buttonId, key) {
-    const button = getElement(buttonId);
-    addTouchStart(button, key);
-    addTouchEnd(button, key);
-    addMouseStart(button, key);
-    addMouseEnd(button, key);
-    addNoContextMenu(button);
-}
-
-/**
- * Adds the touch START event to one mobile button
- * The matching game key becomes true.
- * @param {HTMLElement} button -> mobile button
- * @param {string} key -> The Keyboard property that should change
- */
-function addTouchStart(button, key) {
-    button.addEventListener("touchstart", startMobileKey.bind(null, key));
-}
-
-/**
- * Adds touch END events to one mobile button.
- * @param {HTMLElement} button -< mobile button
- * @param {string} key -> The property that should change
- */
-function addTouchEnd(button, key) {
-    button.addEventListener("touchend", stopMobileKey.bind(null, key));
-    button.addEventListener("touchcancel", stopMobileKey.bind(null, key));
-    button.addEventListener("touchmove", preventTouchMove);
-}
-
-/**
- * Adds the mouse down event to one mobile button.
- * @param {HTMLElement} button -> mobile button
- * @param {string} key -> The Keyboard property that should change
- */
-function addMouseStart(button, key) {
-    button.addEventListener("mousedown", startMouseKey.bind(null, key));
-}
-
-/**
- * Adds mouse end events to one mobile buttons...
- * @param {HTMLElement} button
- * @param {string} key
- */
-function addMouseEnd(button, key) {
-    button.addEventListener("mouseup", stopMouseKey.bind(null, key));
-    button.addEventListener("mouseleave", stopMouseKey.bind(null, key));
-}
-
-/**
- * keeps the game controls feeling like game buttons
- * @param {HTMLElement} button
- */
-function addNoContextMenu(button) {
-    button.addEventListener("contextmenu", preventDefaultEvent);
-}
-
-/**
- * STARTING one mobile key after a touch event
- * It also prevents browser touch behavior.
- * @param {string} key
- * @param {TouchEvent} event
- */
-function startMobileKey(key, event) {
-    event.preventDefault();
-    Keyboard[key] = true;
-}
-
-/**
- * STOPPING mobile key after a touch event
- * @param {string} key
- * @param {TouchEvent} event
- */
-function stopMobileKey(key, event) {
-    event.preventDefault();
-    Keyboard[key] = false;
-}
-
-/**
- * STARTING mobile key
- * @param {string} key
- */
-function startMouseKey(key) {
-    Keyboard[key] = true;
-}
-
-/**
- * STARTING mobile key
- * @param {string} key
- */
-function stopMouseKey(key) {
-    Keyboard[key] = false;
-}
-
-/**
- * Prevent scrolling while touching a mobile button...
- * @param {TouchEvent} event
- */
-function preventTouchMove(event) {
-    event.preventDefault();
-}
-
-/**
- * This is used for the mobile button context menu
- * @param {Event} event
- */
-function preventDefaultEvent(event) {
-    event.preventDefault();
-}
 
 /**
  * Opens the info popup for the game controls.
