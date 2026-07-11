@@ -135,16 +135,40 @@ export class World {
     }
 
     /**
-     * Kills a normal enemy and removes it after a short time.
+     * Kills a normal enemy and close normal enemies too.
      * @param {Object} enemy -> The enemy that should die
      */
     killNormalEnemy(enemy) {
-        enemy.die();
+        this.killCloseNormalEnemies(enemy);
         this.character.jump();
+    }
 
-        setTimeout(() => {
-            this.removeObjectFromMap(this.level.enemies, enemy);
-        }, 500);
+    /**
+     * Kills all normal enemies that are close to the first enemy.
+     * @param {Object} firstEnemy -> The enemy that was hit first
+     */
+    killCloseNormalEnemies(firstEnemy) {
+        this.level.enemies.forEach((enemy) => {
+            if (enemy instanceof Endboss) return;
+            if (enemy.isDead()) return;
+
+            if (this.enemyIsCloseToFirstEnemy(enemy, firstEnemy)) {
+                enemy.die();
+                this.removeEnemyAfterDeath(enemy);
+            }
+        });
+    }
+
+    /**
+     * Checks if one enemy is close to the first enemy.
+     * @param {Object} enemy -> The enemy that is checked
+     * @param {Object} firstEnemy -> The enemy that was hit first
+     * @returns {boolean} -> True when the enemy is close
+     */
+    enemyIsCloseToFirstEnemy(enemy, firstEnemy) {
+        const distance = Math.abs(enemy.x - firstEnemy.x);
+
+        return distance < 60;
     }
 
     /**
@@ -175,7 +199,7 @@ export class World {
     }
 
     /**
-     * Gives one coin to the character, updates the coin bar and checks if 
+     * Gives one coin to the character, updates the coin bar and checks if
      * health can be restored.
      */
     collectCoin() {

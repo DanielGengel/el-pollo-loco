@@ -16,7 +16,7 @@ export class Character extends MoveableObject {
     imgArrPepeHurt = ImageHelper.PEPE.hurt;
     imgArrPepeDead = ImageHelper.PEPE.dead;
     world; // this variable to access the variables in world.class.js
-    showFrame = true; // show frame around character
+    showFrame = false; // show frame around character
     coins = 0;
     bottles = 0;
     lastAction = Date.now();
