@@ -59,12 +59,9 @@ export class Chicken extends MoveableObject {
      * Kills the chicken and plays the death sound.
      */
     die() {
-        console.log("chicken DEAD --- PLAY SOUND");
-        
         SoundHub.playOne(SoundHub.chickenDead); 
         if (this.isDead()) return;
 
         this.energy = 0;
-        
     }
 }

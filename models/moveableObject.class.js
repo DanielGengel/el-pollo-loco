@@ -65,7 +65,6 @@ export class MoveableObject extends DrawableObject {
      */
     isAboveGround() {
         if (this.bottleAboveGround) {
-            console.log("bottleAboveGround");
             return true;
         } else {
             return this.y < 130;
