@@ -14,10 +14,12 @@ export class Endboss extends MoveableObject {
     imgArrEndbossHurt = ImageHelper.CHICKEN_BOSS.hurt;
     imgArrEndbossDead = ImageHelper.CHICKEN_BOSS.dead;
     showFrame = false;
-    offset = { top: 60, right: 40, bottom: 0, left: 40 };
+    offset = { top: 60, right: 60, bottom: 0, left: 60 };
     isDead = false;
     world;
     endbossIsWalking = false;
+    endbossIsAttacking = false;
+    walkDirection = "left";
 
     /**
      * Creates the endboss and starts his animation and checks.
@@ -45,6 +47,8 @@ export class Endboss extends MoveableObject {
             this.playAnimation(this.imgArrEndbossDead);
         } else if (this.isHurt()) {
             this.playAnimation(this.imgArrEndbossHurt);
+        } else if (this.endbossIsAttacking) {
+            this.playAnimation(this.imgArrEndbossAttack);
         } else if (this.endbossIsWalking) {
             this.playWalkAndAlertAnimation();
         } else {
@@ -75,21 +79,25 @@ export class Endboss extends MoveableObject {
             return;
         }
 
+        this.endbossIsAttacking = this.isColliding(this.world.character);
+
         if (this.characterIsNear()) {
             this.endbossIsWalking = true;
         }
 
-        if (this.endbossIsWalking) {
+        if (this.endbossIsWalking && !this.endbossIsAttacking) {
             this.walkToCharacter();
             SoundHub.playOne(SoundHub.endbossApproach);
         }
     };
 
     /**
-     * Moves the endboss in the direction of the character.
+     * Moves the endboss in the saved direction.
      */
     walkToCharacter() {
-        if (this.characterIsLeftFromEndboss()) {
+        this.updateWalkDirection();
+
+        if (this.walkDirection === "left") {
             this.otherDirection = false;
             this.moveLeft();
         } else {
@@ -99,11 +107,32 @@ export class Endboss extends MoveableObject {
     }
 
     /**
-     * Checks if the character is left from the endboss.
-     * @returns {boolean} -> True when the character is left from the endboss
+     * Changes the walking direction only when the character is far enough behind him.
      */
-    characterIsLeftFromEndboss() {
-        return this.world.character.x < this.x;
+    updateWalkDirection() {
+        if (this.world.character.x < this.x - 200) {
+            this.walkDirection = "left";
+        }
+
+        if (this.world.character.x > this.x + 200) {
+            this.walkDirection = "right";
+        }
+    }
+
+    /**
+     * Checks if the character is far left from the endboss.
+     * @returns {boolean} -> True when the character is far left
+     */
+    characterIsFarLeftFromEndboss() {
+        return this.world.character.x < this.x - 200;
+    }
+
+    /**
+     * Checks if the character is far right from the endboss.
+     * @returns {boolean} -> True when the character is far right
+     */
+    characterIsFarRightFromEndboss() {
+        return this.world.character.x > this.x + 200;
     }
 
     /**
