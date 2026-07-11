@@ -214,6 +214,10 @@ button:hover {
      height: 350px;
 }
 
+#imprintPopup {
+    font-size: 16px;
+}
+
 .hidden {
     display: none;
 }
