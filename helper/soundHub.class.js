@@ -1,43 +1,31 @@
 export class SoundHub {
     static backgroundMusic = new Audio("./assets/sounds/chickenDance.mp3");
-
     static characterDamage = new Audio("./assets/sounds/character/characterDamage.mp3");
     static characterDead = new Audio("./assets/sounds/character/characterDead.wav");
     static characterJump = new Audio("./assets/sounds/character/characterJump.wav");
     static characterRun = new Audio("./assets/sounds/character/characterRun.mp3");
     static characterSnoring = new Audio("./assets/sounds/character/characterSnoring.mp3");
-
     static chickenDead = new Audio("./assets/sounds/chicken/chickenDead.mp3");
     static chickenDead2 = new Audio("./assets/sounds/chicken/chickenDead2.mp3");
-
     static bottleCollectSound = new Audio("./assets/sounds/collectibles/bottleCollectSound.wav");
     static collectSound = new Audio("./assets/sounds/collectibles/collectSound.wav");
-
     static endbossApproach = new Audio("./assets/sounds/endboss/endbossApproach.wav");
-
     static gameStart = new Audio("./assets/sounds/game/gameStart.mp3");
-
     static bottleBreak = new Audio("./assets/sounds/throwable/bottleBreak.mp3");
-
+    
     static allSounds = [
         SoundHub.backgroundMusic,
-
         SoundHub.characterDamage,
         SoundHub.characterDead,
         SoundHub.characterJump,
         SoundHub.characterRun,
         SoundHub.characterSnoring,
-
         SoundHub.chickenDead,
         SoundHub.chickenDead2,
-
         SoundHub.bottleCollectSound,
         SoundHub.collectSound,
-
         SoundHub.endbossApproach,
-
         SoundHub.gameStart,
-
         SoundHub.bottleBreak,
     ];
 

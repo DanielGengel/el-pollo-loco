@@ -14,7 +14,8 @@ export class Coin extends CollectibleObjects {
     width = 150;
     /** true: Show frame around coins for development purposes */
     showFrame = false; 
-    offset = { top: 40, right: 40, bottom: 40, left: 40 }; // Offset values for real collision frame
+    /** Offset values for real collision frame */
+    offset = { top: 40, right: 40, bottom: 40, left: 40 };
 
     /**
      * Creates a coin and starts its animation.
@@ -23,7 +24,6 @@ export class Coin extends CollectibleObjects {
         super();
         this.loadImage(ImageHelper.COINS.idle[0]);
         this.loadImages(ImageHelper.COINS.idle);
-        // this.animate();
         IntervalHub.startInterval(this.animate, 300);
 
     }

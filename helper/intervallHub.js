@@ -1,5 +1,5 @@
 export class IntervalHub {
-    // Save all Interval-IDs
+    /** Save all Interval-IDs  */
     static allIntervals = [];
 
     /**
@@ -27,11 +27,10 @@ export class IntervalHub {
      * @param {number} id -> The id of the interval that should stop
      */
     static stopInterval(id) {
-    clearInterval(id);
-    // remove from array
-    const index = this.allIntervals.indexOf(id);
-    if (index !== -1) {
-        this.allIntervals.splice(index, 1);
+        clearInterval(id);
+        const index = this.allIntervals.indexOf(id);
+        if (index !== -1) {
+            this.allIntervals.splice(index, 1);
+        }
     }
-}
 }

@@ -1,4 +1,4 @@
-import { MoveableObject } from "./moveableObject.class.js"; // because of collision frame
+import { MoveableObject } from "./moveableObject.class.js";
 
 export class CollectibleObjects extends MoveableObject {
     /**
