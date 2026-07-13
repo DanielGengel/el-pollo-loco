@@ -12,7 +12,7 @@ export class SoundHub {
     static endbossApproach = new Audio("./assets/sounds/endboss/endbossApproach.wav");
     static gameStart = new Audio("./assets/sounds/game/gameStart.mp3");
     static bottleBreak = new Audio("./assets/sounds/throwable/bottleBreak.mp3");
-    
+
     static allSounds = [
         SoundHub.backgroundMusic,
         SoundHub.characterDamage,
@@ -114,15 +114,22 @@ export class SoundHub {
     }
 
     /**
-     * Plays one sound from the beginning.
+     * Plays the sound only when the sound file is fully loaded.
+     * Without this check, the game could throw an error when starting
+     * or when pressing the pause button.
      * @param {HTMLAudioElement} sound -> The sound that should play
      */
     static playOne(sound) {
         if (!sound.paused) return;
+        const soundInterval = setInterval(() => {
+            if (sound.readyState == 4) {
+                sound.volume = 0.2;
+                sound.currentTime = 0;
+                sound.play();
 
-        sound.currentTime = 0;
-        sound.volume = this.masterVolume;
-        sound.play();
+                clearInterval(soundInterval);
+            }
+        }, 50);
     }
 
     /**
@@ -138,7 +145,7 @@ export class SoundHub {
             sound.volume = this.masterVolume;
         }
 
-        sound.play().catch(error => {
+        sound.play().catch((error) => {
             console.warn("Could not play sound:", error);
         });
     }
